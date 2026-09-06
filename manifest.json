@@ -1,10 +1,10 @@
 {
-  "id": "eyesidian",
-  "name": "Eyesidian",
+  "id": "irisidian",
+  "name": "Irisidian",
   "version": "1.0.0",
   "minAppVersion": "1.5.0",
   "description": "Put living googly eyes in Obsidian.",
-  "author": "Eyesidian",
-  "authorUrl": "https://github.com/eyesidian/eyesidian",
+  "author": "Irisidian",
+  "authorUrl": "https://github.com/loopman90/Irisidian",
   "isDesktopOnly": false
 }

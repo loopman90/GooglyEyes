@@ -3,7 +3,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-const out = join(root, "release", "eyesidian-test");
+const out = join(root, "release", "irisidian-test");
 const skins = ["robot", "cat"];
 
 rmSync(out, { recursive: true, force: true });
@@ -26,18 +26,18 @@ for (const skin of skins) {
 const manifest = JSON.parse(readFileSync(join(root, "assets", "skins.json"), "utf8"));
 writeFileSync(join(out, "assets", "skins.json"), JSON.stringify({
   ...manifest,
-  note: "Eyesidian layered test package. Includes completed Robot and Cat skins.",
+  note: "Irisidian layered test package. Includes completed Robot and Cat skins.",
   layeredSkins: skins,
   maskSkins: skins,
   skins
 }, null, 2));
 
-writeFileSync(join(out, "INSTALL-TEST.md"), `# Eyesidian Test Install
+writeFileSync(join(out, "INSTALL-TEST.md"), `# Irisidian Test Install
 
 Copy this entire folder to:
 
 \`\`\`text
-<your-vault>/.obsidian/plugins/eyesidian
+<your-vault>/.obsidian/plugins/irisidian
 \`\`\`
 
 Then open Obsidian:
@@ -45,10 +45,10 @@ Then open Obsidian:
 1. Go to Settings.
 2. Open Community plugins.
 3. Reload plugins if needed.
-4. Enable Eyesidian.
-5. Use the command "Open Eyesidian Tab" to open the embedded tab.
+4. Enable Irisidian.
+5. Use the command "Open Irisidian Tab" to open the embedded tab.
 
 This package includes the completed Robot and Cat layered skins, with runtime iris/pupil tracking, smooth CSS lids, customizable colors, and full embedded tab-panel masks.
 `);
 
-console.log(`Packaged Eyesidian layered test plugin at ${out}`);
+console.log(`Packaged Irisidian layered test plugin at ${out}`);

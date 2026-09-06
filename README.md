@@ -1,8 +1,8 @@
-# Eyesidian
+# Irisidian
 
 Put living googly eyes in Obsidian.
 
-Eyesidian is a playful, fully local Obsidian Community Plugin that makes the interface look back. One or more pairs of eyes follow the mouse, optionally glance at the text cursor while typing, blink, idle, peek from edges, and react visually to UI events.
+Irisidian is a playful, fully local Obsidian Community Plugin that makes the interface look back. One or more pairs of eyes follow the mouse, optionally glance at the text cursor while typing, blink, idle, peek from edges, and react visually to UI events.
 
 ## What It Does
 
@@ -11,11 +11,11 @@ Eyesidian is a playful, fully local Obsidian Community Plugin that makes the int
 - Reacts to local events such as typing, copy, cut, paste, delete, undo, redo, hover, tab switches, fast scrolling, and quick mouse movement.
 - Supports personalities, reaction intensity, randomness, focus mode, peek mode, opacity, size, and z-index inside an embedded Obsidian tab.
 - Lets users tune iris color, pupil color, eyelid color, eyelid shadow, glow, blink speed, emotion strength, and per-action reactions.
-- Includes a Quick UI, ribbon entry, status bar access, commands, onboarding, settings preview, and an embedded Eyesidian tab.
+- Includes a Quick UI, ribbon entry, status bar access, commands, onboarding, settings preview, and an embedded Irisidian tab.
 
 ## Privacy
 
-Eyesidian is local-only.
+Irisidian is local-only.
 
 - No account.
 - No cloud backend.
@@ -54,11 +54,11 @@ Open the Quick UI from:
 - Ribbon eye icon
 - Status bar item
 
-Quick UI supports show/hide, switch personality, reaction pause, focus mode, randomize personality, Eyesidian tab, and full settings.
+Quick UI supports show/hide, switch personality, reaction pause, focus mode, randomize personality, Irisidian tab, and full settings.
 
-## Eyesidian Tab
+## Irisidian Tab
 
-The Eyesidian tab embeds the eyes directly inside Obsidian instead of floating over the interface. The Robot skin is scaled into a full tab panel overlay so it reads as part of the workspace. It lets you test Blink, Shock, Suspicious, Sleep, Copy, Cut, Paste, Delete, Undo, Dizzy, Idle, and Random reactions. It also has live controls for style, personality, size, and eye-pair count.
+The Irisidian tab embeds the eyes directly inside Obsidian instead of floating over the interface. The Robot skin is scaled into a full tab panel overlay so it reads as part of the workspace. It lets you test Blink, Shock, Suspicious, Sleep, Copy, Cut, Paste, Delete, Undo, Dizzy, Idle, and Random reactions. It also has live controls for style, personality, size, and eye-pair count.
 
 ## Customization
 
@@ -79,7 +79,7 @@ Fallback reactions are built in, so a missing or unknown reaction resolves to a 
 
 For manual installation during development:
 
-1. Copy this folder into `.obsidian/plugins/eyesidian`.
+1. Copy this folder into `.obsidian/plugins/irisidian`.
 2. Run `npm install`.
 3. Run `npm run build`.
 4. Enable the plugin in Obsidian settings.
