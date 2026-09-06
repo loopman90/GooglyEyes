@@ -36,10 +36,11 @@ Available now:
 - Cat
 - Manga Female
 - Dragon
+- Tibetan Monk
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 
-The Robot skin now uses a layered renderer instead of full reaction PNGs. Its PNGs are only the embedded tab mask, thumbnail, and a clean left/right base eye without iris, pupil, or lids. Iris color, pupil color, eyelid color, pupil tracking, eyelids, blinking, and reactions are drawn at runtime, which makes the eyes easier to tune and keeps future skins much lighter.
+Every active skin uses a layered renderer instead of full reaction PNGs. The PNGs are only the embedded tab mask, thumbnail, and clean left/right base eyes without iris, pupil, or lids. Iris color, pupil color, eyelid color, pupil tracking, eyelids, blinking, and reactions are drawn at runtime, which makes the eyes easier to tune and keeps future skins much lighter.
 
 ## Personalities
 
@@ -60,7 +61,7 @@ Quick UI supports show/hide, switch personality, reaction pause, focus mode, ran
 
 ## Irisidian Tab
 
-The Irisidian tab embeds the eyes directly inside Obsidian instead of floating over the interface. The Robot skin is scaled into a full tab panel overlay so it reads as part of the workspace. It lets you test Blink, Shock, Suspicious, Sleep, Copy, Cut, Paste, Delete, Undo, Dizzy, Idle, and Random reactions. It also has live controls for style, personality, size, and eye-pair count.
+The Irisidian tab embeds the eyes directly inside Obsidian instead of floating over the interface. Each active skin is scaled into a full tab panel overlay so it reads as part of the workspace. It lets you test Blink, Shock, Suspicious, Sleep, Copy, Cut, Paste, Delete, Undo, Dizzy, Idle, and Random reactions. It also has live controls for style, personality, size, and eye-pair count.
 
 ## Customization
 
@@ -98,7 +99,7 @@ Use `npm run dev` while developing.
 
 ## Limitations
 
-- The current test build exposes only the completed Robot layered asset pack. More skins will appear one by one after their base eye and mask packs are complete.
+- The current test build exposes only completed layered asset packs. More skins will appear one by one after their base eye and mask packs are complete.
 - No community skin marketplace.
 - No custom user asset imports.
 - No achievements, dialogue system, social features, cloud sync, or online downloads.
