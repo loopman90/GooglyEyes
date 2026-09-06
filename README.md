@@ -39,6 +39,7 @@ Available now:
 - Tibetan Monk
 - Alien
 - Hacker
+- Baby Yoda
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 

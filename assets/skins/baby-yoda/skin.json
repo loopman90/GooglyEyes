@@ -1,0 +1,35 @@
+{
+  "id": "baby-yoda",
+  "name": "Baby Yoda",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.08,
+      "y": 0.263,
+      "w": 0.365,
+      "h": 0.473
+    },
+    {
+      "side": "right",
+      "x": 0.555,
+      "y": 0.263,
+      "w": 0.365,
+      "h": 0.473
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#485c3c",
+    "pupilColor": "#050805",
+    "eyeWhiteColor": "#f2e8cf",
+    "eyelidColor": "#94aa68",
+    "eyelidShadowColor": "#405735",
+    "irisGlow": 0.14
+  }
+}

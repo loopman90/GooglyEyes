@@ -107,7 +107,8 @@ const SKINS: SkinDefinition[] = [
   ["dragon", "Dragon", "Ancient scales with a fiery slit gaze.", "#ff9f21", "#090403", "#e8dcc2", "#31443a", "#ff6b22"],
   ["tibetan-monk", "Tibetan Monk", "Warm robes with a calm meditative gaze.", "#7f5634", "#0b0806", "#f4eadc", "#9b5535", "#d69b3b"],
   ["alien", "Alien", "Bioluminescent skin with an uncanny teal stare.", "#48eed8", "#020809", "#dfe8e5", "#627f77", "#20e5d7"],
-  ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43"]
+  ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43"],
+  ["baby-yoda", "Baby Yoda", "Tiny green space-sage charm with huge curious eyes.", "#485c3c", "#050805", "#f2e8cf", "#94aa68", "#cdb77f"]
 ].map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent]) => ({
   id, name, flavor, iris, pupil, eyeWhite, outline, accent, supportsColorOverrides: true
 }));
@@ -284,7 +285,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker"]);
+const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "baby-yoda"]);
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",

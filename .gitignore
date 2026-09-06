@@ -18,3 +18,5 @@ assets/skins/*
 !assets/skins/alien/**
 !assets/skins/hacker/
 !assets/skins/hacker/**
+!assets/skins/baby-yoda/
+!assets/skins/baby-yoda/**
