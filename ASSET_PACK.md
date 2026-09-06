@@ -61,6 +61,13 @@ assets/
 
 Every active skin folder contains `thumbnail.png` and `skin.json`. Skins listed in `layeredSkins` contain `eyes/left-base.png` and `eyes/right-base.png`. Skins listed in `maskSkins` contain `masks/tab-panel.png`, a full-stage overlay that makes the eyes look embedded inside an Obsidian tab.
 
+Mask rule:
+
+- `masks/tab-panel.png` must be a 1774x887 RGBA PNG.
+- The mask must fill the complete rectangular tab panel; every outer edge pixel must be opaque.
+- Only the two eye openings should be transparent. The outside of the panel may not be transparent, because that makes the skin feel like a floating cutout instead of an embedded Obsidian tab.
+- `npm run validate-assets` enforces this rule for every active mask skin.
+
 Current V1 count:
 
 - 6 active skins

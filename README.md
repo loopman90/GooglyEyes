@@ -43,6 +43,8 @@ Planned skins will be added one by one after their imagegen asset packs are comp
 
 Every active skin uses a layered renderer instead of full reaction PNGs. The PNGs are only the embedded tab mask, thumbnail, and clean left/right base eyes without iris, pupil, or lids. Iris color, pupil color, eyelid color, pupil tracking, eyelids, blinking, and reactions are drawn at runtime, which makes the eyes easier to tune and keeps future skins much lighter.
 
+Mask rule: every `masks/tab-panel.png` must be a 1774x887 rectangular RGBA panel with opaque outer edges and transparency only for the two eye openings. The validator enforces this so skins stay embedded in the Obsidian tab instead of becoming floating cutouts.
+
 ## Personalities
 
 Personality is separate from skin. It changes timing, blink frequency, smoothing, expressiveness, and chaos:
