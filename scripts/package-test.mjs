@@ -4,9 +4,10 @@ import { fileURLToPath } from "node:url";
 import { activeSkinNamesText, getActiveSkins, writeReadme } from "./update-readme.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-const out = join(root, "release", "eyessidian-test");
+const out = join(root, "release", "googly-eyes-test");
 const legacyOut = join(root, "release", `${"iris"}idian-test`);
 const previousOut = join(root, "release", `${"eye"}sidian-test`);
+const recentOut = join(root, "release", `${"eyes"}sidian-test`);
 writeReadme();
 const activeSkins = getActiveSkins();
 const skins = activeSkins.map((skin) => skin.id);
@@ -14,6 +15,7 @@ const skinNames = activeSkinNamesText();
 
 rmSync(legacyOut, { recursive: true, force: true });
 rmSync(previousOut, { recursive: true, force: true });
+rmSync(recentOut, { recursive: true, force: true });
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
@@ -34,29 +36,29 @@ for (const skin of skins) {
 const manifest = JSON.parse(readFileSync(join(root, "assets", "skins.json"), "utf8"));
 writeFileSync(join(out, "assets", "skins.json"), JSON.stringify({
   ...manifest,
-  note: `Eyessidian layered test package. Includes completed ${skinNames} skins.`,
+  note: `GooglyEyes layered test package. Includes completed ${skinNames} skins.`,
   layeredSkins: skins,
   maskSkins: skins,
   skins
 }, null, 2));
 
-writeFileSync(join(out, "INSTALL-TEST.md"), `# Eyessidian Test Install
+writeFileSync(join(out, "INSTALL-TEST.md"), `# GooglyEyes Test Install
 
-This is the simplest way to test Eyessidian.
+This is the simplest way to test GooglyEyes.
 
 Copy this entire folder to:
 
 \`\`\`text
-<your-vault>/.obsidian/plugins/eyessidian
+<your-vault>/.obsidian/plugins/googly-eyes
 \`\`\`
 
 The final folder must look like this:
 
 \`\`\`text
-<your-vault>/.obsidian/plugins/eyessidian/manifest.json
-<your-vault>/.obsidian/plugins/eyessidian/main.js
-<your-vault>/.obsidian/plugins/eyessidian/styles.css
-<your-vault>/.obsidian/plugins/eyessidian/assets/
+<your-vault>/.obsidian/plugins/googly-eyes/manifest.json
+<your-vault>/.obsidian/plugins/googly-eyes/main.js
+<your-vault>/.obsidian/plugins/googly-eyes/styles.css
+<your-vault>/.obsidian/plugins/googly-eyes/assets/
 \`\`\`
 
 Then open Obsidian:
@@ -64,10 +66,10 @@ Then open Obsidian:
 1. Go to Settings.
 2. Open Community plugins.
 3. Reload plugins if needed.
-4. Enable Eyessidian.
-5. Use the command "Open Eyessidian Tab" to open the embedded tab.
+4. Enable GooglyEyes.
+5. Use the command "Open GooglyEyes Tab" to open the embedded tab.
 
 This package includes the completed ${skinNames} layered skins, with runtime iris/pupil tracking, smooth CSS lids, customizable colors, and full embedded tab-panel masks.
 `);
 
-console.log(`Packaged Eyessidian layered test plugin at ${out}`);
+console.log(`Packaged GooglyEyes layered test plugin at ${out}`);

@@ -1,6 +1,6 @@
 # Skin Backlog
 
-Only completed skins should appear in the Eyessidian UI.
+Only completed skins should appear in the GooglyEyes UI.
 
 Completed:
 
@@ -14,6 +14,7 @@ Completed:
 - Anonymous
 - Ice Hockey Horror
 - Mona Lisa
+- Clown
 
 Next candidates:
 

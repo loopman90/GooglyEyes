@@ -29,11 +29,11 @@ export function generateReadme() {
   const skinList = skins.map((skin) => `- ${skin.name}`).join("\n");
   const skinNames = activeSkinNamesText();
 
-  return `# Eyessidian
+  return `# GooglyEyes
 
 Put living, reactive eyes inside Obsidian.
 
-Eyessidian is a playful, fully local Obsidian Community Plugin. It opens an embedded Eyessidian tab where animated eyes look around, follow the mouse, blink, react to local UI events, and can be styled with different skins and personalities.
+GooglyEyes is a playful, fully local Obsidian Community Plugin. It opens an embedded GooglyEyes tab where animated eyes look around, follow the mouse, blink, react to local UI events, and can be styled with different skins and personalities.
 
 ## What You Get
 
@@ -44,11 +44,11 @@ Eyessidian is a playful, fully local Obsidian Community Plugin. It opens an embe
 - Custom iris, pupil, eyelid, shadow, glow, size, opacity, focus mode, and reaction settings.
 - A compact Quick UI behind a Show controls button.
 - A full settings page for detailed behavior tuning.
-- A copy-ready test build in \`release/eyessidian-test\`.
+- A copy-ready test build in \`release/googly-eyes-test\`.
 
 ## Privacy
 
-Eyessidian is local-only.
+GooglyEyes is local-only.
 
 - No account.
 - No cloud backend.
@@ -75,8 +75,8 @@ Use this once the plugin folder is ready or downloaded as a release.
 2. Open your Obsidian vault folder in Finder.
 3. Open the hidden folder named \`.obsidian\`.
 4. Open the folder named \`plugins\`.
-5. Create a folder named \`eyessidian\` if it does not exist.
-6. Put these files and folders inside \`.obsidian/plugins/eyessidian\`:
+5. Create a folder named \`googly-eyes\` if it does not exist.
+6. Put these files and folders inside \`.obsidian/plugins/googly-eyes\`:
    - \`manifest.json\`
    - \`main.js\`
    - \`styles.css\`
@@ -85,23 +85,23 @@ Use this once the plugin folder is ready or downloaded as a release.
 8. Go to Settings.
 9. Go to Community plugins.
 10. Turn off Restricted mode if Obsidian asks for it.
-11. Click Reload plugins if Eyessidian does not appear yet.
-12. Enable Eyessidian.
-13. Run the command \`Open Eyessidian Tab\`.
+11. Click Reload plugins if GooglyEyes does not appear yet.
+12. Enable GooglyEyes.
+13. Run the command \`Open GooglyEyes Tab\`.
 
 Correct final folder:
 
 \`\`\`text
-YourVault/.obsidian/plugins/eyessidian/manifest.json
-YourVault/.obsidian/plugins/eyessidian/main.js
-YourVault/.obsidian/plugins/eyessidian/styles.css
-YourVault/.obsidian/plugins/eyessidian/assets/
+YourVault/.obsidian/plugins/googly-eyes/manifest.json
+YourVault/.obsidian/plugins/googly-eyes/main.js
+YourVault/.obsidian/plugins/googly-eyes/styles.css
+YourVault/.obsidian/plugins/googly-eyes/assets/
 \`\`\`
 
 If the plugin does not appear in Obsidian, the folder is usually one level too deep. Make sure you do not have this:
 
 \`\`\`text
-YourVault/.obsidian/plugins/eyessidian/eyessidian/manifest.json
+YourVault/.obsidian/plugins/googly-eyes/googly-eyes/manifest.json
 \`\`\`
 
 ## Test Build Install
@@ -109,18 +109,18 @@ YourVault/.obsidian/plugins/eyessidian/eyessidian/manifest.json
 For testing the current local build, use the ready-made folder:
 
 \`\`\`text
-${join(root, "release", "eyessidian-test")}
+${join(root, "release", "googly-eyes-test")}
 \`\`\`
 
 1. Run \`npm run package-test\`.
-2. Copy the whole \`release/eyessidian-test\` folder.
+2. Copy the whole \`release/googly-eyes-test\` folder.
 3. Paste it into your vault's \`.obsidian/plugins\` folder.
-4. Rename the copied folder to \`eyessidian\`.
+4. Rename the copied folder to \`googly-eyes\`.
 5. Open Obsidian.
 6. Go to Settings > Community plugins.
 7. Reload plugins if needed.
-8. Enable Eyessidian.
-9. Run \`Open Eyessidian Tab\`.
+8. Enable GooglyEyes.
+9. Run \`Open GooglyEyes Tab\`.
 
 The test package includes ${skinNames}.
 
@@ -146,11 +146,11 @@ Open the Quick UI from:
 - Ribbon eye icon
 - Status bar item
 
-The Quick UI starts compact behind a Show controls button. When expanded it supports show/hide, skin switching, personality switching, reaction pause, focus mode, blink preview, Eyessidian tab, and full settings.
+The Quick UI starts compact behind a Show controls button. When expanded it supports show/hide, skin switching, personality switching, reaction pause, focus mode, blink preview, GooglyEyes tab, and full settings.
 
-## Eyessidian Tab
+## GooglyEyes Tab
 
-The Eyessidian tab embeds the eyes directly inside Obsidian instead of floating over the interface. Each active skin is scaled into a full tab panel overlay so it reads as part of the workspace.
+The GooglyEyes tab embeds the eyes directly inside Obsidian instead of floating over the interface. Each active skin is scaled into a full tab panel overlay so it reads as part of the workspace.
 
 The tab includes live controls for:
 
@@ -203,9 +203,9 @@ When you add or remove a skin from \`assets/skins.json\`, the README skin list a
 
 ## Troubleshooting
 
-Eyessidian does not show in Community plugins:
+GooglyEyes does not show in Community plugins:
 
-- Check that \`manifest.json\` is directly inside \`.obsidian/plugins/eyessidian\`.
+- Check that \`manifest.json\` is directly inside \`.obsidian/plugins/googly-eyes\`.
 - Reload plugins.
 - Restart Obsidian.
 
@@ -214,7 +214,7 @@ The tab opens but looks wrong:
 - Run \`npm run validate-assets\`.
 - Run \`npm run build\`.
 - Run \`npm run package-test\`.
-- Replace the old vault plugin folder with the new \`release/eyessidian-test\` output.
+- Replace the old vault plugin folder with the new \`release/googly-eyes-test\` output.
 
 The eyes look too large or too small:
 

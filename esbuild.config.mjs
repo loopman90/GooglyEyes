@@ -6,7 +6,7 @@ const prod = process.argv[2] === "production";
 
 const context = await esbuild.context({
   banner: {
-    js: "/* Eyessidian - living local eyes for Obsidian */"
+    js: "/* GooglyEyes - living local eyes for Obsidian */"
   },
   entryPoints: ["main.ts"],
   bundle: true,

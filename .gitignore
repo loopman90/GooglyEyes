@@ -24,3 +24,5 @@ assets/skins/*
 !assets/skins/ice-hockey/**
 !assets/skins/mona-lisa/
 !assets/skins/mona-lisa/**
+!assets/skins/clown/
+!assets/skins/clown/**
