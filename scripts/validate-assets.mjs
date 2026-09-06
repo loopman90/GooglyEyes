@@ -18,6 +18,8 @@ const MIN_IRIS_SIZE = 26;
 const MAX_IRIS_SIZE = 44;
 const MIN_PUPIL_SIZE = 16;
 const MAX_PUPIL_SIZE = 46;
+const MIN_EYE_WINDOW_SIZE = 0.12;
+const MAX_EYE_WINDOW_SIZE = 0.5;
 
 function isPng(path) {
   if (!existsSync(path)) return false;
@@ -173,6 +175,33 @@ for (const skin of manifest.skins) {
         const skinMeta = JSON.parse(readFileSync(path, "utf8"));
         const defaults = skinMeta.defaults ?? {};
         if (layeredSkins.has(skin)) {
+          if (!Array.isArray(skinMeta.eyeWindows) || skinMeta.eyeWindows.length !== 2) {
+            invalidJson.push(`${path}\n  - eyeWindows must define exactly one left and one right eye window`);
+          } else {
+            const sides = new Set();
+            for (const window of skinMeta.eyeWindows) {
+              sides.add(window.side);
+              const validSide = window.side === "left" || window.side === "right";
+              const values = [window.x, window.y, window.w, window.h];
+              const numeric = values.every((value) => typeof value === "number" && Number.isFinite(value));
+              const inBounds = numeric
+                && window.x >= 0
+                && window.y >= 0
+                && window.w >= MIN_EYE_WINDOW_SIZE
+                && window.w <= MAX_EYE_WINDOW_SIZE
+                && window.h >= MIN_EYE_WINDOW_SIZE
+                && window.h <= MAX_EYE_WINDOW_SIZE
+                && window.x + window.w <= 1
+                && window.y + window.h <= 1;
+              if (!validSide || !inBounds) {
+                invalidJson.push(`${path}\n  - each eye window must have side left/right and normalized x/y/w/h within the rectangular mask`);
+                break;
+              }
+            }
+            if (!sides.has("left") || !sides.has("right")) {
+              invalidJson.push(`${path}\n  - eyeWindows must include both left and right sides`);
+            }
+          }
           if (typeof defaults.irisSize !== "number" || defaults.irisSize < MIN_IRIS_SIZE || defaults.irisSize > MAX_IRIS_SIZE) {
             invalidJson.push(`${path}\n  - defaults.irisSize must be ${MIN_IRIS_SIZE}-${MAX_IRIS_SIZE}% of the eye window width`);
           }

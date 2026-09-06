@@ -33,6 +33,13 @@ interface EyePairConfig {
   offsetY: number;
 }
 
+interface EyeWindow {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 interface GooglyEyesSettings {
   enabled: boolean;
   visible: boolean;
@@ -147,6 +154,27 @@ const SKIN_TUPLES: SkinTuple[] = [
 const SKINS: SkinDefinition[] = SKIN_TUPLES.map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize]) => ({
   id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize, supportsColorOverrides: true
 }));
+
+const DEFAULT_EYE_WINDOWS: Record<"left" | "right", EyeWindow> = {
+  left: { x: 0.08, y: 0.263, w: 0.365, h: 0.473 },
+  right: { x: 0.555, y: 0.263, w: 0.365, h: 0.473 }
+};
+
+const SKIN_EYE_WINDOWS: Record<string, Record<"left" | "right", EyeWindow>> = {
+  robot: DEFAULT_EYE_WINDOWS,
+  cat: DEFAULT_EYE_WINDOWS,
+  "manga-female": { left: { x: 0.14, y: 0.268, w: 0.32, h: 0.34 }, right: { x: 0.541, y: 0.268, w: 0.32, h: 0.34 } },
+  dragon: DEFAULT_EYE_WINDOWS,
+  "tibetan-monk": { left: { x: 0.184, y: 0.286, w: 0.248, h: 0.248 }, right: { x: 0.57, y: 0.286, w: 0.248, h: 0.248 } },
+  alien: DEFAULT_EYE_WINDOWS,
+  hacker: DEFAULT_EYE_WINDOWS,
+  anonymous: { left: { x: 0.132, y: 0.322, w: 0.346, h: 0.304 }, right: { x: 0.522, y: 0.322, w: 0.346, h: 0.304 } },
+  "ice-hockey": { left: { x: 0.152, y: 0.275, w: 0.306, h: 0.32 }, right: { x: 0.542, y: 0.275, w: 0.306, h: 0.32 } },
+  "mona-lisa": { left: { x: 0.235, y: 0.394, w: 0.232, h: 0.214 }, right: { x: 0.533, y: 0.394, w: 0.232, h: 0.214 } },
+  clown: { left: { x: 0.128, y: 0.246, w: 0.345, h: 0.345 }, right: { x: 0.529, y: 0.246, w: 0.345, h: 0.345 } },
+  spy: { left: { x: 0.159, y: 0.237, w: 0.276, h: 0.22 }, right: { x: 0.564, y: 0.237, w: 0.272, h: 0.229 } },
+  skeleton: { left: { x: 0.161, y: 0.209, w: 0.294, h: 0.441 }, right: { x: 0.544, y: 0.209, w: 0.295, h: 0.441 } }
+};
 
 const AVAILABLE_SKIN_IDS = new Set(SKINS.map((skin) => skin.id));
 
@@ -1060,10 +1088,19 @@ class EyeController {
       this.applyReactionState(pair);
       pair.toggleClass("has-layered-assets", hasLayeredAssets);
       pair.toggleClass("has-peek-mask", hasPeekMask);
+      const eyeWindows = SKIN_EYE_WINDOWS[skinDef.id] ?? DEFAULT_EYE_WINDOWS;
       pair.setCssProps({
         "--accent": skinDef.accent,
         "--skin-iris-size": `${skinDef.irisSize}%`,
-        "--skin-pupil-size": `${skinDef.pupilSize}%`
+        "--skin-pupil-size": `${skinDef.pupilSize}%`,
+        "--eye-left-x": `${eyeWindows.left.x * 100}%`,
+        "--eye-left-y": `${eyeWindows.left.y * 100}%`,
+        "--eye-left-w": `${eyeWindows.left.w * 100}%`,
+        "--eye-left-h": `${eyeWindows.left.h * 100}%`,
+        "--eye-right-x": `${eyeWindows.right.x * 100}%`,
+        "--eye-right-y": `${eyeWindows.right.y * 100}%`,
+        "--eye-right-w": `${eyeWindows.right.w * 100}%`,
+        "--eye-right-h": `${eyeWindows.right.h * 100}%`
       });
       const left = pair.querySelector<HTMLImageElement>(".googly-eyes-eye-left");
       const right = pair.querySelector<HTMLImageElement>(".googly-eyes-eye-right");
@@ -1317,6 +1354,9 @@ class PlaygroundView extends ItemView {
     el.addClass("googly-eyes-playground");
     const stage = el.createDiv({ cls: "googly-eyes-stage" });
     this.plugin.controller.mount(stage);
+    const quickButton = stage.createEl("button", { text: "Quick UI", cls: "googly-eyes-tab-quick-button mod-cta" });
+    quickButton.setAttr("aria-label", "Open Quick UI");
+    quickButton.addEventListener("click", () => new QuickUiModal(this.app, this.plugin).open());
   }
 }
 
@@ -1329,7 +1369,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.addClass("googly-eyes-settings");
-    new Setting(containerEl).setName("General").setHeading();
+    new Setting(containerEl).setName("Visibility and tracking").setHeading();
     containerEl.createEl("p", { text: "GooglyEyes reacts to local events only. It does not read note contents or clipboard contents." });
 
     new Setting(containerEl).setName("Enable plugin").addToggle((toggle) => toggle.setValue(this.plugin.settings.enabled).onChange((value) => this.save("enabled", value)));
@@ -1355,8 +1395,8 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Blink speed").setDesc("Higher is snappier, lower is softer.").addSlider((s) => s.setLimits(0.35, 1.8, 0.05).setValue(this.plugin.settings.blinkSpeed).onChange((v) => this.save("blinkSpeed", v)));
     new Setting(containerEl).setName("Reaction hold").setDesc("Adds a little extra time before an expression returns to neutral.").addSlider((s) => s.setLimits(0, 1200, 50).setValue(this.plugin.settings.reactionHoldMs).onChange((v) => this.save("reactionHoldMs", v)));
     new Setting(containerEl).setName("Ambient emotions").setDesc("Occasionally shows a natural random expression, then returns to mouse tracking.").addToggle((t) => t.setValue(this.plugin.settings.ambientEmotionsEnabled).onChange((v) => this.save("ambientEmotionsEnabled", v)));
-    new Setting(containerEl).setName("Ambient interval").setDesc("Average seconds between spontaneous expressions.").addSlider((s) => s.setLimits(5, 120, 1).setValue(this.plugin.settings.ambientEmotionIntervalSec).setDynamicTooltip().onChange((v) => this.save("ambientEmotionIntervalSec", v)));
-    new Setting(containerEl).setName("Ambient variation").setDesc("Adds random extra time so expressions feel less predictable.").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.ambientEmotionJitter).setDynamicTooltip().onChange((v) => this.save("ambientEmotionJitter", v)));
+    new Setting(containerEl).setName("Ambient interval").setDesc("Average seconds between spontaneous expressions.").addSlider((s) => s.setLimits(5, 120, 1).setValue(this.plugin.settings.ambientEmotionIntervalSec).onChange((v) => this.save("ambientEmotionIntervalSec", v)));
+    new Setting(containerEl).setName("Ambient variation").setDesc("Adds random extra time so expressions feel less predictable.").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.ambientEmotionJitter).onChange((v) => this.save("ambientEmotionJitter", v)));
     new Setting(containerEl).setName("Pause reactions").addToggle((t) => t.setValue(this.plugin.settings.pausedReactions).onChange((v) => this.save("pausedReactions", v)));
 
     new Setting(containerEl).setName("Personality and skin").setHeading();
