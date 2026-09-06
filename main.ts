@@ -58,7 +58,12 @@ interface EyesidianSettings {
   peekFaceMask: boolean;
   irisColor: string;
   pupilColor: string;
+  eyelidColor: string;
+  eyelidShadowColor: string;
   irisGlow: number;
+  emotionStrength: number;
+  blinkSpeed: number;
+  reactionHoldMs: number;
   debugOverlay: boolean;
   size: number;
   opacity: number;
@@ -177,7 +182,12 @@ const DEFAULT_SETTINGS: EyesidianSettings = {
   peekFaceMask: true,
   irisColor: "#42d9ff",
   pupilColor: "#07111b",
+  eyelidColor: "#2a2d30",
+  eyelidShadowColor: "#030508",
   irisGlow: 0.7,
+  emotionStrength: 1,
+  blinkSpeed: 1,
+  reactionHoldMs: 0,
   debugOverlay: false,
   size: 180,
   opacity: 0.95,
@@ -270,6 +280,52 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
 
 const LAYERED_SKINS = new Set(["robot"]);
 
+const REACTION_LABELS = labels<Reaction>({
+  "idle-neutral": "Neutral",
+  blink: "Blink",
+  "slow-blink": "Slow blink",
+  sleepy: "Sleepy",
+  "look-left": "Look left",
+  "look-right": "Look right",
+  "look-up": "Look up",
+  "look-down": "Look down",
+  "wide-stare": "Wide stare",
+  happy: "Happy",
+  shocked: "Shocked",
+  suspicious: "Suspicious",
+  angry: "Angry",
+  sad: "Sad",
+  confused: "Confused",
+  dizzy: "Dizzy",
+  "cross-eyed": "Cross-eyed",
+  "eye-roll": "Eye roll",
+  nervous: "Nervous",
+  typing: "Typing",
+  cut: "Cut",
+  copy: "Copy",
+  paste: "Paste",
+  delete: "Delete",
+  undo: "Undo",
+  redo: "Redo",
+  "idle-long": "Long idle",
+  wake: "Wake",
+  "hover-suspicious": "Hover suspicious",
+  "fast-movement": "Fast movement",
+  peek: "Peek",
+  "sleepy-idle": "Sleepy idle",
+  "chaotic-stare": "Chaotic stare",
+  "dramatic-shock": "Dramatic shock",
+  "rapid-typing-focus": "Rapid typing",
+  "drag-tracking": "Drag tracking"
+});
+
+const BEHAVIOR_PRESETS: Record<string, Partial<EyesidianSettings>> = {
+  subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85 },
+  lively: { personality: "curious", reactionIntensity: "expressive", randomness: "medium", followSensitivity: 0.9, smoothing: 0.2, emotionStrength: 1.1, blinkSpeed: 1.05 },
+  dramatic: { personality: "dramatic", reactionIntensity: "chaotic", randomness: "high", followSensitivity: 1.1, smoothing: 0.28, emotionStrength: 1.35, blinkSpeed: 1.2 },
+  sleepy: { personality: "sleepy", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.45, smoothing: 0.1, emotionStrength: 0.8, blinkSpeed: 0.72 }
+};
+
 class EyeController {
   private root: HTMLDivElement | null = null;
   private pairs: HTMLDivElement[] = [];
@@ -336,7 +392,10 @@ class EyeController {
     this.root.style.setProperty("--eyesidian-z", `${s.zIndex}`);
     this.root.style.setProperty("--iris-color", s.irisColor);
     this.root.style.setProperty("--pupil-color", s.pupilColor);
+    this.root.style.setProperty("--eyelid-color", s.eyelidColor);
+    this.root.style.setProperty("--eyelid-shadow-color", s.eyelidShadowColor);
     this.root.style.setProperty("--iris-glow", `${s.irisGlow}`);
+    this.root.style.setProperty("--lid-transition-scale", `${1 / Math.max(0.2, s.blinkSpeed)}`);
     this.positionRoot();
     this.updateAssets();
   }
@@ -580,7 +639,7 @@ class EyeController {
     const interval = (2600 + Math.random() * 4200 * this.randomness()) * personality.blink;
     this.blinkTimer = window.setTimeout(() => {
       this.setReaction(this.isFocusMode() ? "blink" : pick(["blink", "slow-blink"], this.randomness()));
-      window.setTimeout(() => this.setReaction("idle-neutral"), 180);
+      window.setTimeout(() => this.setReaction("idle-neutral"), 180 / Math.max(0.2, this.plugin.settings.blinkSpeed));
       this.scheduleBlink();
     }, interval);
   }
@@ -592,15 +651,30 @@ class EyeController {
 
   private applyReactionState(pair: HTMLElement): void {
     const reaction = this.currentReaction;
+    const strength = this.plugin.settings.emotionStrength;
     const set = (name: string, value: string) => pair.style.setProperty(name, value);
+    const pct = (value: number) => `${value * strength}%`;
     set("--lid-upper-left", "-55%");
     set("--lid-lower-left", "58%");
     set("--lid-upper-right", "-55%");
     set("--lid-lower-right", "58%");
+    set("--lid-tilt-left", "0deg");
+    set("--lid-tilt-right", "0deg");
+    set("--lid-lower-tilt-left", "0deg");
+    set("--lid-lower-tilt-right", "0deg");
+    set("--reaction-iris-x-left", "0%");
+    set("--reaction-iris-y-left", "0%");
+    set("--reaction-iris-x-right", "0%");
+    set("--reaction-iris-y-right", "0%");
+    set("--reaction-pupil-x-left", "0%");
+    set("--reaction-pupil-y-left", "0%");
+    set("--reaction-pupil-x-right", "0%");
+    set("--reaction-pupil-y-right", "0%");
     set("--iris-scale", "1");
     set("--pupil-scale", "1");
     set("--iris-opacity", "1");
     set("--iris-filter", "none");
+    set("--eye-vibe", "0deg");
 
     if (reaction === "blink" || reaction === "slow-blink") {
       set("--lid-upper-left", "1%");
@@ -613,6 +687,10 @@ class EyeController {
       set("--lid-lower-left", "36%");
       set("--lid-upper-right", "-8%");
       set("--lid-lower-right", "36%");
+      set("--reaction-iris-y-left", pct(5));
+      set("--reaction-iris-y-right", pct(5));
+      set("--reaction-pupil-y-left", pct(8));
+      set("--reaction-pupil-y-right", pct(8));
       set("--iris-opacity", "0.82");
       set("--pupil-scale", "0.86");
     } else if (reaction === "suspicious" || reaction === "hover-suspicious") {
@@ -620,18 +698,36 @@ class EyeController {
       set("--lid-lower-left", "47%");
       set("--lid-upper-right", "-31%");
       set("--lid-lower-right", "54%");
+      set("--lid-tilt-left", "-7deg");
+      set("--lid-tilt-right", "7deg");
+      set("--lid-lower-tilt-left", "3deg");
+      set("--lid-lower-tilt-right", "-3deg");
+      set("--reaction-iris-x-left", pct(5));
+      set("--reaction-iris-x-right", pct(-5));
+      set("--reaction-pupil-x-left", pct(8));
+      set("--reaction-pupil-x-right", pct(-8));
       set("--pupil-scale", "0.92");
     } else if (reaction === "angry" || reaction === "delete" || reaction === "cut") {
       set("--lid-upper-left", "-12%");
       set("--lid-lower-left", "49%");
       set("--lid-upper-right", "-12%");
       set("--lid-lower-right", "49%");
+      set("--lid-tilt-left", "10deg");
+      set("--lid-tilt-right", "-10deg");
+      set("--lid-lower-tilt-left", "-4deg");
+      set("--lid-lower-tilt-right", "4deg");
+      set("--reaction-iris-y-left", pct(-3));
+      set("--reaction-iris-y-right", pct(-3));
+      set("--reaction-pupil-y-left", pct(-5));
+      set("--reaction-pupil-y-right", pct(-5));
       set("--iris-filter", "hue-rotate(155deg) saturate(1.25)");
     } else if (reaction === "shocked" || reaction === "wide-stare" || reaction === "wake" || reaction === "dramatic-shock") {
       set("--lid-upper-left", "-72%");
       set("--lid-lower-left", "70%");
       set("--lid-upper-right", "-72%");
       set("--lid-lower-right", "70%");
+      set("--reaction-iris-y-left", pct(-2));
+      set("--reaction-iris-y-right", pct(-2));
       set("--iris-scale", "1.08");
       set("--pupil-scale", "0.74");
     } else if (reaction === "happy" || reaction === "copy" || reaction === "paste" || reaction === "redo") {
@@ -639,14 +735,45 @@ class EyeController {
       set("--lid-lower-left", "50%");
       set("--lid-upper-right", "-42%");
       set("--lid-lower-right", "50%");
+      set("--lid-tilt-left", "-4deg");
+      set("--lid-tilt-right", "4deg");
+      set("--lid-lower-tilt-left", "2deg");
+      set("--lid-lower-tilt-right", "-2deg");
+      set("--reaction-iris-y-left", pct(-2));
+      set("--reaction-iris-y-right", pct(-2));
       set("--iris-scale", "1.03");
     } else if (reaction === "sad" || reaction === "undo") {
       set("--lid-upper-left", "-22%");
       set("--lid-lower-left", "43%");
       set("--lid-upper-right", "-22%");
       set("--lid-lower-right", "43%");
+      set("--lid-tilt-left", "-8deg");
+      set("--lid-tilt-right", "8deg");
+      set("--lid-lower-tilt-left", "4deg");
+      set("--lid-lower-tilt-right", "-4deg");
+      set("--reaction-iris-y-left", pct(7));
+      set("--reaction-iris-y-right", pct(7));
+      set("--reaction-pupil-y-left", pct(10));
+      set("--reaction-pupil-y-right", pct(10));
       set("--iris-opacity", "0.78");
     } else if (reaction === "confused" || reaction === "dizzy" || reaction === "cross-eyed" || reaction === "eye-roll") {
+      if (reaction === "cross-eyed") {
+        set("--reaction-iris-x-left", pct(9));
+        set("--reaction-iris-x-right", pct(-9));
+        set("--reaction-pupil-x-left", pct(14));
+        set("--reaction-pupil-x-right", pct(-14));
+      } else if (reaction === "eye-roll") {
+        set("--reaction-iris-y-left", pct(-10));
+        set("--reaction-iris-y-right", pct(-10));
+        set("--reaction-pupil-y-left", pct(-14));
+        set("--reaction-pupil-y-right", pct(-14));
+      } else {
+        set("--reaction-iris-x-left", pct(-5));
+        set("--reaction-iris-x-right", pct(5));
+        set("--reaction-pupil-x-left", pct(-8));
+        set("--reaction-pupil-x-right", pct(8));
+      }
+      set("--eye-vibe", reaction === "dizzy" ? "2deg" : "-1deg");
       set("--iris-scale", "0.94");
       set("--pupil-scale", "0.9");
     } else if (reaction === "typing" || reaction === "rapid-typing-focus") {
@@ -654,7 +781,31 @@ class EyeController {
       set("--lid-lower-left", "53%");
       set("--lid-upper-right", "-36%");
       set("--lid-lower-right", "53%");
+      set("--reaction-iris-y-left", pct(5));
+      set("--reaction-iris-y-right", pct(5));
+      set("--reaction-pupil-y-left", pct(7));
+      set("--reaction-pupil-y-right", pct(7));
       set("--iris-filter", "saturate(1.2)");
+    } else if (reaction === "look-left" || reaction === "peek") {
+      set("--reaction-iris-x-left", pct(-10));
+      set("--reaction-iris-x-right", pct(-10));
+      set("--reaction-pupil-x-left", pct(-15));
+      set("--reaction-pupil-x-right", pct(-15));
+    } else if (reaction === "look-right" || reaction === "drag-tracking" || reaction === "fast-movement") {
+      set("--reaction-iris-x-left", pct(10));
+      set("--reaction-iris-x-right", pct(10));
+      set("--reaction-pupil-x-left", pct(15));
+      set("--reaction-pupil-x-right", pct(15));
+    } else if (reaction === "look-up" || reaction === "chaotic-stare") {
+      set("--reaction-iris-y-left", pct(-10));
+      set("--reaction-iris-y-right", pct(-10));
+      set("--reaction-pupil-y-left", pct(-15));
+      set("--reaction-pupil-y-right", pct(-15));
+    } else if (reaction === "look-down") {
+      set("--reaction-iris-y-left", pct(10));
+      set("--reaction-iris-y-right", pct(10));
+      set("--reaction-pupil-y-left", pct(15));
+      set("--reaction-pupil-y-right", pct(15));
     }
   }
 
@@ -741,7 +892,7 @@ class EyeController {
 
   private reactionDuration(reaction: Reaction, multiplier: number): number {
     const base = reaction.includes("typing") ? 380 : reaction.includes("shock") || reaction === "shocked" ? 780 : 560;
-    return this.reduceMotion.matches ? 180 : base * multiplier * this.intensity();
+    return this.reduceMotion.matches ? 180 : base * multiplier * this.intensity() + this.plugin.settings.reactionHoldMs;
   }
 
   private isFocusMode(): boolean {
@@ -918,6 +1069,28 @@ class PlaygroundView extends ItemView {
         this.plugin.controller.refresh();
       });
     });
+    new Setting(controls).setName("Iris").addColorPicker((picker) => {
+      picker.setValue(this.plugin.settings.irisColor).onChange(async (value) => {
+        this.plugin.settings.irisColor = value;
+        await this.plugin.saveSettings();
+        this.plugin.controller.applySettings();
+      });
+    });
+    new Setting(controls).setName("Eyelids").addColorPicker((picker) => {
+      picker.setValue(this.plugin.settings.eyelidColor).onChange(async (value) => {
+        this.plugin.settings.eyelidColor = value;
+        await this.plugin.saveSettings();
+        this.plugin.controller.applySettings();
+      });
+    });
+    new Setting(controls).setName("Emotion").addSlider((slider) => {
+      slider.setLimits(0.25, 1.8, 0.05).setValue(this.plugin.settings.emotionStrength);
+      slider.onChange(async (value) => {
+        this.plugin.settings.emotionStrength = value;
+        await this.plugin.saveSettings();
+        this.plugin.controller.refresh();
+      });
+    });
     const buttons = el.createDiv({ cls: "eyesidian-reaction-grid" });
     [
       ["Blink", "blink"], ["Shock", "shocked"], ["Suspicious", "suspicious"], ["Sleep", "sleepy"], ["Copy", "copy"], ["Cut", "cut"],
@@ -950,10 +1123,22 @@ class EyesidianSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Follow sensitivity").addSlider((s) => s.setLimits(0.1, 1.5, 0.05).setValue(this.plugin.settings.followSensitivity).onChange((v) => this.save("followSensitivity", v)));
     new Setting(containerEl).setName("Smoothing").addSlider((s) => s.setLimits(0.04, 0.8, 0.02).setValue(this.plugin.settings.smoothing).onChange((v) => this.save("smoothing", v)));
 
+    containerEl.createEl("h3", { text: "Behavior presets" });
+    new Setting(containerEl)
+      .setName("Quick behavior")
+      .setDesc("Start here, then fine-tune below.")
+      .addButton((b) => b.setButtonText("Subtle").onClick(() => this.applyPreset("subtle")))
+      .addButton((b) => b.setButtonText("Lively").onClick(() => this.applyPreset("lively")))
+      .addButton((b) => b.setButtonText("Dramatic").onClick(() => this.applyPreset("dramatic")))
+      .addButton((b) => b.setButtonText("Sleepy").onClick(() => this.applyPreset("sleepy")));
+
     containerEl.createEl("h3", { text: "Reactions" });
     new Setting(containerEl).setName("Enable reactions").addToggle((t) => t.setValue(this.plugin.settings.reactionsEnabled).onChange((v) => this.save("reactionsEnabled", v)));
     new Setting(containerEl).setName("Reaction intensity").addDropdown((d) => this.dropdown(d, INTENSITY_LABELS, this.plugin.settings.reactionIntensity, (v) => this.save("reactionIntensity", v as Intensity)));
     new Setting(containerEl).setName("Randomness").addDropdown((d) => this.dropdown(d, RANDOMNESS_LABELS, this.plugin.settings.randomness, (v) => this.save("randomness", v as Randomness)));
+    new Setting(containerEl).setName("Emotion strength").setDesc("How far the eyes and lids push each expression.").addSlider((s) => s.setLimits(0.25, 1.8, 0.05).setValue(this.plugin.settings.emotionStrength).onChange((v) => this.save("emotionStrength", v)));
+    new Setting(containerEl).setName("Blink speed").setDesc("Higher is snappier, lower is softer.").addSlider((s) => s.setLimits(0.35, 1.8, 0.05).setValue(this.plugin.settings.blinkSpeed).onChange((v) => this.save("blinkSpeed", v)));
+    new Setting(containerEl).setName("Reaction hold").setDesc("Adds a little extra time before an expression returns to neutral.").addSlider((s) => s.setLimits(0, 1200, 50).setValue(this.plugin.settings.reactionHoldMs).onChange((v) => this.save("reactionHoldMs", v)));
     new Setting(containerEl).setName("Pause reactions").addToggle((t) => t.setValue(this.plugin.settings.pausedReactions).onChange((v) => this.save("pausedReactions", v)));
 
     containerEl.createEl("h3", { text: "Personality and skin" });
@@ -972,12 +1157,16 @@ class EyesidianSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Number of eye pairs").addSlider((s) => s.setLimits(1, 6, 1).setValue(this.plugin.settings.eyePairCount).onChange((v) => this.save("eyePairCount", v)));
     new Setting(containerEl).setName("Per-pair variation").addToggle((t) => t.setValue(this.plugin.settings.perPairVariation).onChange((v) => this.save("perPairVariation", v)));
 
+    containerEl.createEl("h3", { text: "Look" });
+    new Setting(containerEl).setName("Iris color").addColorPicker((picker) => picker.setValue(this.plugin.settings.irisColor).onChange((v) => this.save("irisColor", v)));
+    new Setting(containerEl).setName("Pupil color").addColorPicker((picker) => picker.setValue(this.plugin.settings.pupilColor).onChange((v) => this.save("pupilColor", v)));
+    new Setting(containerEl).setName("Eyelid color").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidColor).onChange((v) => this.save("eyelidColor", v)));
+    new Setting(containerEl).setName("Eyelid shadow").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidShadowColor).onChange((v) => this.save("eyelidShadowColor", v)));
+    new Setting(containerEl).setName("Iris glow").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.irisGlow).onChange((v) => this.save("irisGlow", v)));
+
     containerEl.createEl("h3", { text: "Embedded tab" });
     new Setting(containerEl).setName("Peek mode").addToggle((t) => t.setValue(this.plugin.settings.peekMode).onChange((v) => this.save("peekMode", v)));
     new Setting(containerEl).setName("Embedded panel mask").setDesc("Adds a full-width tab panel overlay so the eyes sit inside Obsidian instead of looking like a floating mask. Supported by layered skins such as Robot.").addToggle((t) => t.setValue(this.plugin.settings.peekFaceMask).onChange((v) => this.save("peekFaceMask", v)));
-    new Setting(containerEl).setName("Iris color").addColorPicker((picker) => picker.setValue(this.plugin.settings.irisColor).onChange((v) => this.save("irisColor", v)));
-    new Setting(containerEl).setName("Pupil color").addColorPicker((picker) => picker.setValue(this.plugin.settings.pupilColor).onChange((v) => this.save("pupilColor", v)));
-    new Setting(containerEl).setName("Iris glow").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.irisGlow).onChange((v) => this.save("irisGlow", v)));
     new Setting(containerEl).setName("Debug eye windows").setDesc("Shows the eye-window boxes and centers while tuning a skin.").addToggle((t) => t.setValue(this.plugin.settings.debugOverlay).onChange((v) => this.save("debugOverlay", v)));
     new Setting(containerEl).setName("Size").addSlider((s) => s.setLimits(36, 220, 2).setValue(this.plugin.settings.size).onChange((v) => this.save("size", v)));
     new Setting(containerEl).setName("Opacity").addSlider((s) => s.setLimits(0.2, 1, 0.05).setValue(this.plugin.settings.opacity).onChange((v) => this.save("opacity", v)));
@@ -990,11 +1179,28 @@ class EyesidianSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Subtle mode").addToggle((t) => t.setValue(this.plugin.settings.subtleMode).onChange((v) => this.save("subtleMode", v)));
     new Setting(containerEl).setName("Sound effects").setDesc("Off by default. V1 focuses on visual feedback.").addToggle((t) => t.setValue(this.plugin.settings.soundEffects).onChange((v) => this.save("soundEffects", v)));
 
-    containerEl.createEl("h3", { text: "Action mapping" });
+    containerEl.createEl("h3", { text: "Action reactions" });
+    new Setting(containerEl)
+      .setName("Reset reactions")
+      .setDesc("Restores the default reactions for typing, clicks, copy, paste, hover, and idle.")
+      .addButton((button) => button.setButtonText("Reset").onClick(() => this.resetActions()));
     this.plugin.settings.actionMappings.forEach((mapping, index) => {
-      const setting = new Setting(containerEl).setName(mapping.name).setDesc(`${mapping.triggerType} - ${mapping.reactionPool.join(", ")}`);
+      const setting = new Setting(containerEl).setName(mapping.name).setDesc(mapping.triggerType);
       setting.addToggle((t) => t.setValue(mapping.enabled).onChange((v) => {
         this.plugin.settings.actionMappings[index].enabled = v;
+        this.plugin.saveSettings();
+      }));
+      setting.addDropdown((dropdown) => {
+        Object.entries(REACTION_LABELS).forEach(([id, label]) => dropdown.addOption(id, label));
+        dropdown.setValue(mapping.reactionPool[0] ?? "blink");
+        dropdown.onChange((value) => {
+          this.plugin.settings.actionMappings[index].reactionPool = [value as Reaction];
+          this.plugin.saveSettings();
+          this.plugin.controller.react("settings-preview", value as Reaction);
+        });
+      });
+      setting.addSlider((slider) => slider.setLimits(0.2, 1.8, 0.1).setValue(mapping.intensity).onChange((value) => {
+        this.plugin.settings.actionMappings[index].intensity = value;
         this.plugin.saveSettings();
       }));
       setting.addText((t) => t.setPlaceholder("cooldown ms").setValue(String(mapping.cooldownMs)).onChange((v) => {
@@ -1019,6 +1225,20 @@ class EyesidianSettingTab extends PluginSettingTab {
   private dropdown<T extends string>(dropdown: { addOption: (value: string, display: string) => unknown; setValue: (value: string) => { onChange: (cb: (value: string) => unknown) => unknown } }, options: Record<T, string>, value: T, onChange: (value: string) => void): void {
     Object.entries(options).forEach(([id, label]) => dropdown.addOption(id, label as string));
     dropdown.setValue(value).onChange(onChange);
+  }
+
+  private async applyPreset(id: string): Promise<void> {
+    Object.assign(this.plugin.settings, BEHAVIOR_PRESETS[id]);
+    await this.plugin.saveSettings();
+    this.plugin.controller.refresh();
+    this.display();
+  }
+
+  private async resetActions(): Promise<void> {
+    this.plugin.settings.actionMappings = DEFAULT_ACTIONS.map((action) => ({ ...action, reactionPool: [...action.reactionPool] }));
+    await this.plugin.saveSettings();
+    this.plugin.controller.refresh();
+    this.display();
   }
 
   private async save<K extends keyof EyesidianSettings>(key: K, value: EyesidianSettings[K]): Promise<void> {

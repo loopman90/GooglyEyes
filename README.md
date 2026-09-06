@@ -10,6 +10,7 @@ Eyesidian is a playful, fully local Obsidian Community Plugin that makes the int
 - Follows the mouse, the text cursor, Smart / Auto, or both.
 - Reacts to local events such as typing, copy, cut, paste, delete, undo, redo, hover, tab switches, fast scrolling, and quick mouse movement.
 - Supports personalities, reaction intensity, randomness, focus mode, peek mode, opacity, size, and z-index inside an embedded Obsidian tab.
+- Lets users tune iris color, pupil color, eyelid color, eyelid shadow, glow, blink speed, emotion strength, and per-action reactions.
 - Includes a Quick UI, ribbon entry, status bar access, commands, onboarding, settings preview, and an embedded Eyesidian tab.
 
 ## Privacy
@@ -35,7 +36,7 @@ Available now:
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 
-The Robot skin now uses a layered renderer instead of full reaction PNGs. Its PNGs are only the embedded tab mask, thumbnail, and a clean left/right base eye without iris, pupil, or lids. Iris color, pupil color, pupil tracking, eyelids, blinking, and reactions are drawn at runtime, which makes the eyes easier to tune and keeps future skins much lighter.
+The Robot skin now uses a layered renderer instead of full reaction PNGs. Its PNGs are only the embedded tab mask, thumbnail, and a clean left/right base eye without iris, pupil, or lids. Iris color, pupil color, eyelid color, pupil tracking, eyelids, blinking, and reactions are drawn at runtime, which makes the eyes easier to tune and keeps future skins much lighter.
 
 ## Personalities
 
@@ -60,14 +61,14 @@ The Eyesidian tab embeds the eyes directly inside Obsidian instead of floating o
 
 ## Customization
 
-Settings include visibility mode, follow target, sensitivity, smoothing, reactions, reaction intensity, randomness, cooldowns, action mappings, personality tuning, skin thumbnails, iris color, pupil color, iris glow, debug eye windows, peek mode, size, opacity, layering, animation smoothness, focus mode, DND mode, subtle mode, and privacy notes.
+Settings include visibility mode, follow target, sensitivity, smoothing, behavior presets, reactions, reaction intensity, randomness, emotion strength, blink speed, reaction hold, cooldowns, action mappings, personality tuning, skin thumbnails, iris color, pupil color, eyelid color, eyelid shadow color, iris glow, debug eye windows, peek mode, size, opacity, layering, animation smoothness, focus mode, DND mode, subtle mode, and privacy notes.
 
-Actions use:
+Actions can be tuned in a friendly mapping list:
 
 - action name
 - trigger type
 - enabled / disabled
-- assigned reaction pool
+- selected reaction
 - intensity
 - cooldown
 

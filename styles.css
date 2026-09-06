@@ -4,21 +4,41 @@
   --eyesidian-z: 1000;
   --iris-color: #42d9ff;
   --pupil-color: #07111b;
+  --eyelid-color: #2a2d30;
+  --eyelid-shadow-color: #030508;
   --iris-glow: 0.7;
+  --lid-transition-scale: 1;
   --look-x: 0px;
   --look-y: 0px;
   --iris-x: 0px;
   --iris-y: 0px;
   --pupil-x: 0px;
   --pupil-y: 0px;
+  --reaction-iris-x: 0%;
+  --reaction-iris-y: 0%;
+  --reaction-iris-x-left: 0%;
+  --reaction-iris-y-left: 0%;
+  --reaction-iris-x-right: 0%;
+  --reaction-iris-y-right: 0%;
+  --reaction-pupil-x: 0%;
+  --reaction-pupil-y: 0%;
+  --reaction-pupil-x-left: 0%;
+  --reaction-pupil-y-left: 0%;
+  --reaction-pupil-x-right: 0%;
+  --reaction-pupil-y-right: 0%;
   --lid-upper-left: -55%;
   --lid-lower-left: 58%;
   --lid-upper-right: -55%;
   --lid-lower-right: 58%;
+  --lid-tilt-left: 0deg;
+  --lid-tilt-right: 0deg;
+  --lid-lower-tilt-left: 0deg;
+  --lid-lower-tilt-right: 0deg;
   --iris-scale: 1;
   --pupil-scale: 1;
   --iris-opacity: 1;
   --iris-filter: none;
+  --eye-vibe: 0deg;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -79,6 +99,26 @@
   height: 100%;
   overflow: hidden;
   border-radius: 999px;
+  transform: rotate(var(--eye-vibe));
+  transition: transform 130ms ease;
+}
+
+.eyesidian-eye-slot-left {
+  --reaction-iris-x: var(--reaction-iris-x-left);
+  --reaction-iris-y: var(--reaction-iris-y-left);
+  --reaction-pupil-x: var(--reaction-pupil-x-left);
+  --reaction-pupil-y: var(--reaction-pupil-y-left);
+  --lid-tilt: var(--lid-tilt-left);
+  --lid-lower-tilt: var(--lid-lower-tilt-left);
+}
+
+.eyesidian-eye-slot-right {
+  --reaction-iris-x: var(--reaction-iris-x-right);
+  --reaction-iris-y: var(--reaction-iris-y-right);
+  --reaction-pupil-x: var(--reaction-pupil-x-right);
+  --reaction-pupil-y: var(--reaction-pupil-y-right);
+  --lid-tilt: var(--lid-tilt-right);
+  --lid-lower-tilt: var(--lid-lower-tilt-right);
 }
 
 .eyesidian-root.show-debug .eyesidian-eye-slot {
@@ -124,7 +164,7 @@
     inset 0 0 22px rgb(0 17 28 / 0.65);
   opacity: var(--iris-opacity);
   filter: var(--iris-filter);
-  transform: translate(calc(-50% + var(--iris-x)), calc(-50% + var(--iris-y))) scale(var(--iris-scale));
+  transform: translate(calc(-50% + var(--iris-x) + var(--reaction-iris-x)), calc(-50% + var(--iris-y) + var(--reaction-iris-y))) scale(var(--iris-scale));
   transition: transform 70ms linear, width 130ms ease, opacity 130ms ease, filter 130ms ease;
   z-index: 2;
   pointer-events: none;
@@ -154,7 +194,7 @@
   box-shadow:
     0 0 calc(10px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 58%, transparent),
     inset 0 0 9px rgb(0 0 0 / 0.86);
-  transform: translate(calc(-50% + var(--pupil-x)), calc(-50% + var(--pupil-y))) scale(var(--pupil-scale));
+  transform: translate(calc(-50% + var(--pupil-x) + var(--reaction-pupil-x)), calc(-50% + var(--pupil-y) + var(--reaction-pupil-y))) scale(var(--pupil-scale));
   transition: transform 70ms linear, width 120ms ease;
   z-index: 3;
 }
@@ -166,37 +206,37 @@
   height: 58%;
   border-radius: 0 0 55% 55%;
   background:
-    linear-gradient(180deg, rgb(42 45 48), rgb(18 21 24) 62%, rgb(3 5 8));
+    linear-gradient(180deg, color-mix(in srgb, var(--eyelid-color) 92%, #ffffff 8%), var(--eyelid-color) 62%, var(--eyelid-shadow-color));
   box-shadow:
     inset 0 -7px 14px rgb(0 0 0 / 0.62),
     0 3px 7px rgb(0 0 0 / 0.35);
   z-index: 4;
   pointer-events: none;
-  transition: transform 145ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 120ms ease;
+  transition: transform calc(145ms * var(--lid-transition-scale)) cubic-bezier(0.2, 0.8, 0.2, 1), opacity 120ms ease;
 }
 
 .eyesidian-lid-upper {
   top: 0;
-  transform: translateY(var(--lid-upper-left));
+  transform: translateY(var(--lid-upper-left)) rotate(var(--lid-tilt));
 }
 
 .eyesidian-lid-lower {
   bottom: 0;
   border-radius: 55% 55% 0 0;
   background:
-    linear-gradient(0deg, rgb(42 45 48), rgb(18 21 24) 62%, rgb(3 5 8));
+    linear-gradient(0deg, color-mix(in srgb, var(--eyelid-color) 92%, #ffffff 8%), var(--eyelid-color) 62%, var(--eyelid-shadow-color));
   box-shadow:
     inset 0 7px 14px rgb(0 0 0 / 0.62),
     0 -3px 7px rgb(0 0 0 / 0.28);
-  transform: translateY(var(--lid-lower-left));
+  transform: translateY(var(--lid-lower-left)) rotate(var(--lid-lower-tilt));
 }
 
 .eyesidian-eye-slot-right .eyesidian-lid-upper {
-  transform: translateY(var(--lid-upper-right));
+  transform: translateY(var(--lid-upper-right)) rotate(var(--lid-tilt));
 }
 
 .eyesidian-eye-slot-right .eyesidian-lid-lower {
-  transform: translateY(var(--lid-lower-right));
+  transform: translateY(var(--lid-lower-right)) rotate(var(--lid-lower-tilt));
 }
 
 .eyesidian-peek-mask {
