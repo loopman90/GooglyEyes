@@ -1,8 +1,8 @@
 # Eyesidian Asset Pack
 
-Eyesidian exposes only completed skins in the UI. The current active skin is Robot.
+Eyesidian exposes only completed skins in the UI. The current active skins are Robot and Cat.
 
-Robot uses the layered renderer. That means PNGs provide only the fixed art that should not move: a tab-panel mask, a thumbnail, and clean left/right base eyes. Iris, pupil, glow, eyelids, blinking, mouse tracking, and reaction poses are drawn at runtime with DOM/CSS.
+Robot and Cat use the layered renderer. That means PNGs provide only the fixed art that should not move: a tab-panel mask, a thumbnail, and clean left/right base eyes. Iris, pupil, glow, eyelids, blinking, mouse tracking, and reaction poses are drawn at runtime with DOM/CSS.
 
 Asset layout:
 
@@ -17,17 +17,25 @@ assets/
       masks/
         tab-panel.png         # full embedded Obsidian panel overlay
       thumbnail.png
+    cat/
+      skin.json
+      eyes/
+        left-base.png
+        right-base.png
+      masks/
+        tab-panel.png
+      thumbnail.png
 ```
 
 Every active skin folder contains `thumbnail.png` and `skin.json`. Skins listed in `layeredSkins` contain `eyes/left-base.png` and `eyes/right-base.png`. Skins listed in `maskSkins` contain `masks/tab-panel.png`, a full-stage overlay that makes the eyes look embedded inside an Obsidian tab.
 
 Current V1 count:
 
-- 1 active skin
-- 2 base eye PNGs for Robot
-- 1 mask PNG for Robot
-- 1 thumbnail PNG for Robot
-- 1 skin metadata JSON for Robot
+- 2 active skins
+- 2 base eye PNGs per skin
+- 1 mask PNG per skin
+- 1 thumbnail PNG per skin
+- 1 skin metadata JSON per skin
 
 Validation:
 

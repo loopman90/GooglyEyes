@@ -1,0 +1,22 @@
+{
+  "id": "cat",
+  "name": "Cat",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    { "side": "left", "x": 0.08, "y": 0.263, "w": 0.365, "h": 0.473 },
+    { "side": "right", "x": 0.555, "y": 0.263, "w": 0.365, "h": 0.473 }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#58d34f",
+    "pupilColor": "#050806",
+    "eyelidColor": "#3b3735",
+    "eyelidShadowColor": "#120e0c",
+    "irisGlow": 0.35
+  }
+}

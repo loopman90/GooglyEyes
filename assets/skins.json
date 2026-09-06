@@ -1,14 +1,17 @@
 {
   "generated": "2026-09-06T15:35:07.747Z",
-  "note": "Robot-only active asset manifest. Other skins are intentionally omitted until their imagegen asset packs are complete.",
+  "note": "Active layered asset manifest. Skins are added one by one after their imagegen base/mask packs are complete.",
   "layeredSkins": [
-    "robot"
+    "robot",
+    "cat"
   ],
   "maskSkins": [
-    "robot"
+    "robot",
+    "cat"
   ],
   "skins": [
-    "robot"
+    "robot",
+    "cat"
   ],
   "reactions": [
     "idle-neutral",

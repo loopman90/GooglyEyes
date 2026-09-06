@@ -33,6 +33,7 @@ The current test build exposes only completed skins in the UI.
 Available now:
 
 - Robot
+- Cat
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 

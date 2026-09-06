@@ -4,32 +4,35 @@ import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const out = join(root, "release", "eyesidian-test");
-const skin = "robot";
+const skins = ["robot", "cat"];
 
 rmSync(out, { recursive: true, force: true });
-mkdirSync(join(out, "assets", "skins", skin, "eyes"), { recursive: true });
-mkdirSync(join(out, "assets", "skins", skin, "masks"), { recursive: true });
+mkdirSync(out, { recursive: true });
 
 for (const file of ["manifest.json", "main.js", "styles.css", "README.md", "CHANGELOG.md", "LICENSE"]) {
   copyFileSync(join(root, file), join(out, file));
 }
 
-copyFileSync(join(root, "assets", "skins", skin, "thumbnail.png"), join(out, "assets", "skins", skin, "thumbnail.png"));
-copyFileSync(join(root, "assets", "skins", skin, "skin.json"), join(out, "assets", "skins", skin, "skin.json"));
-copyFileSync(join(root, "assets", "skins", skin, "eyes", "left-base.png"), join(out, "assets", "skins", skin, "eyes", "left-base.png"));
-copyFileSync(join(root, "assets", "skins", skin, "eyes", "right-base.png"), join(out, "assets", "skins", skin, "eyes", "right-base.png"));
-copyFileSync(join(root, "assets", "skins", skin, "masks", "tab-panel.png"), join(out, "assets", "skins", skin, "masks", "tab-panel.png"));
+for (const skin of skins) {
+  mkdirSync(join(out, "assets", "skins", skin, "eyes"), { recursive: true });
+  mkdirSync(join(out, "assets", "skins", skin, "masks"), { recursive: true });
+  copyFileSync(join(root, "assets", "skins", skin, "thumbnail.png"), join(out, "assets", "skins", skin, "thumbnail.png"));
+  copyFileSync(join(root, "assets", "skins", skin, "skin.json"), join(out, "assets", "skins", skin, "skin.json"));
+  copyFileSync(join(root, "assets", "skins", skin, "eyes", "left-base.png"), join(out, "assets", "skins", skin, "eyes", "left-base.png"));
+  copyFileSync(join(root, "assets", "skins", skin, "eyes", "right-base.png"), join(out, "assets", "skins", skin, "eyes", "right-base.png"));
+  copyFileSync(join(root, "assets", "skins", skin, "masks", "tab-panel.png"), join(out, "assets", "skins", skin, "masks", "tab-panel.png"));
+}
 
 const manifest = JSON.parse(readFileSync(join(root, "assets", "skins.json"), "utf8"));
 writeFileSync(join(out, "assets", "skins.json"), JSON.stringify({
   ...manifest,
-  note: "Robot-only Eyesidian layered test package. Other skins are intentionally omitted until their imagegen asset packs are complete.",
-  layeredSkins: ["robot"],
-  maskSkins: ["robot"],
-  skins: ["robot"]
+  note: "Eyesidian layered test package. Includes completed Robot and Cat skins.",
+  layeredSkins: skins,
+  maskSkins: skins,
+  skins
 }, null, 2));
 
-writeFileSync(join(out, "INSTALL-TEST.md"), `# Eyesidian Robot Test Install
+writeFileSync(join(out, "INSTALL-TEST.md"), `# Eyesidian Test Install
 
 Copy this entire folder to:
 
@@ -45,7 +48,7 @@ Then open Obsidian:
 4. Enable Eyesidian.
 5. Use the command "Open Eyesidian Tab" to open the embedded tab.
 
-This package is intentionally Robot-only, with layered base eyes, runtime iris/pupil tracking, smooth CSS lids, and a full embedded tab-panel mask.
+This package includes the completed Robot and Cat layered skins, with runtime iris/pupil tracking, smooth CSS lids, customizable colors, and full embedded tab-panel masks.
 `);
 
-console.log(`Packaged Robot-only test plugin at ${out}`);
+console.log(`Packaged Eyesidian layered test plugin at ${out}`);

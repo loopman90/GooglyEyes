@@ -6,3 +6,5 @@ release/
 assets/skins/*
 !assets/skins/robot/
 !assets/skins/robot/**
+!assets/skins/cat/
+!assets/skins/cat/**

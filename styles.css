@@ -199,6 +199,27 @@
   z-index: 3;
 }
 
+.eyesidian-pair[data-skin="cat"] .eyesidian-iris {
+  width: 48%;
+  background:
+    radial-gradient(circle at 39% 34%, rgb(255 255 255 / 0.82) 0 7%, transparent 8%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--iris-color) 62%, #ffe89d 18%) 0 38%, color-mix(in srgb, var(--iris-color) 78%, #12280f 22%) 65%, rgb(8 36 12 / 0.92) 100%);
+}
+
+.eyesidian-pair[data-skin="cat"] .eyesidian-iris::before {
+  opacity: 0.42;
+}
+
+.eyesidian-pair[data-skin="cat"] .eyesidian-pupil {
+  width: 24%;
+  height: 82%;
+  aspect-ratio: auto;
+  border-radius: 52%;
+  background:
+    radial-gradient(ellipse at 36% 28%, rgb(255 255 255 / 0.55) 0 8%, transparent 9%),
+    linear-gradient(90deg, color-mix(in srgb, var(--pupil-color) 88%, var(--iris-color) 12%), var(--pupil-color) 46% 54%, color-mix(in srgb, var(--pupil-color) 88%, var(--iris-color) 12%));
+}
+
 .eyesidian-lid {
   position: absolute;
   left: -6%;
