@@ -1,0 +1,37 @@
+{
+  "id": "spy",
+  "name": "Spy",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.159,
+      "y": 0.237,
+      "w": 0.276,
+      "h": 0.22
+    },
+    {
+      "side": "right",
+      "x": 0.564,
+      "y": 0.237,
+      "w": 0.272,
+      "h": 0.229
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#4d6f8f",
+    "pupilColor": "#080706",
+    "eyeWhiteColor": "#f6f0df",
+    "eyelidColor": "#d8c7a9",
+    "eyelidShadowColor": "#4a3c2e",
+    "irisGlow": 0.16,
+    "irisSize": 30,
+    "pupilSize": 30
+  }
+}

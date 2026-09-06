@@ -40,9 +40,10 @@ The current build exposes only completed skins in the UI:
 - Alien
 - Hacker
 - Anonymous
-- Ice Hockey Horror
+- Jason
 - Mona Lisa
 - Clown
+- Spy
 
 Planned skins are added one by one after their imagegen asset packs are complete. Unfinished skins are not exposed in the plugin UI.
 
@@ -101,7 +102,7 @@ For testing the current local build, use the ready-made folder:
 8. Enable GooglyEyes.
 9. Run `Open tab`.
 
-The test package includes Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Ice Hockey Horror, Mona Lisa, and Clown.
+The test package includes Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Jason, Mona Lisa, Clown, and Spy.
 
 ## Developer Setup
 

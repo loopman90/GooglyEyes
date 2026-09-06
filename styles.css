@@ -109,6 +109,11 @@
   gap: 21%;
 }
 
+.googly-eyes-pair[data-skin="spy"] .googly-eyes-layered-eyes {
+  inset: 23.7% 16% 54%;
+  gap: 19%;
+}
+
 .googly-eyes-eye-slot {
   position: relative;
   width: 100%;
