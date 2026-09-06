@@ -135,7 +135,8 @@ const SKIN_TUPLES: SkinTuple[] = [
   ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43", 31, 30],
   ["anonymous", "Anonymous", "White mask, dark hood, and a quiet red stare.", "#ac1220", "#050203", "#eee7d7", "#e1ddd1", "#b01622", 31, 34],
   ["ice-hockey", "Ice Hockey Horror", "Frozen hockey mask with a blood-spattered stare.", "#9feeff", "#05090d", "#dcecf4", "#ccd7dd", "#b01622", 34, 32],
-  ["mona-lisa", "Mona Lisa", "Renaissance calm with a mysterious painted gaze.", "#7d6a32", "#171006", "#efe3c5", "#a87943", "#c9a34a", 32, 34]
+  ["mona-lisa", "Mona Lisa", "Renaissance calm with a mysterious painted gaze.", "#7d6a32", "#171006", "#efe3c5", "#a87943", "#c9a34a", 32, 34],
+  ["clown", "Clown", "Cartoon circus face with a bright playful stare.", "#39d7ff", "#100711", "#fff5df", "#231c25", "#ff3845", 31, 32]
 ];
 
 const SKINS: SkinDefinition[] = SKIN_TUPLES.map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize]) => ({
@@ -328,7 +329,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa"]);
+const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa", "clown"]);
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",
@@ -398,7 +399,7 @@ class EyeController {
 
   mount(parent: HTMLElement): void {
     if (!this.root) {
-      this.root = createDiv({ cls: "googly-eyes-root" });
+      this.root = parent.createDiv({ cls: "googly-eyes-root" });
       this.root.setAttr("aria-label", "GooglyEyes living eyes");
       this.root.setAttr("role", "img");
       this.root.tabIndex = 0;
@@ -413,7 +414,7 @@ class EyeController {
   unload(): void {
     this.cleanups.forEach((fn) => fn());
     this.cleanups = [];
-    if (this.frame) cancelAnimationFrame(this.frame);
+    if (this.frame) window.cancelAnimationFrame(this.frame);
     if (this.idleTimer) window.clearTimeout(this.idleTimer);
     if (this.blinkTimer) window.clearTimeout(this.blinkTimer);
     this.root?.remove();
@@ -436,16 +437,18 @@ class EyeController {
     this.root.toggleClass("is-focus-mode", this.isFocusMode());
     this.root.toggleClass("is-reduced-motion", this.reduceMotion.matches);
     this.root.toggleClass("show-debug", s.debugOverlay);
-    this.root.style.setProperty("--googly-eyes-size", `${s.size}px`);
-    this.root.parentElement?.style.setProperty("--googly-eyes-size", `${s.size}px`);
-    this.root.style.setProperty("--googly-eyes-opacity", `${s.opacity}`);
-    this.root.style.setProperty("--googly-eyes-z", `${s.zIndex}`);
-    this.root.style.setProperty("--iris-color", s.irisColor);
-    this.root.style.setProperty("--pupil-color", s.pupilColor);
-    this.root.style.setProperty("--eyelid-color", s.eyelidColor);
-    this.root.style.setProperty("--eyelid-shadow-color", s.eyelidShadowColor);
-    this.root.style.setProperty("--iris-glow", `${s.irisGlow}`);
-    this.root.style.setProperty("--lid-transition-scale", `${1 / Math.max(0.2, s.blinkSpeed)}`);
+    this.root.setCssProps({
+      "--googly-eyes-size": `${s.size}px`,
+      "--googly-eyes-opacity": `${s.opacity}`,
+      "--googly-eyes-z": `${s.zIndex}`,
+      "--iris-color": s.irisColor,
+      "--pupil-color": s.pupilColor,
+      "--eyelid-color": s.eyelidColor,
+      "--eyelid-shadow-color": s.eyelidShadowColor,
+      "--iris-glow": `${s.irisGlow}`,
+      "--lid-transition-scale": `${1 / Math.max(0.2, s.blinkSpeed)}`
+    });
+    this.root.parentElement?.setCssProps({ "--googly-eyes-size": `${s.size}px` });
     this.positionRoot();
     this.updateAssets();
   }
@@ -469,26 +472,26 @@ class EyeController {
 
   setVisible(visible: boolean): void {
     this.plugin.settings.visible = visible;
-    this.plugin.saveSettings();
+    void this.plugin.saveSettings();
     this.applySettings();
   }
 
   randomizeStyle(): void {
     this.plugin.settings.skinId = pick(SKINS.map((skin) => skin.id), 1);
-    this.plugin.saveSettings();
+    void this.plugin.saveSettings();
     this.refresh();
   }
 
   randomizePersonality(): void {
     this.plugin.settings.personality = pick(Object.keys(PERSONALITY_OPTIONS) as Personality[], 1);
-    this.plugin.saveSettings();
+    void this.plugin.saveSettings();
     this.refresh();
   }
 
   resetPosition(): void {
     this.plugin.settings.customX = 24;
     this.plugin.settings.customY = 80;
-    this.plugin.saveSettings();
+    void this.plugin.saveSettings();
     this.applySettings();
   }
 
@@ -596,12 +599,12 @@ class EyeController {
     else this.react("typing");
     if (this.plugin.settings.focusMode === "writing") {
       this.plugin.settings.focusModeActive = true;
-      this.plugin.saveSettings();
+      void this.plugin.saveSettings();
       this.applySettings();
       window.setTimeout(() => {
         if (this.plugin.settings.focusMode === "writing") {
           this.plugin.settings.focusModeActive = false;
-          this.plugin.saveSettings();
+          void this.plugin.saveSettings();
           this.applySettings();
         }
       }, 2500);
@@ -638,7 +641,7 @@ class EyeController {
   private stopDrag(): void {
     if (!this.dragging) return;
     this.dragging = false;
-    this.plugin.saveSettings();
+    void this.plugin.saveSettings();
   }
 
   private loop = (): void => {
@@ -664,15 +667,19 @@ class EyeController {
             const baseTravel = Math.min(eyeRect.width, eyeRect.height) * s.followSensitivity * energy;
             const strength = clamp(distance / 280, 0, 1);
             const angle = Math.atan2(vy, vx);
-            iris.style.setProperty("--iris-x", `${Math.cos(angle) * baseTravel * 0.085 * strength}px`);
-            iris.style.setProperty("--iris-y", `${Math.sin(angle) * baseTravel * 0.07 * strength}px`);
-            pupil?.style.setProperty("--pupil-x", `${Math.cos(angle) * baseTravel * 0.13 * strength}px`);
-            pupil?.style.setProperty("--pupil-y", `${Math.sin(angle) * baseTravel * 0.11 * strength}px`);
+            iris.setCssProps({
+              "--iris-x": `${Math.cos(angle) * baseTravel * 0.085 * strength}px`,
+              "--iris-y": `${Math.sin(angle) * baseTravel * 0.07 * strength}px`
+            });
+            pupil?.setCssProps({
+              "--pupil-x": `${Math.cos(angle) * baseTravel * 0.13 * strength}px`,
+              "--pupil-y": `${Math.sin(angle) * baseTravel * 0.11 * strength}px`
+            });
           });
         }
       }
     }
-    this.frame = requestAnimationFrame(this.loop);
+    this.frame = window.requestAnimationFrame(this.loop);
   };
 
   private scheduleIdle(): void {
@@ -703,7 +710,7 @@ class EyeController {
     const reaction = this.currentReaction;
     const strength = this.plugin.settings.emotionStrength;
     const pose = PERSONALITY_POSES[this.plugin.settings.personality];
-    const set = (name: string, value: string) => pair.style.setProperty(name, value);
+    const set = (name: string, value: string) => pair.setCssProps({ [name]: value });
     const pct = (value: number) => `${value * strength}%`;
     set("--lid-upper-left", "-63%");
     set("--lid-lower-left", "65%");
@@ -721,6 +728,14 @@ class EyeController {
     set("--reaction-pupil-y-left", "0%");
     set("--reaction-pupil-x-right", "0%");
     set("--reaction-pupil-y-right", "0%");
+    set("--eye-base-x-left", "0%");
+    set("--eye-base-y-left", "0%");
+    set("--eye-base-x-right", "0%");
+    set("--eye-base-y-right", "0%");
+    set("--eye-base-scale-left", "1.04");
+    set("--eye-base-scale-right", "1.04");
+    set("--eye-base-rotate-left", "0deg");
+    set("--eye-base-rotate-right", "0deg");
     set("--iris-scale", "1");
     set("--pupil-scale", "1");
     set("--iris-opacity", "1");
@@ -744,6 +759,10 @@ class EyeController {
       set("--reaction-iris-y-right", pct(pose.irisY));
       set("--reaction-pupil-y-left", pct(pose.pupilY));
       set("--reaction-pupil-y-right", pct(pose.pupilY));
+      set("--eye-base-x-left", pct((pose.irisXLeft ?? 0) * 0.2));
+      set("--eye-base-x-right", pct((pose.irisXRight ?? 0) * 0.2));
+      set("--eye-base-y-left", pct(pose.irisY * 0.18));
+      set("--eye-base-y-right", pct(pose.irisY * 0.18));
       set("--iris-scale", pose.irisScale);
       set("--pupil-scale", pose.pupilScale);
       set("--iris-filter", pose.irisFilter ?? "none");
@@ -753,131 +772,229 @@ class EyeController {
       set("--lid-lower-left", "-2%");
       set("--lid-upper-right", "4%");
       set("--lid-lower-right", "-2%");
+      set("--eye-base-y-left", "1%");
+      set("--eye-base-y-right", "1%");
+      set("--eye-base-scale-left", "0.98");
+      set("--eye-base-scale-right", "0.98");
       set("--pupil-scale", "0.72");
     } else if (reaction === "sleepy" || reaction === "sleepy-idle" || reaction === "idle-long") {
-      set("--lid-upper-left", "-24%");
-      set("--lid-lower-left", "47%");
-      set("--lid-upper-right", "-24%");
-      set("--lid-lower-right", "47%");
-      set("--reaction-iris-y-left", pct(5));
-      set("--reaction-iris-y-right", pct(5));
-      set("--reaction-pupil-y-left", pct(8));
-      set("--reaction-pupil-y-right", pct(8));
-      set("--iris-opacity", "0.82");
-      set("--pupil-scale", "0.86");
+      set("--lid-upper-left", "-10%");
+      set("--lid-lower-left", "34%");
+      set("--lid-upper-right", "-10%");
+      set("--lid-lower-right", "34%");
+      set("--lid-tilt-left", "-2deg");
+      set("--lid-tilt-right", "2deg");
+      set("--reaction-iris-y-left", pct(11));
+      set("--reaction-iris-y-right", pct(11));
+      set("--reaction-pupil-y-left", pct(15));
+      set("--reaction-pupil-y-right", pct(15));
+      set("--eye-base-y-left", pct(4));
+      set("--eye-base-y-right", pct(4));
+      set("--eye-base-scale-left", "0.99");
+      set("--eye-base-scale-right", "0.99");
+      set("--iris-opacity", "0.68");
+      set("--iris-scale", "0.84");
+      set("--pupil-scale", "0.78");
     } else if (reaction === "suspicious" || reaction === "hover-suspicious") {
-      set("--lid-upper-left", "-31%");
-      set("--lid-lower-left", "56%");
-      set("--lid-upper-right", "-43%");
-      set("--lid-lower-right", "62%");
-      set("--lid-tilt-left", "-7deg");
-      set("--lid-tilt-right", "7deg");
-      set("--lid-lower-tilt-left", "3deg");
-      set("--lid-lower-tilt-right", "-3deg");
-      set("--reaction-iris-x-left", pct(5));
-      set("--reaction-iris-x-right", pct(-5));
-      set("--reaction-pupil-x-left", pct(8));
-      set("--reaction-pupil-x-right", pct(-8));
-      set("--pupil-scale", "0.92");
-    } else if (reaction === "angry" || reaction === "delete" || reaction === "cut") {
-      set("--lid-upper-left", "-27%");
-      set("--lid-lower-left", "58%");
-      set("--lid-upper-right", "-27%");
+      set("--lid-upper-left", "-15%");
+      set("--lid-lower-left", "42%");
+      set("--lid-upper-right", "-35%");
       set("--lid-lower-right", "58%");
-      set("--lid-tilt-left", "10deg");
-      set("--lid-tilt-right", "-10deg");
-      set("--lid-lower-tilt-left", "-4deg");
-      set("--lid-lower-tilt-right", "4deg");
+      set("--lid-tilt-left", "-14deg");
+      set("--lid-tilt-right", "13deg");
+      set("--lid-lower-tilt-left", "8deg");
+      set("--lid-lower-tilt-right", "-7deg");
+      set("--reaction-iris-x-left", pct(9));
+      set("--reaction-iris-x-right", pct(-9));
+      set("--reaction-pupil-x-left", pct(14));
+      set("--reaction-pupil-x-right", pct(-14));
+      set("--eye-base-x-left", pct(3));
+      set("--eye-base-x-right", pct(-3));
+      set("--eye-base-y-left", pct(1));
+      set("--eye-base-y-right", pct(-1));
+      set("--eye-base-rotate-left", "-3deg");
+      set("--eye-base-rotate-right", "3deg");
+      set("--iris-scale", "0.88");
+      set("--pupil-scale", "0.8");
+      set("--iris-filter", "contrast(1.18) saturate(0.9)");
+    } else if (reaction === "angry" || reaction === "delete" || reaction === "cut") {
+      set("--lid-upper-left", "-13%");
+      set("--lid-lower-left", "45%");
+      set("--lid-upper-right", "-13%");
+      set("--lid-lower-right", "45%");
+      set("--lid-tilt-left", "18deg");
+      set("--lid-tilt-right", "-18deg");
+      set("--lid-lower-tilt-left", "-8deg");
+      set("--lid-lower-tilt-right", "8deg");
+      set("--reaction-iris-y-left", pct(-7));
+      set("--reaction-iris-y-right", pct(-7));
+      set("--reaction-pupil-y-left", pct(-11));
+      set("--reaction-pupil-y-right", pct(-11));
+      set("--eye-base-y-left", pct(-3));
+      set("--eye-base-y-right", pct(-3));
+      set("--eye-base-rotate-left", "3deg");
+      set("--eye-base-rotate-right", "-3deg");
+      set("--eye-base-scale-left", "1.08");
+      set("--eye-base-scale-right", "1.08");
+      set("--iris-scale", "0.95");
+      set("--pupil-scale", "0.74");
+      set("--iris-filter", "hue-rotate(155deg) saturate(1.55) contrast(1.12)");
+    } else if (reaction === "shocked" || reaction === "wide-stare" || reaction === "wake" || reaction === "dramatic-shock") {
+      set("--lid-upper-left", "-92%");
+      set("--lid-lower-left", "88%");
+      set("--lid-upper-right", "-92%");
+      set("--lid-lower-right", "88%");
+      set("--lid-tilt-left", "2deg");
+      set("--lid-tilt-right", "-2deg");
       set("--reaction-iris-y-left", pct(-3));
       set("--reaction-iris-y-right", pct(-3));
-      set("--reaction-pupil-y-left", pct(-5));
-      set("--reaction-pupil-y-right", pct(-5));
-      set("--iris-filter", "hue-rotate(155deg) saturate(1.25)");
-    } else if (reaction === "shocked" || reaction === "wide-stare" || reaction === "wake" || reaction === "dramatic-shock") {
-      set("--lid-upper-left", "-77%");
-      set("--lid-lower-left", "75%");
-      set("--lid-upper-right", "-77%");
-      set("--lid-lower-right", "75%");
-      set("--reaction-iris-y-left", pct(-2));
-      set("--reaction-iris-y-right", pct(-2));
-      set("--iris-scale", "1.08");
-      set("--pupil-scale", "0.74");
+      set("--reaction-pupil-y-left", pct(-4));
+      set("--reaction-pupil-y-right", pct(-4));
+      set("--eye-base-y-left", pct(-2));
+      set("--eye-base-y-right", pct(-2));
+      set("--eye-base-scale-left", reaction === "dramatic-shock" ? "1.16" : "1.1");
+      set("--eye-base-scale-right", reaction === "dramatic-shock" ? "1.16" : "1.1");
+      set("--iris-scale", reaction === "dramatic-shock" ? "1.22" : "1.14");
+      set("--pupil-scale", reaction === "wide-stare" ? "0.52" : "0.58");
+      set("--eye-vibe", reaction === "dramatic-shock" ? "-2deg" : "0deg");
     } else if (reaction === "happy" || reaction === "copy" || reaction === "paste" || reaction === "redo") {
-      set("--lid-upper-left", "-52%");
-      set("--lid-lower-left", "59%");
-      set("--lid-upper-right", "-52%");
-      set("--lid-lower-right", "59%");
-      set("--lid-tilt-left", "-4deg");
-      set("--lid-tilt-right", "4deg");
-      set("--lid-lower-tilt-left", "2deg");
-      set("--lid-lower-tilt-right", "-2deg");
-      set("--reaction-iris-y-left", pct(-2));
-      set("--reaction-iris-y-right", pct(-2));
-      set("--iris-scale", "1.03");
+      set("--lid-upper-left", "-45%");
+      set("--lid-lower-left", "36%");
+      set("--lid-upper-right", "-45%");
+      set("--lid-lower-right", "36%");
+      set("--lid-tilt-left", "-9deg");
+      set("--lid-tilt-right", "9deg");
+      set("--lid-lower-tilt-left", "-7deg");
+      set("--lid-lower-tilt-right", "7deg");
+      set("--reaction-iris-y-left", pct(-8));
+      set("--reaction-iris-y-right", pct(-8));
+      set("--reaction-pupil-y-left", pct(-10));
+      set("--reaction-pupil-y-right", pct(-10));
+      set("--eye-base-y-left", pct(-3));
+      set("--eye-base-y-right", pct(-3));
+      set("--eye-base-rotate-left", "-2deg");
+      set("--eye-base-rotate-right", "2deg");
+      set("--eye-base-scale-left", "1.07");
+      set("--eye-base-scale-right", "1.07");
+      set("--iris-scale", "1.08");
+      set("--pupil-scale", "1.04");
+      set("--iris-filter", "brightness(1.08) saturate(1.18)");
     } else if (reaction === "sad" || reaction === "undo") {
-      set("--lid-upper-left", "-35%");
-      set("--lid-lower-left", "53%");
-      set("--lid-upper-right", "-35%");
-      set("--lid-lower-right", "53%");
-      set("--lid-tilt-left", "-8deg");
-      set("--lid-tilt-right", "8deg");
-      set("--lid-lower-tilt-left", "4deg");
-      set("--lid-lower-tilt-right", "-4deg");
-      set("--reaction-iris-y-left", pct(7));
-      set("--reaction-iris-y-right", pct(7));
-      set("--reaction-pupil-y-left", pct(10));
-      set("--reaction-pupil-y-right", pct(10));
-      set("--iris-opacity", "0.78");
+      set("--lid-upper-left", "-18%");
+      set("--lid-lower-left", "43%");
+      set("--lid-upper-right", "-18%");
+      set("--lid-lower-right", "43%");
+      set("--lid-tilt-left", "-16deg");
+      set("--lid-tilt-right", "16deg");
+      set("--lid-lower-tilt-left", "7deg");
+      set("--lid-lower-tilt-right", "-7deg");
+      set("--reaction-iris-y-left", pct(13));
+      set("--reaction-iris-y-right", pct(13));
+      set("--reaction-pupil-y-left", pct(18));
+      set("--reaction-pupil-y-right", pct(18));
+      set("--eye-base-y-left", pct(5));
+      set("--eye-base-y-right", pct(5));
+      set("--eye-base-rotate-left", "-2deg");
+      set("--eye-base-rotate-right", "2deg");
+      set("--eye-base-scale-left", "0.98");
+      set("--eye-base-scale-right", "0.98");
+      set("--iris-opacity", "0.62");
+      set("--iris-scale", "0.82");
+      set("--pupil-scale", "0.86");
+      set("--iris-filter", "saturate(0.65) brightness(0.86)");
     } else if (reaction === "confused" || reaction === "dizzy" || reaction === "cross-eyed" || reaction === "eye-roll") {
       if (reaction === "cross-eyed") {
-        set("--reaction-iris-x-left", pct(9));
-        set("--reaction-iris-x-right", pct(-9));
-        set("--reaction-pupil-x-left", pct(14));
-        set("--reaction-pupil-x-right", pct(-14));
+        set("--reaction-iris-x-left", pct(15));
+        set("--reaction-iris-x-right", pct(-15));
+        set("--reaction-pupil-x-left", pct(22));
+        set("--reaction-pupil-x-right", pct(-22));
+        set("--eye-base-x-left", pct(4));
+        set("--eye-base-x-right", pct(-4));
+        set("--eye-base-rotate-left", "4deg");
+        set("--eye-base-rotate-right", "-4deg");
       } else if (reaction === "eye-roll") {
-        set("--reaction-iris-y-left", pct(-10));
-        set("--reaction-iris-y-right", pct(-10));
-        set("--reaction-pupil-y-left", pct(-14));
-        set("--reaction-pupil-y-right", pct(-14));
+        set("--lid-upper-left", "-80%");
+        set("--lid-lower-left", "70%");
+        set("--lid-upper-right", "-80%");
+        set("--lid-lower-right", "70%");
+        set("--reaction-iris-y-left", pct(-18));
+        set("--reaction-iris-y-right", pct(-18));
+        set("--reaction-pupil-y-left", pct(-24));
+        set("--reaction-pupil-y-right", pct(-24));
+        set("--eye-base-y-left", pct(-5));
+        set("--eye-base-y-right", pct(-5));
+        set("--eye-base-scale-left", "1.05");
+        set("--eye-base-scale-right", "1.05");
       } else {
-        set("--reaction-iris-x-left", pct(-5));
-        set("--reaction-iris-x-right", pct(5));
-        set("--reaction-pupil-x-left", pct(-8));
-        set("--reaction-pupil-x-right", pct(8));
+        set("--lid-upper-left", "-32%");
+        set("--lid-lower-left", "54%");
+        set("--lid-upper-right", "-72%");
+        set("--lid-lower-right", "74%");
+        set("--lid-tilt-left", "12deg");
+        set("--lid-tilt-right", "-9deg");
+        set("--reaction-iris-x-left", pct(-12));
+        set("--reaction-iris-x-right", pct(10));
+        set("--reaction-pupil-x-left", pct(-18));
+        set("--reaction-pupil-x-right", pct(15));
+        set("--reaction-iris-y-left", pct(7));
+        set("--reaction-iris-y-right", pct(-6));
+        set("--reaction-pupil-y-left", pct(11));
+        set("--reaction-pupil-y-right", pct(-9));
+        set("--eye-base-x-left", pct(-3));
+        set("--eye-base-x-right", pct(3));
+        set("--eye-base-y-left", pct(3));
+        set("--eye-base-y-right", pct(-3));
+        set("--eye-base-rotate-left", reaction === "dizzy" ? "-7deg" : "-4deg");
+        set("--eye-base-rotate-right", reaction === "dizzy" ? "7deg" : "4deg");
       }
-      set("--eye-vibe", reaction === "dizzy" ? "2deg" : "-1deg");
-      set("--iris-scale", "0.94");
-      set("--pupil-scale", "0.9");
+      set("--eye-vibe", reaction === "dizzy" ? "5deg" : "-2deg");
+      set("--iris-scale", reaction === "dizzy" ? "0.82" : "0.9");
+      set("--pupil-scale", reaction === "dizzy" ? "0.72" : "0.82");
+      set("--iris-filter", reaction === "dizzy" ? "hue-rotate(55deg) saturate(1.45)" : "saturate(1.05)");
     } else if (reaction === "typing" || reaction === "rapid-typing-focus") {
-      set("--lid-upper-left", "-47%");
-      set("--lid-lower-left", "61%");
-      set("--lid-upper-right", "-47%");
-      set("--lid-lower-right", "61%");
-      set("--reaction-iris-y-left", pct(5));
-      set("--reaction-iris-y-right", pct(5));
-      set("--reaction-pupil-y-left", pct(7));
-      set("--reaction-pupil-y-right", pct(7));
-      set("--iris-filter", "saturate(1.2)");
+      set("--lid-upper-left", reaction === "rapid-typing-focus" ? "-38%" : "-44%");
+      set("--lid-lower-left", reaction === "rapid-typing-focus" ? "50%" : "58%");
+      set("--lid-upper-right", reaction === "rapid-typing-focus" ? "-38%" : "-44%");
+      set("--lid-lower-right", reaction === "rapid-typing-focus" ? "50%" : "58%");
+      set("--reaction-iris-y-left", pct(reaction === "rapid-typing-focus" ? 10 : 6));
+      set("--reaction-iris-y-right", pct(reaction === "rapid-typing-focus" ? 10 : 6));
+      set("--reaction-pupil-y-left", pct(reaction === "rapid-typing-focus" ? 15 : 9));
+      set("--reaction-pupil-y-right", pct(reaction === "rapid-typing-focus" ? 15 : 9));
+      set("--eye-base-y-left", pct(reaction === "rapid-typing-focus" ? 4 : 2));
+      set("--eye-base-y-right", pct(reaction === "rapid-typing-focus" ? 4 : 2));
+      set("--eye-base-scale-left", reaction === "rapid-typing-focus" ? "1.03" : "1.01");
+      set("--eye-base-scale-right", reaction === "rapid-typing-focus" ? "1.03" : "1.01");
+      set("--iris-scale", reaction === "rapid-typing-focus" ? "0.9" : "0.98");
+      set("--pupil-scale", reaction === "rapid-typing-focus" ? "0.82" : "0.94");
+      set("--iris-filter", "saturate(1.25) contrast(1.08)");
     } else if (reaction === "look-left" || reaction === "peek") {
       set("--reaction-iris-x-left", pct(-10));
       set("--reaction-iris-x-right", pct(-10));
       set("--reaction-pupil-x-left", pct(-15));
       set("--reaction-pupil-x-right", pct(-15));
+      set("--eye-base-x-left", pct(-3));
+      set("--eye-base-x-right", pct(-3));
     } else if (reaction === "look-right" || reaction === "drag-tracking" || reaction === "fast-movement") {
       set("--reaction-iris-x-left", pct(10));
       set("--reaction-iris-x-right", pct(10));
       set("--reaction-pupil-x-left", pct(15));
       set("--reaction-pupil-x-right", pct(15));
+      set("--eye-base-x-left", pct(3));
+      set("--eye-base-x-right", pct(3));
     } else if (reaction === "look-up" || reaction === "chaotic-stare") {
       set("--reaction-iris-y-left", pct(-10));
       set("--reaction-iris-y-right", pct(-10));
       set("--reaction-pupil-y-left", pct(-15));
       set("--reaction-pupil-y-right", pct(-15));
+      set("--eye-base-y-left", pct(-3));
+      set("--eye-base-y-right", pct(-3));
     } else if (reaction === "look-down") {
       set("--reaction-iris-y-left", pct(10));
       set("--reaction-iris-y-right", pct(10));
       set("--reaction-pupil-y-left", pct(15));
       set("--reaction-pupil-y-right", pct(15));
+      set("--eye-base-y-left", pct(3));
+      set("--eye-base-y-right", pct(3));
     }
   }
 
@@ -895,16 +1012,18 @@ class EyeController {
       this.applyReactionState(pair);
       pair.toggleClass("has-layered-assets", hasLayeredAssets);
       pair.toggleClass("has-peek-mask", hasPeekMask);
-      pair.style.setProperty("--accent", skinDef.accent);
-      pair.style.setProperty("--skin-iris-size", `${skinDef.irisSize}%`);
-      pair.style.setProperty("--skin-pupil-size", `${skinDef.pupilSize}%`);
+      pair.setCssProps({
+        "--accent": skinDef.accent,
+        "--skin-iris-size": `${skinDef.irisSize}%`,
+        "--skin-pupil-size": `${skinDef.pupilSize}%`
+      });
       const left = pair.querySelector<HTMLImageElement>(".googly-eyes-eye-left");
       const right = pair.querySelector<HTMLImageElement>(".googly-eyes-eye-right");
       const mask = pair.querySelector<HTMLImageElement>(".googly-eyes-peek-mask");
       if (left) left.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "left")}`) : "");
       if (right) right.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "right")}`) : "");
       if (mask) mask.setAttr("src", hasPeekMask ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${maskAsset(skinDef.id, "tab-panel")}`) : "");
-      pair.style.transform = `translate(${index * 10}px, ${index * 8}px)`;
+      pair.setCssStyles({ transform: `translate(${index * 10}px, ${index * 8}px)` });
     }
   }
 
@@ -925,23 +1044,16 @@ class EyeController {
     if (!this.root) return;
     if (this.root.closest(".googly-eyes-stage")) {
       this.root.removeClasses(["pos-top-left", "pos-top-right", "pos-bottom-left", "pos-bottom-right", "pos-sidebar", "pos-statusbar", "pos-floating", "pos-custom"]);
-      this.root.style.left = "";
-      this.root.style.top = "";
-      this.root.style.right = "";
-      this.root.style.bottom = "";
+      this.root.setCssStyles({ left: "", top: "", right: "", bottom: "" });
       return;
     }
     const s = this.plugin.settings;
     this.root.removeClasses(["pos-top-left", "pos-top-right", "pos-bottom-left", "pos-bottom-right", "pos-sidebar", "pos-statusbar", "pos-floating", "pos-custom"]);
     this.root.addClass(`pos-${s.positionPreset}`);
     if (s.positionPreset === "floating" || s.positionPreset === "custom") {
-      this.root.style.left = `${s.customX}px`;
-      this.root.style.top = `${s.customY}px`;
-      this.root.style.right = "";
-      this.root.style.bottom = "";
+      this.root.setCssStyles({ left: `${s.customX}px`, top: `${s.customY}px`, right: "", bottom: "" });
     } else {
-      this.root.style.left = "";
-      this.root.style.top = "";
+      this.root.setCssStyles({ left: "", top: "", right: "", bottom: "" });
     }
   }
 
@@ -994,6 +1106,8 @@ class QuickUiModal extends Modal {
     this.button(header, this.plugin.settings.quickUiExpanded ? "Hide controls" : "Show controls", async () => {
       this.plugin.settings.quickUiExpanded = !this.plugin.settings.quickUiExpanded;
       await this.plugin.saveSettings();
+      this.render();
+      return false;
     });
 
     if (!this.plugin.settings.quickUiExpanded) return;
@@ -1002,34 +1116,42 @@ class QuickUiModal extends Modal {
     new Setting(selectors).setName("Skin").addDropdown((dropdown) => {
       SKINS.forEach((skin) => dropdown.addOption(skin.id, skin.name));
       dropdown.setValue(this.plugin.settings.skinId);
-      dropdown.onChange(async (value) => {
+      dropdown.onChange((value) => {
         this.plugin.settings.skinId = value;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
-        this.render();
+        void this.plugin.saveSettings().then(() => {
+          this.plugin.controller.refresh();
+          this.render();
+        });
       });
     });
     new Setting(selectors).setName("Personality").addDropdown((dropdown) => {
       Object.entries(PERSONALITY_OPTIONS).forEach(([id, option]) => dropdown.addOption(id, option.label));
       dropdown.setValue(this.plugin.settings.personality);
-      dropdown.onChange(async (value) => {
+      dropdown.onChange((value) => {
         this.plugin.settings.personality = value as Personality;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
-        this.render();
+        void this.plugin.saveSettings().then(() => {
+          this.plugin.controller.refresh();
+          this.render();
+        });
       });
     });
 
     const grid = contentEl.createDiv({ cls: "googly-eyes-quick-grid" });
     this.button(grid, this.plugin.settings.visible ? "Hide eyes" : "Show eyes", async () => this.plugin.controller.setVisible(!this.plugin.settings.visible));
-    this.button(grid, "Next skin", async () => this.plugin.nextStyle());
-    this.button(grid, "Next personality", async () => this.plugin.nextPersonality());
-    this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", async () => this.plugin.toggleFocusMode());
-    this.button(grid, this.plugin.settings.pausedReactions ? "Resume reactions" : "Pause reactions", async () => this.plugin.togglePauseReactions());
-    this.button(grid, "Blink preview", async () => this.plugin.controller.react("quick ui", "blink"));
-    this.button(grid, "GooglyEyes tab", async () => {
+    this.button(grid, "Next skin", () => void this.plugin.nextStyle());
+    this.button(grid, "Next personality", () => void this.plugin.nextPersonality());
+    this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", () => void this.plugin.toggleFocusMode());
+    this.button(grid, this.plugin.settings.pausedReactions ? "Resume reactions" : "Pause reactions", () => void this.plugin.togglePauseReactions());
+    this.button(grid, "Reset view", () => void this.plugin.resetQuickView());
+    this.button(grid, "Blink preview", () => this.plugin.controller.react("quick ui", "blink"));
+    this.button(grid, "GooglyEyes tab", () => {
       this.close();
-      this.plugin.openPlayground();
+      void this.plugin.openPlayground();
+      return false;
+    });
+    this.button(grid, "Fullscreen", async () => {
+      this.close();
+      await this.plugin.enterFullscreen();
       return false;
     });
     this.button(grid, "Full settings", async () => {
@@ -1042,11 +1164,12 @@ class QuickUiModal extends Modal {
 
   private button(parent: HTMLElement, label: string, onClick: () => void | boolean | Promise<void | boolean>): void {
     const button = parent.createEl("button", { text: label, cls: "mod-cta" });
-    button.addEventListener("click", async () => {
-      const shouldRender = await onClick();
-      this.plugin.controller.applySettings();
-      if (shouldRender === false) return;
-      this.render();
+    button.addEventListener("click", () => {
+      void Promise.resolve(onClick()).then((shouldRender) => {
+        this.plugin.controller.applySettings();
+        if (shouldRender === false) return;
+        this.render();
+      });
     });
   }
 }
@@ -1111,7 +1234,7 @@ class OnboardingModal extends Modal {
       dropdown.setValue(value);
       dropdown.onChange((next) => {
         onChange(next);
-        this.plugin.saveSettings();
+        void this.plugin.saveSettings();
         this.plugin.controller.refresh();
       });
     });
@@ -1136,6 +1259,7 @@ class PlaygroundView extends ItemView {
   }
 
   async onClose(): Promise<void> {
+    this.plugin.exitFullscreen();
     this.plugin.controller.unload();
   }
 
@@ -1143,76 +1267,8 @@ class PlaygroundView extends ItemView {
     const el = this.containerEl.children[1] as HTMLElement;
     el.empty();
     el.addClass("googly-eyes-playground");
-    el.createEl("h2", { text: "GooglyEyes" });
     const stage = el.createDiv({ cls: "googly-eyes-stage" });
     this.plugin.controller.mount(stage);
-    const controls = el.createDiv({ cls: "googly-eyes-control-row" });
-    new Setting(controls).setName("Style").addDropdown((d) => {
-      SKINS.forEach((skin) => d.addOption(skin.id, skin.name));
-      d.setValue(this.plugin.settings.skinId);
-      d.onChange(async (value) => {
-        this.plugin.settings.skinId = value;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
-      });
-    });
-    new Setting(controls).setName("Personality").addDropdown((d) => {
-      Object.entries(PERSONALITY_OPTIONS).forEach(([id, p]) => d.addOption(id, p.label));
-      d.setValue(this.plugin.settings.personality);
-      d.onChange(async (value) => {
-        this.plugin.settings.personality = value as Personality;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
-      });
-    });
-    new Setting(controls).setName("Size").addSlider((slider) => {
-      slider.setLimits(36, 220, 2).setValue(this.plugin.settings.size);
-      slider.onChange(async (value) => {
-        this.plugin.settings.size = value;
-        await this.plugin.saveSettings();
-        this.plugin.controller.applySettings();
-      });
-    });
-    new Setting(controls).setName("Eye pairs").addSlider((slider) => {
-      slider.setLimits(1, 6, 1).setValue(this.plugin.settings.eyePairCount);
-      slider.onChange(async (value) => {
-        this.plugin.settings.eyePairCount = value;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
-      });
-    });
-    new Setting(controls).setName("Iris").addColorPicker((picker) => {
-      picker.setValue(this.plugin.settings.irisColor).onChange(async (value) => {
-        this.plugin.settings.irisColor = value;
-        await this.plugin.saveSettings();
-        this.plugin.controller.applySettings();
-      });
-    });
-    new Setting(controls).setName("Eyelids").addColorPicker((picker) => {
-      picker.setValue(this.plugin.settings.eyelidColor).onChange(async (value) => {
-        this.plugin.settings.eyelidColor = value;
-        await this.plugin.saveSettings();
-        this.plugin.controller.applySettings();
-      });
-    });
-    new Setting(controls).setName("Emotion").addSlider((slider) => {
-      slider.setLimits(0.25, 1.8, 0.05).setValue(this.plugin.settings.emotionStrength);
-      slider.onChange(async (value) => {
-        this.plugin.settings.emotionStrength = value;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
-      });
-    });
-    const buttons = el.createDiv({ cls: "googly-eyes-reaction-grid" });
-    [
-      ["Blink", "blink"], ["Shock", "shocked"], ["Suspicious", "suspicious"], ["Sleep", "sleepy"], ["Happy", "happy"], ["Look left", "look-left"],
-      ["Look right", "look-right"], ["Look up", "look-up"], ["Look down", "look-down"], ["Dizzy", "dizzy"], ["Idle", "idle-long"], ["Wake", "wake"]
-    ].forEach(([label, reaction]) => {
-      buttons.createEl("button", { text: label }).addEventListener("click", () => {
-        this.plugin.controller.react("playground", reaction as Reaction);
-      });
-    });
-    el.createDiv({ cls: "googly-eyes-preview-note", text: "GooglyEyes is embedded in this tab. It follows local UI events without reading note or clipboard content." });
   }
 }
 
@@ -1225,7 +1281,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.addClass("googly-eyes-settings");
-    containerEl.createEl("h2", { text: "GooglyEyes" });
+    new Setting(containerEl).setName("GooglyEyes").setHeading();
     containerEl.createEl("p", { text: "GooglyEyes reacts to local events only. It does not read note contents or clipboard contents." });
 
     new Setting(containerEl).setName("Enable plugin").addToggle((toggle) => toggle.setValue(this.plugin.settings.enabled).onChange((value) => this.save("enabled", value)));
@@ -1234,16 +1290,16 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Follow sensitivity").addSlider((s) => s.setLimits(0.1, 1.5, 0.05).setValue(this.plugin.settings.followSensitivity).onChange((v) => this.save("followSensitivity", v)));
     new Setting(containerEl).setName("Smoothing").addSlider((s) => s.setLimits(0.04, 0.8, 0.02).setValue(this.plugin.settings.smoothing).onChange((v) => this.save("smoothing", v)));
 
-    containerEl.createEl("h3", { text: "Behavior presets" });
+    new Setting(containerEl).setName("Behavior presets").setHeading();
     new Setting(containerEl)
       .setName("Quick behavior")
       .setDesc("Start here, then fine-tune below.")
-      .addButton((b) => b.setButtonText("Subtle").onClick(() => this.applyPreset("subtle")))
-      .addButton((b) => b.setButtonText("Lively").onClick(() => this.applyPreset("lively")))
-      .addButton((b) => b.setButtonText("Dramatic").onClick(() => this.applyPreset("dramatic")))
-      .addButton((b) => b.setButtonText("Sleepy").onClick(() => this.applyPreset("sleepy")));
+      .addButton((b) => b.setButtonText("Subtle").onClick(() => void this.applyPreset("subtle")))
+      .addButton((b) => b.setButtonText("Lively").onClick(() => void this.applyPreset("lively")))
+      .addButton((b) => b.setButtonText("Dramatic").onClick(() => void this.applyPreset("dramatic")))
+      .addButton((b) => b.setButtonText("Sleepy").onClick(() => void this.applyPreset("sleepy")));
 
-    containerEl.createEl("h3", { text: "Reactions" });
+    new Setting(containerEl).setName("Reactions").setHeading();
     new Setting(containerEl).setName("Enable reactions").addToggle((t) => t.setValue(this.plugin.settings.reactionsEnabled).onChange((v) => this.save("reactionsEnabled", v)));
     new Setting(containerEl).setName("Reaction intensity").addDropdown((d) => this.dropdown(d, INTENSITY_LABELS, this.plugin.settings.reactionIntensity, (v) => this.save("reactionIntensity", v as Intensity)));
     new Setting(containerEl).setName("Randomness").addDropdown((d) => this.dropdown(d, RANDOMNESS_LABELS, this.plugin.settings.randomness, (v) => this.save("randomness", v as Randomness)));
@@ -1252,7 +1308,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Reaction hold").setDesc("Adds a little extra time before an expression returns to neutral.").addSlider((s) => s.setLimits(0, 1200, 50).setValue(this.plugin.settings.reactionHoldMs).onChange((v) => this.save("reactionHoldMs", v)));
     new Setting(containerEl).setName("Pause reactions").addToggle((t) => t.setValue(this.plugin.settings.pausedReactions).onChange((v) => this.save("pausedReactions", v)));
 
-    containerEl.createEl("h3", { text: "Personality and skin" });
+    new Setting(containerEl).setName("Personality and skin").setHeading();
     new Setting(containerEl).setName("Personality").addDropdown((d) => {
       Object.entries(PERSONALITY_OPTIONS).forEach(([id, p]) => d.addOption(id, p.label));
       d.setValue(this.plugin.settings.personality).onChange((v) => this.save("personality", v as Personality));
@@ -1268,14 +1324,14 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Number of eye pairs").addSlider((s) => s.setLimits(1, 6, 1).setValue(this.plugin.settings.eyePairCount).onChange((v) => this.save("eyePairCount", v)));
     new Setting(containerEl).setName("Per-pair variation").addToggle((t) => t.setValue(this.plugin.settings.perPairVariation).onChange((v) => this.save("perPairVariation", v)));
 
-    containerEl.createEl("h3", { text: "Look" });
+    new Setting(containerEl).setName("Look").setHeading();
     new Setting(containerEl).setName("Iris color").addColorPicker((picker) => picker.setValue(this.plugin.settings.irisColor).onChange((v) => this.save("irisColor", v)));
     new Setting(containerEl).setName("Pupil color").addColorPicker((picker) => picker.setValue(this.plugin.settings.pupilColor).onChange((v) => this.save("pupilColor", v)));
     new Setting(containerEl).setName("Eyelid color").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidColor).onChange((v) => this.save("eyelidColor", v)));
     new Setting(containerEl).setName("Eyelid shadow").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidShadowColor).onChange((v) => this.save("eyelidShadowColor", v)));
     new Setting(containerEl).setName("Iris glow").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.irisGlow).onChange((v) => this.save("irisGlow", v)));
 
-    containerEl.createEl("h3", { text: "Embedded tab" });
+    new Setting(containerEl).setName("Embedded tab").setHeading();
     new Setting(containerEl).setName("Peek mode").addToggle((t) => t.setValue(this.plugin.settings.peekMode).onChange((v) => this.save("peekMode", v)));
     new Setting(containerEl).setName("Embedded panel mask").setDesc("Adds a full-width tab panel overlay so the eyes sit inside Obsidian instead of looking like a floating mask. Supported by layered skins such as Robot.").addToggle((t) => t.setValue(this.plugin.settings.peekFaceMask).onChange((v) => this.save("peekFaceMask", v)));
     new Setting(containerEl).setName("Debug eye windows").setDesc("Shows the eye-window boxes and centers while tuning a skin.").addToggle((t) => t.setValue(this.plugin.settings.debugOverlay).onChange((v) => this.save("debugOverlay", v)));
@@ -1284,39 +1340,39 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Layering / z-index").addText((t) => t.setValue(String(this.plugin.settings.zIndex)).onChange((v) => this.save("zIndex", Number(v) || 1000)));
     new Setting(containerEl).setName("Animation frame count / smoothness").addSlider((s) => s.setLimits(8, 60, 1).setValue(this.plugin.settings.animationSmoothness).onChange((v) => this.save("animationSmoothness", v)));
 
-    containerEl.createEl("h3", { text: "Focus and accessibility" });
+    new Setting(containerEl).setName("Focus and accessibility").setHeading();
     new Setting(containerEl).setName("Focus mode").addDropdown((d) => this.dropdown(d, FOCUS_LABELS, this.plugin.settings.focusMode, (v) => this.save("focusMode", v as FocusModeSetting)));
     new Setting(containerEl).setName("DND mode").addToggle((t) => t.setValue(this.plugin.settings.dndMode).onChange((v) => this.save("dndMode", v)));
     new Setting(containerEl).setName("Subtle mode").addToggle((t) => t.setValue(this.plugin.settings.subtleMode).onChange((v) => this.save("subtleMode", v)));
     new Setting(containerEl).setName("Sound effects").setDesc("Off by default. V1 focuses on visual feedback.").addToggle((t) => t.setValue(this.plugin.settings.soundEffects).onChange((v) => this.save("soundEffects", v)));
 
-    containerEl.createEl("h3", { text: "Action reactions" });
+    new Setting(containerEl).setName("Action reactions").setHeading();
     new Setting(containerEl)
       .setName("Reset reactions")
       .setDesc("Restores the default reactions for typing, clicks, copy, paste, hover, and idle.")
-      .addButton((button) => button.setButtonText("Reset").onClick(() => this.resetActions()));
+      .addButton((button) => button.setButtonText("Reset").onClick(() => void this.resetActions()));
     this.plugin.settings.actionMappings.forEach((mapping, index) => {
       const setting = new Setting(containerEl).setName(mapping.name).setDesc(mapping.triggerType);
       setting.addToggle((t) => t.setValue(mapping.enabled).onChange((v) => {
         this.plugin.settings.actionMappings[index].enabled = v;
-        this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       }));
       setting.addDropdown((dropdown) => {
         Object.entries(REACTION_LABELS).forEach(([id, label]) => dropdown.addOption(id, label));
         dropdown.setValue(mapping.reactionPool[0] ?? "blink");
         dropdown.onChange((value) => {
           this.plugin.settings.actionMappings[index].reactionPool = [value as Reaction];
-          this.plugin.saveSettings();
+          void this.plugin.saveSettings();
           this.plugin.controller.react("settings-preview", value as Reaction);
         });
       });
       setting.addSlider((slider) => slider.setLimits(0.2, 1.8, 0.1).setValue(mapping.intensity).onChange((value) => {
         this.plugin.settings.actionMappings[index].intensity = value;
-        this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       }));
       setting.addText((t) => t.setPlaceholder("cooldown ms").setValue(String(mapping.cooldownMs)).onChange((v) => {
         this.plugin.settings.actionMappings[index].cooldownMs = Number(v) || mapping.cooldownMs;
-        this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       }));
     });
     new Setting(containerEl).setName("Add custom action").setDesc("Creates a local event mapping you can trigger from commands or future extensions.").addButton((button) => {
@@ -1327,9 +1383,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
       });
     });
 
-    containerEl.createEl("h3", { text: "Preview tools" });
+    new Setting(containerEl).setName("Preview tools").setHeading();
     new Setting(containerEl).setName("Quick UI").addButton((b) => b.setButtonText("Open").onClick(() => new QuickUiModal(this.app, this.plugin).open()));
-    new Setting(containerEl).setName("GooglyEyes tab").addButton((b) => b.setButtonText("Open").onClick(() => this.plugin.openPlayground()));
+    new Setting(containerEl).setName("GooglyEyes tab").addButton((b) => b.setButtonText("Open").onClick(() => void this.plugin.openPlayground()));
     new Setting(containerEl).setName("Onboarding").addButton((b) => b.setButtonText("Restart").onClick(() => new OnboardingModal(this.app, this.plugin).open()));
   }
 
@@ -1352,11 +1408,12 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     this.display();
   }
 
-  private async save<K extends keyof GooglyEyesSettings>(key: K, value: GooglyEyesSettings[K]): Promise<void> {
+  private save<K extends keyof GooglyEyesSettings>(key: K, value: GooglyEyesSettings[K]): void {
     this.plugin.settings[key] = value;
-    await this.plugin.saveSettings();
-    this.plugin.controller.refresh();
-    this.display();
+    void this.plugin.saveSettings().then(() => {
+      this.plugin.controller.refresh();
+      this.display();
+    });
   }
 }
 
@@ -1364,6 +1421,7 @@ export default class GooglyEyesPlugin extends Plugin {
   settings: GooglyEyesSettings = DEFAULT_SETTINGS;
   controller!: EyeController;
   private statusEl: HTMLElement | null = null;
+  private fullscreenEl: HTMLElement | null = null;
 
   async onload(): Promise<void> {
     await this.loadSettings();
@@ -1376,19 +1434,24 @@ export default class GooglyEyesPlugin extends Plugin {
     this.statusEl.setText("GooglyEyes");
     this.statusEl.addEventListener("click", () => new QuickUiModal(this.app, this).open());
     this.addCommands();
+    this.registerDomEvent(document, "keydown", (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || !this.fullscreenEl) return;
+      event.preventDefault();
+      this.exitFullscreen();
+    });
     this.app.workspace.onLayoutReady(() => {
-      this.openPlayground();
+      void this.openPlayground();
       if (!this.settings.onboardingComplete) window.setTimeout(() => new OnboardingModal(this.app, this).open(), 600);
     });
   }
 
   onunload(): void {
+    this.exitFullscreen();
     this.controller.unload();
-    this.app.workspace.detachLeavesOfType(VIEW_TYPE_PLAYGROUND);
   }
 
   async loadSettings(): Promise<void> {
-    const loaded = await this.loadData();
+    const loaded = (await this.loadData()) as Partial<GooglyEyesSettings> | null;
     this.settings = {
       ...DEFAULT_SETTINGS,
       ...loaded,
@@ -1404,15 +1467,16 @@ export default class GooglyEyesPlugin extends Plugin {
   }
 
   addCommands(): void {
-    this.addCommand({ id: "toggle-googly-eyes", name: "Toggle GooglyEyes", callback: () => this.toggleEnabled() });
-    this.addCommand({ id: "show-hide-eyes", name: "Show / Hide Eyes", callback: () => this.controller.setVisible(!this.settings.visible) });
-    this.addCommand({ id: "open-quick-ui", name: "Open Quick UI", callback: () => new QuickUiModal(this.app, this).open(), hotkeys: [{ modifiers: ["Mod", "Shift"], key: "E" }] });
-    this.addCommand({ id: "open-playground", name: "Open GooglyEyes Tab", callback: () => this.openPlayground() });
-    this.addCommand({ id: "randomize-personality", name: "Randomize Personality", callback: () => this.controller.randomizePersonality() });
-    this.addCommand({ id: "toggle-focus-mode", name: "Toggle Focus Mode", callback: () => this.toggleFocusMode() });
-    this.addCommand({ id: "switch-next-personality", name: "Switch Next Personality", callback: () => this.nextPersonality() });
-    this.addCommand({ id: "pause-reactions", name: "Pause Reactions", callback: () => this.setPaused(true) });
-    this.addCommand({ id: "resume-reactions", name: "Resume Reactions", callback: () => this.setPaused(false) });
+    this.addCommand({ id: "toggle", name: "Toggle", callback: () => void this.toggleEnabled() });
+    this.addCommand({ id: "show-hide", name: "Show / hide eyes", callback: () => void this.controller.setVisible(!this.settings.visible) });
+    this.addCommand({ id: "open-quick-ui", name: "Open quick UI", callback: () => new QuickUiModal(this.app, this).open() });
+    this.addCommand({ id: "open-tab", name: "Open tab", callback: () => void this.openPlayground() });
+    this.addCommand({ id: "open-fullscreen", name: "Open fullscreen", callback: () => void this.enterFullscreen() });
+    this.addCommand({ id: "randomize-personality", name: "Randomize personality", callback: () => this.controller.randomizePersonality() });
+    this.addCommand({ id: "toggle-focus-mode", name: "Toggle focus mode", callback: () => void this.toggleFocusMode() });
+    this.addCommand({ id: "switch-next-personality", name: "Switch next personality", callback: () => void this.nextPersonality() });
+    this.addCommand({ id: "pause-reactions", name: "Pause reactions", callback: () => void this.setPaused(true) });
+    this.addCommand({ id: "resume-reactions", name: "Resume reactions", callback: () => void this.setPaused(false) });
   }
 
   async toggleEnabled(): Promise<void> {
@@ -1438,6 +1502,23 @@ export default class GooglyEyesPlugin extends Plugin {
     this.controller.applySettings();
   }
 
+  async resetQuickView(): Promise<void> {
+    this.settings.enabled = true;
+    this.settings.visible = true;
+    this.settings.positionPreset = DEFAULT_SETTINGS.positionPreset;
+    this.settings.customX = DEFAULT_SETTINGS.customX;
+    this.settings.customY = DEFAULT_SETTINGS.customY;
+    this.settings.size = DEFAULT_SETTINGS.size;
+    this.settings.opacity = DEFAULT_SETTINGS.opacity;
+    this.settings.focusModeActive = false;
+    this.settings.pausedReactions = false;
+    this.settings.dndMode = false;
+    this.settings.peekMode = DEFAULT_SETTINGS.peekMode;
+    this.settings.quickUiExpanded = true;
+    await this.saveSettings();
+    this.controller.applySettings();
+  }
+
   async nextStyle(): Promise<void> {
     const ids = SKINS.map((skin) => skin.id);
     this.settings.skinId = ids[(ids.indexOf(this.settings.skinId) + 1) % ids.length];
@@ -1452,15 +1533,34 @@ export default class GooglyEyesPlugin extends Plugin {
     this.controller.refresh();
   }
 
-  async openPlayground(): Promise<void> {
+  async enterFullscreen(): Promise<void> {
+    const leaf = await this.openPlayground();
+    const view = leaf.view as ItemView;
+    const el = view.containerEl.children[1] as HTMLElement | undefined;
+    if (!el) return;
+    this.exitFullscreen();
+    this.fullscreenEl = el;
+    this.fullscreenEl.addClass("googly-eyes-fullscreen");
+    this.controller.refresh();
+  }
+
+  exitFullscreen(): void {
+    if (!this.fullscreenEl) return;
+    this.fullscreenEl.removeClass("googly-eyes-fullscreen");
+    this.fullscreenEl = null;
+    this.controller.refresh();
+  }
+
+  async openPlayground(): Promise<WorkspaceLeaf> {
     const existing = this.app.workspace.getLeavesOfType(VIEW_TYPE_PLAYGROUND)[0];
     if (existing) {
       this.app.workspace.revealLeaf(existing);
-      return;
+      return existing;
     }
     const leaf = this.app.workspace.getLeaf(true);
     await leaf.setViewState({ type: VIEW_TYPE_PLAYGROUND, active: true });
     this.app.workspace.revealLeaf(leaf);
+    return leaf;
   }
 
   private mergeActions(saved: ActionMapping[]): ActionMapping[] {

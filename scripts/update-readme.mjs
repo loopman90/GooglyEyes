@@ -87,7 +87,7 @@ Use this once the plugin folder is ready or downloaded as a release.
 10. Turn off Restricted mode if Obsidian asks for it.
 11. Click Reload plugins if GooglyEyes does not appear yet.
 12. Enable GooglyEyes.
-13. Run the command \`Open GooglyEyes Tab\`.
+13. Run the command \`Open tab\`.
 
 Correct final folder:
 
@@ -120,7 +120,7 @@ ${join(root, "release", "googly-eyes-test")}
 6. Go to Settings > Community plugins.
 7. Reload plugins if needed.
 8. Enable GooglyEyes.
-9. Run \`Open GooglyEyes Tab\`.
+9. Run \`Open tab\`.
 
 The test package includes ${skinNames}.
 

@@ -28,6 +28,14 @@
   --reaction-pupil-y-left: 0%;
   --reaction-pupil-x-right: 0%;
   --reaction-pupil-y-right: 0%;
+  --eye-base-x-left: 0%;
+  --eye-base-y-left: 0%;
+  --eye-base-x-right: 0%;
+  --eye-base-y-right: 0%;
+  --eye-base-scale-left: 1.04;
+  --eye-base-scale-right: 1.04;
+  --eye-base-rotate-left: 0deg;
+  --eye-base-rotate-right: 0deg;
   --lid-upper-left: -63%;
   --lid-lower-left: 65%;
   --lid-upper-right: -63%;
@@ -96,6 +104,11 @@
   display: grid;
 }
 
+.googly-eyes-pair[data-skin="clown"] .googly-eyes-layered-eyes {
+  inset: 30% 14% 42%;
+  gap: 21%;
+}
+
 .googly-eyes-eye-slot {
   position: relative;
   width: 100%;
@@ -111,6 +124,10 @@
   --reaction-iris-y: var(--reaction-iris-y-left);
   --reaction-pupil-x: var(--reaction-pupil-x-left);
   --reaction-pupil-y: var(--reaction-pupil-y-left);
+  --eye-base-x: var(--eye-base-x-left);
+  --eye-base-y: var(--eye-base-y-left);
+  --eye-base-scale: var(--eye-base-scale-left);
+  --eye-base-rotate: var(--eye-base-rotate-left);
   --lid-tilt: var(--lid-tilt-left);
   --lid-lower-tilt: var(--lid-lower-tilt-left);
 }
@@ -120,6 +137,10 @@
   --reaction-iris-y: var(--reaction-iris-y-right);
   --reaction-pupil-x: var(--reaction-pupil-x-right);
   --reaction-pupil-y: var(--reaction-pupil-y-right);
+  --eye-base-x: var(--eye-base-x-right);
+  --eye-base-y: var(--eye-base-y-right);
+  --eye-base-scale: var(--eye-base-scale-right);
+  --eye-base-rotate: var(--eye-base-rotate-right);
   --lid-tilt: var(--lid-tilt-right);
   --lid-lower-tilt: var(--lid-lower-tilt-right);
 }
@@ -148,6 +169,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: translate(var(--eye-base-x), var(--eye-base-y)) rotate(var(--eye-base-rotate)) scale(var(--eye-base-scale));
+  transform-origin: 50% 50%;
+  transition: transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
   -webkit-user-drag: none;
 }
 
@@ -469,14 +493,14 @@
 
 .googly-eyes-root.is-reduced-motion,
 .googly-eyes-root.is-reduced-motion * {
-  transition: none !important;
-  animation: none !important;
+  transition: none;
+  animation: none;
 }
 
 .googly-eyes-modal .googly-eyes-quick-grid,
 .googly-eyes-reaction-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -512,7 +536,7 @@
 
 .googly-eyes-skin-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin: 10px 0 18px;
 }
@@ -550,40 +574,34 @@
 }
 
 .googly-eyes-playground {
-  padding: 18px;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.googly-eyes-playground.googly-eyes-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  width: 100vw;
+  height: 100vh;
+  background: var(--background-primary);
 }
 
 .googly-eyes-stage {
   position: relative;
-  --googly-eyes-size: 180px;
-  width: min(calc(var(--googly-eyes-size) * 3.6), 100%);
-  min-width: min(320px, 100%);
-  aspect-ratio: 2 / 1;
-  margin: 6px 0 18px;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  margin: 0;
   overflow: hidden;
   background:
     linear-gradient(135deg, var(--background-secondary), var(--background-primary));
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 8px;
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.05),
-    inset 0 -18px 38px rgb(0 0 0 / 0.12),
-    0 1px 2px rgb(0 0 0 / 0.12);
-}
-
-.googly-eyes-stage::before {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 6px;
-  pointer-events: none;
-  z-index: 4;
 }
 
 .googly-eyes-control-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-bottom: 16px;
 }
@@ -612,6 +630,11 @@ body.theme-dark .googly-eyes-pair {
   }
 
   .googly-eyes-skin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .googly-eyes-modal .googly-eyes-quick-grid,
+  .googly-eyes-reaction-grid {
     grid-template-columns: 1fr;
   }
 }

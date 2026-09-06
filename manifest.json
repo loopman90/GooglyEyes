@@ -2,9 +2,9 @@
   "id": "googly-eyes",
   "name": "GooglyEyes",
   "version": "1.0.0",
-  "minAppVersion": "1.5.0",
-  "description": "Put living googly eyes in Obsidian.",
+  "minAppVersion": "1.7.2",
+  "description": "Put living reactive eyes in your workspace.",
   "author": "GooglyEyes",
-  "authorUrl": "https://github.com/loopman90/GooglyEyes",
+  "authorUrl": "https://github.com/loopman90",
   "isDesktopOnly": false
 }

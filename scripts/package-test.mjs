@@ -5,17 +5,11 @@ import { activeSkinNamesText, getActiveSkins, writeReadme } from "./update-readm
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const out = join(root, "release", "googly-eyes-test");
-const legacyOut = join(root, "release", `${"iris"}idian-test`);
-const previousOut = join(root, "release", `${"eye"}sidian-test`);
-const recentOut = join(root, "release", `${"eyes"}sidian-test`);
 writeReadme();
 const activeSkins = getActiveSkins();
 const skins = activeSkins.map((skin) => skin.id);
 const skinNames = activeSkinNamesText();
 
-rmSync(legacyOut, { recursive: true, force: true });
-rmSync(previousOut, { recursive: true, force: true });
-rmSync(recentOut, { recursive: true, force: true });
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
@@ -67,7 +61,7 @@ Then open Obsidian:
 2. Open Community plugins.
 3. Reload plugins if needed.
 4. Enable GooglyEyes.
-5. Use the command "Open GooglyEyes Tab" to open the embedded tab.
+5. Use the command "Open tab" to open the embedded tab.
 
 This package includes the completed ${skinNames} layered skins, with runtime iris/pupil tracking, smooth CSS lids, customizable colors, and full embedded tab-panel masks.
 `);

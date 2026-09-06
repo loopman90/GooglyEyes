@@ -5,8 +5,20 @@
   "mask": "masks/tab-panel.png",
   "thumbnail": "thumbnail.png",
   "eyeWindows": [
-    { "side": "left", "x": 0.152, "y": 0.278, "w": 0.306, "h": 0.372 },
-    { "side": "right", "x": 0.542, "y": 0.278, "w": 0.306, "h": 0.372 }
+    {
+      "side": "left",
+      "x": 0.152,
+      "y": 0.275,
+      "w": 0.306,
+      "h": 0.32
+    },
+    {
+      "side": "right",
+      "x": 0.542,
+      "y": 0.275,
+      "w": 0.306,
+      "h": 0.32
+    }
   ],
   "assets": {
     "leftBase": "eyes/left-base.png",
@@ -19,7 +31,7 @@
     "eyelidColor": "#ccd7dd",
     "eyelidShadowColor": "#101820",
     "irisGlow": 0.45,
-    "irisSize": 34,
-    "pupilSize": 32
+    "irisSize": 30,
+    "pupilSize": 30
   }
 }
