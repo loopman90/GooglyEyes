@@ -46,18 +46,23 @@ GooglyEyes is a playful, fully local Obsidian Community Plugin. It opens an embe
 - A full settings page for detailed behavior tuning.
 - A copy-ready test build in \`release/googly-eyes-test\`.
 
-## Privacy
+## Privacy Statement
 
-GooglyEyes is local-only.
+GooglyEyes is designed to be local-only and privacy-friendly. The plugin provides visual reactions inside your workspace; it is not built to collect, transmit, sell, or analyze your personal data.
 
 - No account.
 - No cloud backend.
 - No runtime AI.
 - No internet requirement.
+- No analytics or telemetry.
+- No third-party tracking.
 - No note-text analysis.
 - No clipboard content reading.
 - Clipboard reactions only know that a \`copy\`, \`cut\`, or \`paste\` event happened.
+- Mouse and keyboard reactions use local UI events only.
 - Settings are stored locally in Obsidian plugin data.
+- Skin images are loaded from the installed plugin folder.
+- The plugin does not send vault names, file names, file contents, settings, cursor movement, or usage behavior to any external service.
 
 ## Active Skins
 
@@ -133,9 +138,23 @@ npm install
 npm run validate-assets
 npm run build
 npm run package-test
+npm run release:check
 \`\`\`
 
 Use \`npm run dev\` while developing.
+
+## Release Checklist
+
+Use this before publishing a GitHub release:
+
+1. Update \`manifest.json\`, \`package.json\`, \`versions.json\`, and \`CHANGELOG.md\`.
+2. Run \`npm run release:check\`.
+3. Commit the exact source and generated \`main.js\`.
+4. Tag the commit with the plain version number, for example \`1.0.3\`, without a \`v\` prefix.
+5. Create the GitHub release with only \`main.js\`, \`manifest.json\`, and \`styles.css\`.
+6. Let the artifact attestation workflow run for the release assets.
+
+The repository includes a GitHub Actions workflow that can attest \`main.js\`, \`manifest.json\`, and \`styles.css\` for future releases.
 
 ## Quick UI
 

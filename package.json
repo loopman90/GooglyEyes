@@ -1,6 +1,6 @@
 {
   "name": "googly-eyes",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Put living reactive eyes in your workspace.",
   "main": "main.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "prepackage-test": "node scripts/update-readme.mjs",
     "package-test": "node scripts/package-test.mjs",
     "version:check": "node scripts/check-version.mjs",
-    "validate-assets": "node scripts/validate-assets.mjs"
+    "validate-assets": "node scripts/validate-assets.mjs",
+    "release:check": "npm run version:check && npm run validate-assets && npm run build && node scripts/release-check.mjs"
   },
   "keywords": [
     "obsidian",

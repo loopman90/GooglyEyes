@@ -140,6 +140,7 @@ const SKIN_TUPLES: SkinTuple[] = [
   ["cat", "Cat", "Soft fur, sharp focus, vertical pupils.", "#58d34f", "#050806", "#f4ead2", "#5a514d", "#f3b08b", 37, 22],
   ["manga-female", "Manga Female", "Big anime eyes with soft lashes.", "#9b68ee", "#140d2d", "#f8f4ef", "#6a3c43", "#f4a7c4", 43, 32],
   ["dragon", "Dragon", "Ancient scales with a fiery slit gaze.", "#ff9f21", "#090403", "#e8dcc2", "#31443a", "#ff6b22", 36, 19],
+  ["d20-rpg", "D20 RPG", "Tabletop dice, parchment maps, and dungeon master focus.", "#3fcf7f", "#100806", "#f2dec0", "#7b4f2b", "#c59a43", 32, 28],
   ["tibetan-monk", "Tibetan Monk", "Warm robes with a calm meditative gaze.", "#7f5634", "#0b0806", "#f4eadc", "#9b5535", "#d69b3b", 30, 32],
   ["alien", "Alien", "Bioluminescent skin with an uncanny teal stare.", "#48eed8", "#020809", "#dfe8e5", "#627f77", "#20e5d7", 36, 30],
   ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43", 31, 30],
@@ -165,6 +166,7 @@ const SKIN_EYE_WINDOWS: Record<string, Record<"left" | "right", EyeWindow>> = {
   cat: DEFAULT_EYE_WINDOWS,
   "manga-female": { left: { x: 0.14, y: 0.268, w: 0.32, h: 0.34 }, right: { x: 0.541, y: 0.268, w: 0.32, h: 0.34 } },
   dragon: DEFAULT_EYE_WINDOWS,
+  "d20-rpg": { left: { x: 0.153, y: 0.325, w: 0.303, h: 0.29 }, right: { x: 0.544, y: 0.325, w: 0.303, h: 0.29 } },
   "tibetan-monk": { left: { x: 0.184, y: 0.286, w: 0.248, h: 0.248 }, right: { x: 0.57, y: 0.286, w: 0.248, h: 0.248 } },
   alien: DEFAULT_EYE_WINDOWS,
   hacker: DEFAULT_EYE_WINDOWS,
@@ -174,6 +176,23 @@ const SKIN_EYE_WINDOWS: Record<string, Record<"left" | "right", EyeWindow>> = {
   clown: { left: { x: 0.128, y: 0.246, w: 0.345, h: 0.345 }, right: { x: 0.529, y: 0.246, w: 0.345, h: 0.345 } },
   spy: { left: { x: 0.159, y: 0.237, w: 0.276, h: 0.22 }, right: { x: 0.564, y: 0.237, w: 0.272, h: 0.229 } },
   skeleton: { left: { x: 0.161, y: 0.209, w: 0.294, h: 0.441 }, right: { x: 0.544, y: 0.209, w: 0.295, h: 0.441 } }
+};
+
+const SKIN_AMBIENT_REACTIONS: Record<string, Reaction[]> = {
+  robot: ["wide-stare", "confused", "eye-roll", "rapid-typing-focus", "suspicious"],
+  cat: ["suspicious", "look-left", "look-right", "sleepy-idle", "happy"],
+  "manga-female": ["happy", "shocked", "sad", "confused", "sleepy-idle"],
+  dragon: ["angry", "suspicious", "dramatic-shock", "chaotic-stare", "look-down"],
+  "d20-rpg": ["dramatic-shock", "wide-stare", "happy", "confused", "chaotic-stare"],
+  "tibetan-monk": ["slow-blink", "sleepy-idle", "look-down", "happy", "idle-long"],
+  alien: ["wide-stare", "confused", "dizzy", "cross-eyed", "peek"],
+  hacker: ["suspicious", "rapid-typing-focus", "look-left", "look-right", "nervous"],
+  anonymous: ["suspicious", "peek", "look-left", "look-right", "idle-long"],
+  "ice-hockey": ["suspicious", "angry", "wide-stare", "shocked", "look-left"],
+  "mona-lisa": ["idle-long", "slow-blink", "happy", "suspicious", "look-right"],
+  clown: ["happy", "cross-eyed", "dizzy", "chaotic-stare", "shocked"],
+  spy: ["peek", "suspicious", "look-left", "look-right", "wide-stare"],
+  skeleton: ["suspicious", "sleepy-idle", "shocked", "confused", "idle-long"]
 };
 
 const AVAILABLE_SKIN_IDS = new Set(SKINS.map((skin) => skin.id));
@@ -347,17 +366,6 @@ const RANDOMNESS_LABELS = labels<Randomness>({
   custom: "Custom"
 });
 
-const POSITION_LABELS = labels<PositionPreset>({
-  "top-left": "Top Left",
-  "top-right": "Top Right",
-  "bottom-left": "Bottom Left",
-  "bottom-right": "Bottom Right",
-  sidebar: "Sidebar",
-  statusbar: "Statusbar",
-  floating: "Floating Window",
-  custom: "Custom Position"
-});
-
 const FOCUS_LABELS = labels<FocusModeSetting>({
   manual: "Manual toggle",
   writing: "Auto during writing",
@@ -365,7 +373,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa", "clown", "spy", "skeleton"]);
+const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "d20-rpg", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa", "clown", "spy", "skeleton"]);
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",
@@ -663,7 +671,7 @@ class EyeController {
 
   private followTextCursorSoon(): void {
     window.setTimeout(() => {
-      const cursor = document.querySelector(".cm-cursor-primary, .cm-cursor") as HTMLElement | null;
+      const cursor = document.querySelector<HTMLElement>(".cm-cursor-primary, .cm-cursor");
       if (!cursor) return;
       const rect = cursor.getBoundingClientRect();
       if (rect.width || rect.height) this.target = { x: rect.left, y: rect.top };
@@ -677,7 +685,7 @@ class EyeController {
     const rect = this.root.getBoundingClientRect();
     this.dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
     this.react("drag");
-    (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
+    if (event.target instanceof HTMLElement) event.target.setPointerCapture?.(event.pointerId);
   }
 
   private drag(event: MouseEvent): void {
@@ -706,7 +714,7 @@ class EyeController {
         const irises = pair.querySelectorAll<HTMLElement>(".googly-eyes-iris");
         if (irises.length) {
           irises.forEach((iris) => {
-            const slot = iris.closest(".googly-eyes-eye-slot") as HTMLElement | null;
+            const slot = iris.closest<HTMLElement>(".googly-eyes-eye-slot");
             const pupil = iris.querySelector<HTMLElement>(".googly-eyes-pupil");
             const eyeRect = slot?.getBoundingClientRect() ?? rect;
             const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
@@ -767,11 +775,12 @@ class EyeController {
     const s = this.plugin.settings;
     if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.dragging) return;
     if (this.root?.hasClass("is-hidden")) return;
-    const pool: Reaction[] = ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "look-left", "look-right", "happy"];
+    const skinId = this.plugin.settings.skinId;
+    const pool: Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "look-left", "look-right", "happy"];
     const reaction = this.resolveReaction(pick(pool, Math.max(0.45, this.randomness())));
     this.setReaction(reaction);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
-    const duration = this.reactionDuration(reaction, 0.95 + Math.random() * 0.55);
+    const duration = this.ambientReactionDuration(reaction);
     this.ambientReturnTimer = window.setTimeout(() => {
       if (this.currentReaction === reaction) this.setReaction("idle-neutral");
     }, duration);
@@ -1166,6 +1175,12 @@ class EyeController {
     return this.reduceMotion.matches ? 180 : base * multiplier * this.intensity() + this.plugin.settings.reactionHoldMs;
   }
 
+  private ambientReactionDuration(reaction: Reaction): number {
+    if (this.reduceMotion.matches) return 900;
+    const base = reaction === "sleepy-idle" || reaction === "idle-long" ? 3000 : reaction === "dizzy" || reaction === "chaotic-stare" ? 2400 : 2600;
+    return base + Math.random() * 850 + this.plugin.settings.reactionHoldMs;
+  }
+
   private isFocusMode(): boolean {
     return this.plugin.settings.focusModeActive || this.plugin.settings.focusMode === "fullscreen" && !!document.fullscreenElement;
   }
@@ -1188,10 +1203,9 @@ class QuickUiModal extends Modal {
 
     const header = contentEl.createDiv({ cls: "googly-eyes-quick-header" });
     header.createEl("span", { text: this.plugin.settings.quickUiExpanded ? "Quick controls are visible" : "Quick controls are hidden" });
-    this.button(header, this.plugin.settings.quickUiExpanded ? "Hide controls" : "Show controls", async () => {
+    this.button(header, this.plugin.settings.quickUiExpanded ? "Hide controls" : "Show controls", () => {
       this.plugin.settings.quickUiExpanded = !this.plugin.settings.quickUiExpanded;
-      await this.plugin.saveSettings();
-      this.render();
+      void this.plugin.saveSettings().then(() => this.render());
       return false;
     });
 
@@ -1222,7 +1236,7 @@ class QuickUiModal extends Modal {
     });
 
     const grid = contentEl.createDiv({ cls: "googly-eyes-quick-grid" });
-    this.button(grid, this.plugin.settings.visible ? "Hide eyes" : "Show eyes", async () => this.plugin.controller.setVisible(!this.plugin.settings.visible));
+    this.button(grid, this.plugin.settings.visible ? "Hide eyes" : "Show eyes", () => this.plugin.controller.setVisible(!this.plugin.settings.visible));
     this.button(grid, "Next skin", () => void this.plugin.nextStyle());
     this.button(grid, "Next personality", () => void this.plugin.nextPersonality());
     this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", () => void this.plugin.toggleFocusMode());
@@ -1234,12 +1248,12 @@ class QuickUiModal extends Modal {
       void this.plugin.openPlayground();
       return false;
     });
-    this.button(grid, "Fullscreen", async () => {
+    this.button(grid, "Fullscreen", () => {
       this.close();
-      await this.plugin.enterFullscreen();
+      void this.plugin.enterFullscreen();
       return false;
     });
-    this.button(grid, "Full settings", async () => {
+    this.button(grid, "Full settings", () => {
       this.close();
       (this.app as App & { setting?: { open: () => void; openTabById: (id: string) => void } }).setting?.open();
       (this.app as App & { setting?: { openTabById: (id: string) => void } }).setting?.openTabById(this.plugin.manifest.id);
@@ -1262,12 +1276,10 @@ class QuickUiModal extends Modal {
 class OnboardingModal extends Modal {
   private step = 0;
   private steps = [
-    "Welcome to GooglyEyes",
-    "Choose a style",
-    "Choose a personality",
-    "Choose follow behavior",
-    "Choose reaction intensity",
-    "Quick privacy explanation",
+    "Welcome",
+    "Choose a skin",
+    "Choose behavior",
+    "Privacy",
     "Start"
   ];
 
@@ -1284,24 +1296,33 @@ class OnboardingModal extends Modal {
     contentEl.empty();
     contentEl.addClass("googly-eyes-modal");
     contentEl.createEl("h2", { text: this.steps[this.step] });
-    if (this.step === 1) this.select(contentEl, SKINS.map((s) => [s.id, s.name]), this.plugin.settings.skinId, (value) => this.plugin.settings.skinId = value);
-    else if (this.step === 2) this.select(contentEl, Object.entries(PERSONALITY_OPTIONS).map(([id, p]) => [id, p.label]), this.plugin.settings.personality, (value) => this.plugin.settings.personality = value as Personality);
-    else if (this.step === 3) this.select(contentEl, Object.entries(FOLLOW_LABELS), this.plugin.settings.followTarget, (value) => this.plugin.settings.followTarget = value as FollowTarget);
-    else if (this.step === 4) this.select(contentEl, Object.entries(INTENSITY_LABELS), this.plugin.settings.reactionIntensity, (value) => this.plugin.settings.reactionIntensity = value as Intensity);
-    else if (this.step === 5) contentEl.createEl("p", { text: "GooglyEyes only reacts to local UI events. It does not read note text, clipboard contents, accounts, or the internet." });
-    else contentEl.createEl("p", { text: "Put living googly eyes in Obsidian." });
+    if (this.step === 1) {
+      this.select(contentEl, SKINS.map((s) => [s.id, s.name]), this.plugin.settings.skinId, (value) => this.plugin.settings.skinId = value);
+    } else if (this.step === 2) {
+      this.select(contentEl, Object.entries(PERSONALITY_OPTIONS).map(([id, p]) => [id, p.label]), this.plugin.settings.personality, (value) => this.plugin.settings.personality = value as Personality);
+      this.select(contentEl, Object.entries(FOLLOW_LABELS), this.plugin.settings.followTarget, (value) => this.plugin.settings.followTarget = value as FollowTarget);
+      this.select(contentEl, Object.entries(INTENSITY_LABELS), this.plugin.settings.reactionIntensity, (value) => this.plugin.settings.reactionIntensity = value as Intensity);
+    } else if (this.step === 3) {
+      contentEl.createEl("p", { text: "GooglyEyes reacts to local UI events only. It does not read note text, clipboard contents, accounts, analytics, or the internet." });
+    } else if (this.step === 4) {
+      contentEl.createEl("p", { text: "Open the embedded tab and try your selected skin with the Quick UI in the lower-left corner." });
+    } else {
+      contentEl.createEl("p", { text: "Pick a skin, choose a behavior style, then open the embedded tab." });
+    }
     const nav = contentEl.createDiv({ cls: "googly-eyes-modal-nav" });
     if (this.step > 0) this.navButton(nav, "Back", () => this.step--);
-    this.navButton(nav, this.step === this.steps.length - 1 ? "Start" : "Next", async () => {
+    this.navButton(nav, this.step === this.steps.length - 1 ? "Start" : "Next", () => {
       if (this.step === this.steps.length - 1) {
         this.plugin.settings.onboardingComplete = true;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
-        this.close();
+        this.plugin.settings.quickUiExpanded = true;
+        void this.plugin.saveSettings().then(() => {
+          this.plugin.controller.refresh();
+          this.close();
+          void this.plugin.openPlayground();
+        });
       } else {
         this.step++;
-        await this.plugin.saveSettings();
-        this.plugin.controller.refresh();
+        void this.plugin.saveSettings().then(() => this.plugin.controller.refresh());
       }
     });
   }
@@ -1467,10 +1488,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
       }));
     });
     new Setting(containerEl).setName("Add custom action").setDesc("Creates a local event mapping you can trigger from commands or future extensions.").addButton((button) => {
-      button.setButtonText("Add").onClick(async () => {
+      button.setButtonText("Add").onClick(() => {
         this.plugin.settings.actionMappings.push({ name: `custom action ${this.plugin.settings.actionMappings.length + 1}`, triggerType: "command", enabled: true, reactionPool: ["happy", "blink"], intensity: 1, cooldownMs: 1000 });
-        await this.plugin.saveSettings();
-        this.display();
+        void this.plugin.saveSettings().then(() => this.display());
       });
     });
 
@@ -1565,7 +1585,7 @@ export default class GooglyEyesPlugin extends Plugin {
     this.addCommand({ id: "open-quick-ui", name: "Open quick UI", callback: () => new QuickUiModal(this.app, this).open() });
     this.addCommand({ id: "open-tab", name: "Open tab", callback: () => void this.openPlayground() });
     this.addCommand({ id: "open-fullscreen", name: "Open fullscreen", callback: () => void this.enterFullscreen() });
-    this.addCommand({ id: "randomize-personality", name: "Randomize personality", callback: () => this.controller.randomizePersonality() });
+    this.addCommand({ id: "randomize-personality", name: "Randomize personality", callback: () => void this.controller.randomizePersonality() });
     this.addCommand({ id: "toggle-focus-mode", name: "Toggle focus mode", callback: () => void this.toggleFocusMode() });
     this.addCommand({ id: "switch-next-personality", name: "Switch next personality", callback: () => void this.nextPersonality() });
     this.addCommand({ id: "pause-reactions", name: "Pause reactions", callback: () => void this.setPaused(true) });
@@ -1647,12 +1667,12 @@ export default class GooglyEyesPlugin extends Plugin {
   async openPlayground(): Promise<WorkspaceLeaf> {
     const existing = this.app.workspace.getLeavesOfType(VIEW_TYPE_PLAYGROUND)[0];
     if (existing) {
-      this.app.workspace.revealLeaf(existing);
+      await this.app.workspace.revealLeaf(existing);
       return existing;
     }
     const leaf = this.app.workspace.getLeaf(true);
     await leaf.setViewState({ type: VIEW_TYPE_PLAYGROUND, active: true });
-    this.app.workspace.revealLeaf(leaf);
+    await this.app.workspace.revealLeaf(leaf);
     return leaf;
   }
 

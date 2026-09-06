@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.4
+
+- Added the D20 RPG layered skin with a full rectangular tabletop mask and matte runtime-colored eyes.
+- Added per-skin ambient emotion profiles so skins express more fitting random reactions.
+- Shortened onboarding and opens the embedded tab after setup.
+- Added a README privacy statement and release checklist.
+- Added release checks and a GitHub artifact attestation workflow for future releases.
+
 ## 1.0.3
 
 - Fixed layered eye placement so every active skin uses its own scalable eye windows inside the rectangular tab mask.
