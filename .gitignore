@@ -8,3 +8,5 @@ assets/skins/*
 !assets/skins/robot/**
 !assets/skins/cat/
 !assets/skins/cat/**
+!assets/skins/manga-female/
+!assets/skins/manga-female/**

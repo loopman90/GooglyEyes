@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const out = join(root, "release", "irisidian-test");
-const skins = ["robot", "cat"];
+const skins = ["robot", "cat", "manga-female"];
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
@@ -26,7 +26,7 @@ for (const skin of skins) {
 const manifest = JSON.parse(readFileSync(join(root, "assets", "skins.json"), "utf8"));
 writeFileSync(join(out, "assets", "skins.json"), JSON.stringify({
   ...manifest,
-  note: "Irisidian layered test package. Includes completed Robot and Cat skins.",
+  note: "Irisidian layered test package. Includes completed Robot, Cat, and Manga Female skins.",
   layeredSkins: skins,
   maskSkins: skins,
   skins
@@ -48,7 +48,7 @@ Then open Obsidian:
 4. Enable Irisidian.
 5. Use the command "Open Irisidian Tab" to open the embedded tab.
 
-This package includes the completed Robot and Cat layered skins, with runtime iris/pupil tracking, smooth CSS lids, customizable colors, and full embedded tab-panel masks.
+This package includes the completed Robot, Cat, and Manga Female layered skins, with runtime iris/pupil tracking, smooth CSS lids, customizable colors, and full embedded tab-panel masks.
 `);
 
 console.log(`Packaged Irisidian layered test plugin at ${out}`);

@@ -3,15 +3,18 @@
   "note": "Active layered asset manifest. Skins are added one by one after their imagegen base/mask packs are complete.",
   "layeredSkins": [
     "robot",
-    "cat"
+    "cat",
+    "manga-female"
   ],
   "maskSkins": [
     "robot",
-    "cat"
+    "cat",
+    "manga-female"
   ],
   "skins": [
     "robot",
-    "cat"
+    "cat",
+    "manga-female"
   ],
   "reactions": [
     "idle-neutral",

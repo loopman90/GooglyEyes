@@ -1,0 +1,22 @@
+{
+  "id": "manga-female",
+  "name": "Manga Female",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    { "side": "left", "x": 0.08, "y": 0.263, "w": 0.365, "h": 0.473 },
+    { "side": "right", "x": 0.555, "y": 0.263, "w": 0.365, "h": 0.473 }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#9b68ee",
+    "pupilColor": "#140d2d",
+    "eyelidColor": "#d99a96",
+    "eyelidShadowColor": "#5b252b",
+    "irisGlow": 0.55
+  }
+}

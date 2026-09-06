@@ -1,8 +1,8 @@
 # Irisidian Asset Pack
 
-Irisidian exposes only completed skins in the UI. The current active skins are Robot and Cat.
+Irisidian exposes only completed skins in the UI. The current active skins are Robot, Cat, and Manga Female.
 
-Robot and Cat use the layered renderer. That means PNGs provide only the fixed art that should not move: a tab-panel mask, a thumbnail, and clean left/right base eyes. Iris, pupil, glow, eyelids, blinking, mouse tracking, and reaction poses are drawn at runtime with DOM/CSS.
+Robot, Cat, and Manga Female use the layered renderer. That means PNGs provide only the fixed art that should not move: a tab-panel mask, a thumbnail, and clean left/right base eyes. Iris, pupil, glow, eyelids, blinking, mouse tracking, and reaction poses are drawn at runtime with DOM/CSS.
 
 Asset layout:
 
@@ -25,13 +25,21 @@ assets/
       masks/
         tab-panel.png
       thumbnail.png
+    manga-female/
+      skin.json
+      eyes/
+        left-base.png
+        right-base.png
+      masks/
+        tab-panel.png
+      thumbnail.png
 ```
 
 Every active skin folder contains `thumbnail.png` and `skin.json`. Skins listed in `layeredSkins` contain `eyes/left-base.png` and `eyes/right-base.png`. Skins listed in `maskSkins` contain `masks/tab-panel.png`, a full-stage overlay that makes the eyes look embedded inside an Obsidian tab.
 
 Current V1 count:
 
-- 2 active skins
+- 3 active skins
 - 2 base eye PNGs per skin
 - 1 mask PNG per skin
 - 1 thumbnail PNG per skin
