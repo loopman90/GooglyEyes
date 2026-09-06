@@ -38,6 +38,7 @@ Available now:
 - Dragon
 - Tibetan Monk
 - Alien
+- Hacker
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 

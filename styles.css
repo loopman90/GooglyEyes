@@ -319,6 +319,30 @@
     radial-gradient(circle at 50% 52%, var(--pupil-color) 0 44%, color-mix(in srgb, var(--pupil-color) 72%, var(--iris-color) 28%) 100%);
 }
 
+.irisidian-pair[data-skin="hacker"] .irisidian-iris {
+  width: 42%;
+  background:
+    radial-gradient(circle at 34% 30%, rgb(228 255 198 / 0.72) 0 7%, transparent 8%),
+    radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--iris-color) 86%, #d6ff9c 14%) 0 25%, color-mix(in srgb, var(--iris-color) 72%, #0d3b10 28%) 55%, rgb(2 22 5 / 0.96) 100%);
+  box-shadow:
+    0 0 calc(26px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 78%, transparent),
+    inset 0 0 14px rgb(207 255 171 / 0.22),
+    inset 0 0 22px rgb(0 20 2 / 0.72);
+}
+
+.irisidian-pair[data-skin="hacker"] .irisidian-iris::before {
+  background:
+    repeating-conic-gradient(from 8deg, color-mix(in srgb, var(--iris-color) 58%, #e5ffc9 42%) 0deg 2deg, color-mix(in srgb, #08280a 56%, transparent) 2deg 8deg);
+  opacity: 0.5;
+}
+
+.irisidian-pair[data-skin="hacker"] .irisidian-pupil {
+  width: 32%;
+  background:
+    radial-gradient(circle at 36% 29%, rgb(222 255 195 / 0.58) 0 8%, transparent 9%),
+    radial-gradient(circle at 50% 52%, var(--pupil-color) 0 45%, color-mix(in srgb, var(--pupil-color) 76%, var(--iris-color) 24%) 100%);
+}
+
 .irisidian-lid {
   position: absolute;
   left: -6%;

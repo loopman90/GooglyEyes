@@ -1,0 +1,35 @@
+{
+  "id": "hacker",
+  "name": "Hacker",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.08,
+      "y": 0.263,
+      "w": 0.365,
+      "h": 0.473
+    },
+    {
+      "side": "right",
+      "x": 0.555,
+      "y": 0.263,
+      "w": 0.365,
+      "h": 0.473
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#58ff37",
+    "pupilColor": "#010502",
+    "eyeWhiteColor": "#e5e1d8",
+    "eyelidColor": "#2a2f2b",
+    "eyelidShadowColor": "#070a09",
+    "irisGlow": 0.5
+  }
+}
