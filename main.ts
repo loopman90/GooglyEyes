@@ -384,8 +384,12 @@ class EyeController {
       const pair = this.root.createDiv({ cls: "eyesidian-pair" });
       pair.createEl("img", { cls: "eyesidian-expression eyesidian-pair-fallback", attr: { alt: "" } });
       const individual = pair.createDiv({ cls: "eyesidian-individual-eyes" });
-      individual.createEl("img", { cls: "eyesidian-eye eyesidian-eye-left", attr: { alt: "" } });
-      individual.createEl("img", { cls: "eyesidian-eye eyesidian-eye-right", attr: { alt: "" } });
+      const leftSlot = individual.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-left" });
+      leftSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-left", attr: { alt: "" } });
+      leftSlot.createDiv({ cls: "eyesidian-pupil", attr: { "aria-hidden": "true" } });
+      const rightSlot = individual.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-right" });
+      rightSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-right", attr: { alt: "" } });
+      rightSlot.createDiv({ cls: "eyesidian-pupil", attr: { "aria-hidden": "true" } });
       pair.createEl("img", { cls: "eyesidian-peek-mask", attr: { alt: "" } });
       this.pairs.push(pair);
     }
@@ -526,16 +530,34 @@ class EyeController {
       for (const pair of this.pairs) {
         const rect = pair.getBoundingClientRect();
         const energy = this.isFocusMode() ? 0.35 : PERSONALITY_OPTIONS[s.personality].energy * this.intensity();
-        const eyes = pair.querySelectorAll<HTMLElement>(".eyesidian-eye, .eyesidian-pair-fallback");
-        eyes.forEach((eye) => {
-          const eyeRect = eye.getBoundingClientRect();
-          const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
-          const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
-          const dx = clamp((this.eased.x - cx) / 160, -1, 1);
-          const dy = clamp((this.eased.y - cy) / 120, -1, 1);
-          eye.style.setProperty("--look-x", `${dx * 7 * s.followSensitivity * energy}px`);
-          eye.style.setProperty("--look-y", `${dy * 5 * s.followSensitivity * energy}px`);
-        });
+        const pupils = pair.querySelectorAll<HTMLElement>(".eyesidian-pupil");
+        if (pupils.length) {
+          pupils.forEach((pupil) => {
+            const slot = pupil.closest(".eyesidian-eye-slot") as HTMLElement | null;
+            const eyeRect = slot?.getBoundingClientRect() ?? rect;
+            const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
+            const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
+            const vx = this.eased.x - cx;
+            const vy = this.eased.y - cy;
+            const distance = Math.hypot(vx, vy);
+            const travel = Math.min(eyeRect.width, eyeRect.height) * 0.16 * s.followSensitivity * energy;
+            const strength = clamp(distance / 280, 0, 1);
+            const angle = Math.atan2(vy, vx);
+            pupil.style.setProperty("--pupil-x", `${Math.cos(angle) * travel * strength}px`);
+            pupil.style.setProperty("--pupil-y", `${Math.sin(angle) * travel * strength}px`);
+          });
+        } else {
+          const eyes = pair.querySelectorAll<HTMLElement>(".eyesidian-pair-fallback");
+          eyes.forEach((eye) => {
+            const eyeRect = eye.getBoundingClientRect();
+            const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
+            const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
+            const dx = clamp((this.eased.x - cx) / 160, -1, 1);
+            const dy = clamp((this.eased.y - cy) / 120, -1, 1);
+            eye.style.setProperty("--look-x", `${dx * 7 * s.followSensitivity * energy}px`);
+            eye.style.setProperty("--look-y", `${dy * 5 * s.followSensitivity * energy}px`);
+          });
+        }
       }
     }
     this.frame = requestAnimationFrame(this.loop);
@@ -575,6 +597,7 @@ class EyeController {
       const hasIndividualAssets = INDIVIDUAL_EYE_SKINS.has(skinDef.id);
       const hasPeekMask = hasIndividualAssets && s.peekFaceMask;
       pair.dataset.skin = skinDef.id;
+      pair.dataset.reaction = this.currentReaction;
       pair.toggleClass("has-individual-assets", hasIndividualAssets);
       pair.toggleClass("has-peek-mask", hasPeekMask);
       pair.style.setProperty("--iris", skinDef.iris);
