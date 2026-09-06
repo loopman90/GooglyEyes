@@ -35,6 +35,7 @@ Available now:
 - Robot
 - Cat
 - Manga Female
+- Dragon
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 

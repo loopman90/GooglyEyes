@@ -10,3 +10,5 @@ assets/skins/*
 !assets/skins/cat/**
 !assets/skins/manga-female/
 !assets/skins/manga-female/**
+!assets/skins/dragon/
+!assets/skins/dragon/**

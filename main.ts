@@ -103,7 +103,8 @@ const REACTIONS: Reaction[] = [
 const SKINS: SkinDefinition[] = [
   ["robot", "Robot", "Mechanical lenses with tiny LED attitude.", "#42d9ff", "#09121c", "#eef8ff", "#6a7685", "#ffcc33"],
   ["cat", "Cat", "Soft fur, sharp focus, vertical pupils.", "#58d34f", "#050806", "#f4ead2", "#5a514d", "#f3b08b"],
-  ["manga-female", "Manga Female", "Big anime eyes with soft lashes.", "#9b68ee", "#140d2d", "#f8f4ef", "#6a3c43", "#f4a7c4"]
+  ["manga-female", "Manga Female", "Big anime eyes with soft lashes.", "#9b68ee", "#140d2d", "#f8f4ef", "#6a3c43", "#f4a7c4"],
+  ["dragon", "Dragon", "Ancient scales with a fiery slit gaze.", "#ff9f21", "#090403", "#e8dcc2", "#31443a", "#ff6b22"]
 ].map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent]) => ({
   id, name, flavor, iris, pupil, eyeWhite, outline, accent, supportsColorOverrides: true
 }));
@@ -280,7 +281,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = new Set(["robot", "cat", "manga-female"]);
+const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon"]);
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",

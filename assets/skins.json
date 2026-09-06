@@ -4,17 +4,20 @@
   "layeredSkins": [
     "robot",
     "cat",
-    "manga-female"
+    "manga-female",
+    "dragon"
   ],
   "maskSkins": [
     "robot",
     "cat",
-    "manga-female"
+    "manga-female",
+    "dragon"
   ],
   "skins": [
     "robot",
     "cat",
-    "manga-female"
+    "manga-female",
+    "dragon"
   ],
   "reactions": [
     "idle-neutral",
