@@ -64,6 +64,9 @@ interface GooglyEyesSettings {
   emotionStrength: number;
   blinkSpeed: number;
   reactionHoldMs: number;
+  ambientEmotionsEnabled: boolean;
+  ambientEmotionIntervalSec: number;
+  ambientEmotionJitter: number;
   debugOverlay: boolean;
   size: number;
   opacity: number;
@@ -240,6 +243,9 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   emotionStrength: 1,
   blinkSpeed: 1,
   reactionHoldMs: 0,
+  ambientEmotionsEnabled: true,
+  ambientEmotionIntervalSec: 28,
+  ambientEmotionJitter: 0.65,
   debugOverlay: false,
   size: 180,
   opacity: 0.95,
@@ -373,10 +379,10 @@ const REACTION_LABELS = labels<Reaction>({
 });
 
 const BEHAVIOR_PRESETS: Record<string, Partial<GooglyEyesSettings>> = {
-  subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85 },
-  lively: { personality: "curious", reactionIntensity: "expressive", randomness: "medium", followSensitivity: 0.9, smoothing: 0.2, emotionStrength: 1.1, blinkSpeed: 1.05 },
-  dramatic: { personality: "dramatic", reactionIntensity: "chaotic", randomness: "high", followSensitivity: 1.1, smoothing: 0.28, emotionStrength: 1.35, blinkSpeed: 1.2 },
-  sleepy: { personality: "sleepy", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.45, smoothing: 0.1, emotionStrength: 0.8, blinkSpeed: 0.72 }
+  subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85, ambientEmotionIntervalSec: 50, ambientEmotionJitter: 0.45 },
+  lively: { personality: "curious", reactionIntensity: "expressive", randomness: "medium", followSensitivity: 0.9, smoothing: 0.2, emotionStrength: 1.1, blinkSpeed: 1.05, ambientEmotionIntervalSec: 24, ambientEmotionJitter: 0.75 },
+  dramatic: { personality: "dramatic", reactionIntensity: "chaotic", randomness: "high", followSensitivity: 1.1, smoothing: 0.28, emotionStrength: 1.35, blinkSpeed: 1.2, ambientEmotionIntervalSec: 16, ambientEmotionJitter: 0.95 },
+  sleepy: { personality: "sleepy", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.45, smoothing: 0.1, emotionStrength: 0.8, blinkSpeed: 0.72, ambientEmotionIntervalSec: 42, ambientEmotionJitter: 0.55 }
 };
 
 class EyeController {
@@ -388,6 +394,8 @@ class EyeController {
   private frame = 0;
   private idleTimer = 0;
   private blinkTimer = 0;
+  private ambientTimer = 0;
+  private ambientReturnTimer = 0;
   private dragging = false;
   private dragOffset = { x: 0, y: 0 };
   private cleanups: Array<() => void> = [];
@@ -419,6 +427,13 @@ class EyeController {
     if (this.frame) window.cancelAnimationFrame(this.frame);
     if (this.idleTimer) window.clearTimeout(this.idleTimer);
     if (this.blinkTimer) window.clearTimeout(this.blinkTimer);
+    if (this.ambientTimer) window.clearTimeout(this.ambientTimer);
+    if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
+    this.frame = 0;
+    this.idleTimer = 0;
+    this.blinkTimer = 0;
+    this.ambientTimer = 0;
+    this.ambientReturnTimer = 0;
     this.root?.remove();
     this.root = null;
     this.pairs = [];
@@ -429,6 +444,10 @@ class EyeController {
     this.buildPairs();
     this.applySettings();
     this.setReaction("idle-neutral");
+  }
+
+  refreshAmbientEmotions(): void {
+    this.scheduleAmbientEmotion();
   }
 
   applySettings(): void {
@@ -549,6 +568,7 @@ class EyeController {
     }
     this.scheduleIdle();
     this.scheduleBlink();
+    this.scheduleAmbientEmotion();
   }
 
   private hoverHandler = (event: MouseEvent): void => {
@@ -701,6 +721,32 @@ class EyeController {
       window.setTimeout(() => this.setReaction("idle-neutral"), 180 / Math.max(0.2, this.plugin.settings.blinkSpeed));
       this.scheduleBlink();
     }, interval);
+  }
+
+  private scheduleAmbientEmotion(): void {
+    if (this.ambientTimer) window.clearTimeout(this.ambientTimer);
+    const s = this.plugin.settings;
+    const base = clamp(s.ambientEmotionIntervalSec, 5, 240) * 1000;
+    const jitter = base * clamp(s.ambientEmotionJitter, 0, 1.5);
+    const interval = base + Math.random() * jitter;
+    this.ambientTimer = window.setTimeout(() => {
+      this.playAmbientEmotion();
+      this.scheduleAmbientEmotion();
+    }, interval);
+  }
+
+  private playAmbientEmotion(): void {
+    const s = this.plugin.settings;
+    if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.dragging) return;
+    if (this.root?.hasClass("is-hidden")) return;
+    const pool: Reaction[] = ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "look-left", "look-right", "happy"];
+    const reaction = this.resolveReaction(pick(pool, Math.max(0.45, this.randomness())));
+    this.setReaction(reaction);
+    if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
+    const duration = this.reactionDuration(reaction, 0.95 + Math.random() * 0.55);
+    this.ambientReturnTimer = window.setTimeout(() => {
+      if (this.currentReaction === reaction) this.setReaction("idle-neutral");
+    }, duration);
   }
 
   private setReaction(reaction: Reaction): void {
@@ -1283,7 +1329,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.addClass("googly-eyes-settings");
-    new Setting(containerEl).setName("GooglyEyes").setHeading();
+    new Setting(containerEl).setName("General").setHeading();
     containerEl.createEl("p", { text: "GooglyEyes reacts to local events only. It does not read note contents or clipboard contents." });
 
     new Setting(containerEl).setName("Enable plugin").addToggle((toggle) => toggle.setValue(this.plugin.settings.enabled).onChange((value) => this.save("enabled", value)));
@@ -1308,6 +1354,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Emotion strength").setDesc("How far the eyes and lids push each expression.").addSlider((s) => s.setLimits(0.25, 1.8, 0.05).setValue(this.plugin.settings.emotionStrength).onChange((v) => this.save("emotionStrength", v)));
     new Setting(containerEl).setName("Blink speed").setDesc("Higher is snappier, lower is softer.").addSlider((s) => s.setLimits(0.35, 1.8, 0.05).setValue(this.plugin.settings.blinkSpeed).onChange((v) => this.save("blinkSpeed", v)));
     new Setting(containerEl).setName("Reaction hold").setDesc("Adds a little extra time before an expression returns to neutral.").addSlider((s) => s.setLimits(0, 1200, 50).setValue(this.plugin.settings.reactionHoldMs).onChange((v) => this.save("reactionHoldMs", v)));
+    new Setting(containerEl).setName("Ambient emotions").setDesc("Occasionally shows a natural random expression, then returns to mouse tracking.").addToggle((t) => t.setValue(this.plugin.settings.ambientEmotionsEnabled).onChange((v) => this.save("ambientEmotionsEnabled", v)));
+    new Setting(containerEl).setName("Ambient interval").setDesc("Average seconds between spontaneous expressions.").addSlider((s) => s.setLimits(5, 120, 1).setValue(this.plugin.settings.ambientEmotionIntervalSec).setDynamicTooltip().onChange((v) => this.save("ambientEmotionIntervalSec", v)));
+    new Setting(containerEl).setName("Ambient variation").setDesc("Adds random extra time so expressions feel less predictable.").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.ambientEmotionJitter).setDynamicTooltip().onChange((v) => this.save("ambientEmotionJitter", v)));
     new Setting(containerEl).setName("Pause reactions").addToggle((t) => t.setValue(this.plugin.settings.pausedReactions).onChange((v) => this.save("pausedReactions", v)));
 
     new Setting(containerEl).setName("Personality and skin").setHeading();
@@ -1400,6 +1449,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     Object.assign(this.plugin.settings, BEHAVIOR_PRESETS[id]);
     await this.plugin.saveSettings();
     this.plugin.controller.refresh();
+    this.plugin.controller.refreshAmbientEmotions();
     this.display();
   }
 
@@ -1414,6 +1464,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     this.plugin.settings[key] = value;
     void this.plugin.saveSettings().then(() => {
       this.plugin.controller.refresh();
+      if (String(key).startsWith("ambientEmotion")) this.plugin.controller.refreshAmbientEmotions();
       this.display();
     });
   }
