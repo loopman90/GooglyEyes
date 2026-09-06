@@ -1,0 +1,235 @@
+.eyesidian-root {
+  --eyesidian-size: 320px;
+  --eyesidian-opacity: 0.95;
+  --eyesidian-z: 1000;
+  --look-x: 0px;
+  --look-y: 0px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--eyesidian-z);
+  opacity: var(--eyesidian-opacity);
+  pointer-events: auto;
+  user-select: none;
+  contain: layout style paint;
+  transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.eyesidian-root.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.eyesidian-root.pos-top-left,
+.eyesidian-root.pos-top-right,
+.eyesidian-root.pos-bottom-left,
+.eyesidian-root.pos-bottom-right,
+.eyesidian-root.pos-sidebar,
+.eyesidian-root.pos-statusbar,
+.eyesidian-root.pos-floating,
+.eyesidian-root.pos-custom {
+  inset: 0;
+}
+
+.eyesidian-root.is-peeking {
+  overflow: hidden;
+  transform: none;
+}
+
+.eyesidian-pair {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 2px 5px rgb(0 0 0 / 0.22));
+  transition: transform 160ms ease;
+}
+
+.eyesidian-expression {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-user-drag: none;
+  transform: translate(var(--look-x), var(--look-y));
+  transition: transform 70ms linear;
+}
+
+.eyesidian-individual-eyes {
+  display: none;
+  position: absolute;
+  inset: 26.3% 8% 26.4%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 13%;
+  z-index: 1;
+}
+
+.eyesidian-pair.has-individual-assets .eyesidian-pair-fallback {
+  display: none;
+}
+
+.eyesidian-pair.has-individual-assets .eyesidian-individual-eyes {
+  display: grid;
+}
+
+.eyesidian-eye {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  transform: translate(var(--look-x), var(--look-y));
+  transition: transform 70ms linear;
+}
+
+.eyesidian-peek-mask {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  z-index: 2;
+}
+
+.eyesidian-pair.has-peek-mask .eyesidian-peek-mask {
+  display: block;
+}
+
+.eyesidian-root.is-focus-mode .eyesidian-pair {
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.18));
+}
+
+.eyesidian-root.is-reduced-motion,
+.eyesidian-root.is-reduced-motion * {
+  transition: none !important;
+  animation: none !important;
+}
+
+.eyesidian-modal .eyesidian-quick-grid,
+.eyesidian-reaction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.eyesidian-modal-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.eyesidian-settings h3 {
+  margin-top: 28px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.eyesidian-skin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 8px;
+  margin: 10px 0 18px;
+}
+
+.eyesidian-skin-card {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-secondary);
+  cursor: pointer;
+}
+
+.eyesidian-skin-card:hover,
+.eyesidian-skin-card.is-selected {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+.eyesidian-skin-card img {
+  grid-row: 1 / span 2;
+  width: 54px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.eyesidian-skin-card span {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  line-height: 1.25;
+}
+
+.eyesidian-playground {
+  padding: 18px;
+}
+
+.eyesidian-stage {
+  position: relative;
+  --eyesidian-size: 180px;
+  width: min(calc(var(--eyesidian-size) * 3.6), 100%);
+  min-width: min(320px, 100%);
+  aspect-ratio: 2 / 1;
+  margin: 6px 0 18px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, var(--background-secondary), var(--background-primary));
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.05),
+    inset 0 -18px 38px rgb(0 0 0 / 0.12),
+    0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.eyesidian-stage::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.eyesidian-control-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.eyesidian-preview-note {
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+.eyesidian-statusbar {
+  cursor: pointer;
+}
+
+body.theme-dark .eyesidian-pair {
+  filter: drop-shadow(0 2px 7px rgb(0 0 0 / 0.45));
+}
+
+@media (max-width: 600px) {
+  .eyesidian-root {
+    --eyesidian-size: min(82px, 24vw);
+  }
+
+  .eyesidian-root.pos-top-right {
+    top: 12px;
+    right: 12px;
+  }
+
+  .eyesidian-skin-grid {
+    grid-template-columns: 1fr;
+  }
+}

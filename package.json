@@ -1,0 +1,29 @@
+{
+  "name": "eyesidian",
+  "version": "1.0.0",
+  "description": "Put living googly eyes in Obsidian.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "generate-assets": "node scripts/generate-assets.mjs",
+    "split-robot-assets": "node scripts/split-pair-assets.mjs robot",
+    "package-test": "node scripts/package-test.mjs",
+    "validate-assets": "node scripts/validate-assets.mjs"
+  },
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "googly-eyes",
+    "companion"
+  ],
+  "author": "Eyesidian",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.24.0",
+    "obsidian": "^1.7.2",
+    "typescript": "^5.6.0"
+  }
+}

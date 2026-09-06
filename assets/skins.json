@@ -1,0 +1,51 @@
+{
+  "generated": "2026-09-06T15:35:07.747Z",
+  "note": "Robot-only active asset manifest. Other skins are intentionally omitted until their imagegen asset packs are complete.",
+  "individualEyeSkins": [
+    "robot"
+  ],
+  "maskSkins": [
+    "robot"
+  ],
+  "skins": [
+    "robot"
+  ],
+  "reactions": [
+    "idle-neutral",
+    "blink",
+    "slow-blink",
+    "sleepy",
+    "look-left",
+    "look-right",
+    "look-up",
+    "look-down",
+    "wide-stare",
+    "happy",
+    "shocked",
+    "suspicious",
+    "angry",
+    "sad",
+    "confused",
+    "dizzy",
+    "cross-eyed",
+    "eye-roll",
+    "nervous",
+    "typing",
+    "cut",
+    "copy",
+    "paste",
+    "delete",
+    "undo",
+    "redo",
+    "idle-long",
+    "wake",
+    "hover-suspicious",
+    "fast-movement",
+    "peek",
+    "sleepy-idle",
+    "chaotic-stare",
+    "dramatic-shock",
+    "rapid-typing-focus",
+    "drag-tracking"
+  ]
+}

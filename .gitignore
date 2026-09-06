@@ -1,0 +1,8 @@
+node_modules/
+.pnpm-store/
+.DS_Store
+*.log
+release/
+assets/skins/*
+!assets/skins/robot/
+!assets/skins/robot/**
