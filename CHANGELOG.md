@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Added the Skeleton layered skin with a full rectangular skull mask and runtime-colored eyes.
+
 ## 1.0.0
 
 - Initial V1 plugin scaffold.

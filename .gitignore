@@ -28,3 +28,5 @@ assets/skins/*
 !assets/skins/clown/**
 !assets/skins/spy/
 !assets/skins/spy/**
+!assets/skins/skeleton/
+!assets/skins/skeleton/**

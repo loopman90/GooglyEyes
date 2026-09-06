@@ -13,7 +13,8 @@
     "ice-hockey",
     "mona-lisa",
     "clown",
-    "spy"
+    "spy",
+    "skeleton"
   ],
   "maskSkins": [
     "robot",
@@ -27,7 +28,8 @@
     "ice-hockey",
     "mona-lisa",
     "clown",
-    "spy"
+    "spy",
+    "skeleton"
   ],
   "skins": [
     "robot",
@@ -41,7 +43,8 @@
     "ice-hockey",
     "mona-lisa",
     "clown",
-    "spy"
+    "spy",
+    "skeleton"
   ],
   "reactions": [
     "idle-neutral",

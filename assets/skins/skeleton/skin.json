@@ -1,0 +1,37 @@
+{
+  "id": "skeleton",
+  "name": "Skeleton",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.161,
+      "y": 0.209,
+      "w": 0.294,
+      "h": 0.441
+    },
+    {
+      "side": "right",
+      "x": 0.544,
+      "y": 0.209,
+      "w": 0.295,
+      "h": 0.441
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#75d7ff",
+    "pupilColor": "#07090c",
+    "eyeWhiteColor": "#f8f0dc",
+    "eyelidColor": "#e8dcc2",
+    "eyelidShadowColor": "#5d5549",
+    "irisGlow": 0.24,
+    "irisSize": 32,
+    "pupilSize": 30
+  }
+}

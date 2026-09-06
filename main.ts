@@ -137,7 +137,8 @@ const SKIN_TUPLES: SkinTuple[] = [
   ["ice-hockey", "Jason", "Frozen hockey mask with a blood-spattered stare.", "#9feeff", "#05090d", "#dcecf4", "#ccd7dd", "#b01622", 34, 32],
   ["mona-lisa", "Mona Lisa", "Renaissance calm with a mysterious painted gaze.", "#7d6a32", "#171006", "#efe3c5", "#a87943", "#c9a34a", 32, 34],
   ["clown", "Clown", "Cartoon circus face with a bright playful stare.", "#39d7ff", "#100711", "#fff5df", "#231c25", "#ff3845", 31, 32],
-  ["spy", "Spy", "Cartoon eyes peeking through newspaper cutouts.", "#4d6f8f", "#080706", "#f6f0df", "#2f2b25", "#c9b06c", 30, 30]
+  ["spy", "Spy", "Cartoon eyes peeking through newspaper cutouts.", "#4d6f8f", "#080706", "#f6f0df", "#2f2b25", "#c9b06c", 30, 30],
+  ["skeleton", "Skeleton", "Playful bone mask with deep skull sockets.", "#75d7ff", "#07090c", "#f8f0dc", "#343036", "#d8caa9", 32, 30]
 ];
 
 const SKINS: SkinDefinition[] = SKIN_TUPLES.map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize]) => ({
@@ -330,7 +331,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa", "clown", "spy"]);
+const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa", "clown", "spy", "skeleton"]);
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",

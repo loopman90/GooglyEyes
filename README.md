@@ -44,6 +44,7 @@ The current build exposes only completed skins in the UI:
 - Mona Lisa
 - Clown
 - Spy
+- Skeleton
 
 Planned skins are added one by one after their imagegen asset packs are complete. Unfinished skins are not exposed in the plugin UI.
 
@@ -102,7 +103,7 @@ For testing the current local build, use the ready-made folder:
 8. Enable GooglyEyes.
 9. Run `Open tab`.
 
-The test package includes Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Jason, Mona Lisa, Clown, and Spy.
+The test package includes Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Jason, Mona Lisa, Clown, Spy, and Skeleton.
 
 ## Developer Setup
 
@@ -203,4 +204,4 @@ The eyes look too large or too small:
 
 ## Version
 
-Current package version: `1.0.0`.
+Current package version: `1.0.1`.
