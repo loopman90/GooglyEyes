@@ -4,14 +4,16 @@ import { fileURLToPath } from "node:url";
 import { activeSkinNamesText, getActiveSkins, writeReadme } from "./update-readme.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-const out = join(root, "release", "eyesidian-test");
+const out = join(root, "release", "eyessidian-test");
 const legacyOut = join(root, "release", `${"iris"}idian-test`);
+const previousOut = join(root, "release", `${"eye"}sidian-test`);
 writeReadme();
 const activeSkins = getActiveSkins();
 const skins = activeSkins.map((skin) => skin.id);
 const skinNames = activeSkinNamesText();
 
 rmSync(legacyOut, { recursive: true, force: true });
+rmSync(previousOut, { recursive: true, force: true });
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
@@ -32,29 +34,29 @@ for (const skin of skins) {
 const manifest = JSON.parse(readFileSync(join(root, "assets", "skins.json"), "utf8"));
 writeFileSync(join(out, "assets", "skins.json"), JSON.stringify({
   ...manifest,
-  note: `Eyesidian layered test package. Includes completed ${skinNames} skins.`,
+  note: `Eyessidian layered test package. Includes completed ${skinNames} skins.`,
   layeredSkins: skins,
   maskSkins: skins,
   skins
 }, null, 2));
 
-writeFileSync(join(out, "INSTALL-TEST.md"), `# Eyesidian Test Install
+writeFileSync(join(out, "INSTALL-TEST.md"), `# Eyessidian Test Install
 
-This is the simplest way to test Eyesidian.
+This is the simplest way to test Eyessidian.
 
 Copy this entire folder to:
 
 \`\`\`text
-<your-vault>/.obsidian/plugins/eyesidian
+<your-vault>/.obsidian/plugins/eyessidian
 \`\`\`
 
 The final folder must look like this:
 
 \`\`\`text
-<your-vault>/.obsidian/plugins/eyesidian/manifest.json
-<your-vault>/.obsidian/plugins/eyesidian/main.js
-<your-vault>/.obsidian/plugins/eyesidian/styles.css
-<your-vault>/.obsidian/plugins/eyesidian/assets/
+<your-vault>/.obsidian/plugins/eyessidian/manifest.json
+<your-vault>/.obsidian/plugins/eyessidian/main.js
+<your-vault>/.obsidian/plugins/eyessidian/styles.css
+<your-vault>/.obsidian/plugins/eyessidian/assets/
 \`\`\`
 
 Then open Obsidian:
@@ -62,10 +64,10 @@ Then open Obsidian:
 1. Go to Settings.
 2. Open Community plugins.
 3. Reload plugins if needed.
-4. Enable Eyesidian.
-5. Use the command "Open Eyesidian Tab" to open the embedded tab.
+4. Enable Eyessidian.
+5. Use the command "Open Eyessidian Tab" to open the embedded tab.
 
 This package includes the completed ${skinNames} layered skins, with runtime iris/pupil tracking, smooth CSS lids, customizable colors, and full embedded tab-panel masks.
 `);
 
-console.log(`Packaged Eyesidian layered test plugin at ${out}`);
+console.log(`Packaged Eyessidian layered test plugin at ${out}`);

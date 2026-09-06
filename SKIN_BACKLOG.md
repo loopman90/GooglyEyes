@@ -1,6 +1,6 @@
 # Skin Backlog
 
-Only completed skins should appear in the Eyesidian UI.
+Only completed skins should appear in the Eyessidian UI.
 
 Completed:
 

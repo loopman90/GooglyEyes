@@ -1,5 +1,5 @@
 {
-  "name": "eyesidian",
+  "name": "eyessidian",
   "version": "1.0.0",
   "description": "Put living googly eyes in Obsidian.",
   "main": "main.js",
@@ -18,7 +18,7 @@
     "googly-eyes",
     "companion"
   ],
-  "author": "Eyesidian",
+  "author": "Eyessidian",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.0",

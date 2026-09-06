@@ -1,8 +1,8 @@
-# Eyesidian
+# Eyessidian
 
 Put living, reactive eyes inside Obsidian.
 
-Eyesidian is a playful, fully local Obsidian Community Plugin. It opens an embedded Eyesidian tab where animated eyes look around, follow the mouse, blink, react to local UI events, and can be styled with different skins and personalities.
+Eyessidian is a playful, fully local Obsidian Community Plugin. It opens an embedded Eyessidian tab where animated eyes look around, follow the mouse, blink, react to local UI events, and can be styled with different skins and personalities.
 
 ## What You Get
 
@@ -13,11 +13,11 @@ Eyesidian is a playful, fully local Obsidian Community Plugin. It opens an embed
 - Custom iris, pupil, eyelid, shadow, glow, size, opacity, focus mode, and reaction settings.
 - A compact Quick UI behind a Show controls button.
 - A full settings page for detailed behavior tuning.
-- A copy-ready test build in `release/eyesidian-test`.
+- A copy-ready test build in `release/eyessidian-test`.
 
 ## Privacy
 
-Eyesidian is local-only.
+Eyessidian is local-only.
 
 - No account.
 - No cloud backend.
@@ -53,8 +53,8 @@ Use this once the plugin folder is ready or downloaded as a release.
 2. Open your Obsidian vault folder in Finder.
 3. Open the hidden folder named `.obsidian`.
 4. Open the folder named `plugins`.
-5. Create a folder named `eyesidian` if it does not exist.
-6. Put these files and folders inside `.obsidian/plugins/eyesidian`:
+5. Create a folder named `eyessidian` if it does not exist.
+6. Put these files and folders inside `.obsidian/plugins/eyessidian`:
    - `manifest.json`
    - `main.js`
    - `styles.css`
@@ -63,23 +63,23 @@ Use this once the plugin folder is ready or downloaded as a release.
 8. Go to Settings.
 9. Go to Community plugins.
 10. Turn off Restricted mode if Obsidian asks for it.
-11. Click Reload plugins if Eyesidian does not appear yet.
-12. Enable Eyesidian.
-13. Run the command `Open Eyesidian Tab`.
+11. Click Reload plugins if Eyessidian does not appear yet.
+12. Enable Eyessidian.
+13. Run the command `Open Eyessidian Tab`.
 
 Correct final folder:
 
 ```text
-YourVault/.obsidian/plugins/eyesidian/manifest.json
-YourVault/.obsidian/plugins/eyesidian/main.js
-YourVault/.obsidian/plugins/eyesidian/styles.css
-YourVault/.obsidian/plugins/eyesidian/assets/
+YourVault/.obsidian/plugins/eyessidian/manifest.json
+YourVault/.obsidian/plugins/eyessidian/main.js
+YourVault/.obsidian/plugins/eyessidian/styles.css
+YourVault/.obsidian/plugins/eyessidian/assets/
 ```
 
 If the plugin does not appear in Obsidian, the folder is usually one level too deep. Make sure you do not have this:
 
 ```text
-YourVault/.obsidian/plugins/eyesidian/eyesidian/manifest.json
+YourVault/.obsidian/plugins/eyessidian/eyessidian/manifest.json
 ```
 
 ## Test Build Install
@@ -87,18 +87,18 @@ YourVault/.obsidian/plugins/eyesidian/eyesidian/manifest.json
 For testing the current local build, use the ready-made folder:
 
 ```text
-/Users/mathijssen/Documents/ChatGPT/Peek/release/eyesidian-test
+/Users/mathijssen/Documents/ChatGPT/Peek/release/eyessidian-test
 ```
 
 1. Run `npm run package-test`.
-2. Copy the whole `release/eyesidian-test` folder.
+2. Copy the whole `release/eyessidian-test` folder.
 3. Paste it into your vault's `.obsidian/plugins` folder.
-4. Rename the copied folder to `eyesidian`.
+4. Rename the copied folder to `eyessidian`.
 5. Open Obsidian.
 6. Go to Settings > Community plugins.
 7. Reload plugins if needed.
-8. Enable Eyesidian.
-9. Run `Open Eyesidian Tab`.
+8. Enable Eyessidian.
+9. Run `Open Eyessidian Tab`.
 
 The test package includes Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Ice Hockey Horror, and Mona Lisa.
 
@@ -124,11 +124,11 @@ Open the Quick UI from:
 - Ribbon eye icon
 - Status bar item
 
-The Quick UI starts compact behind a Show controls button. When expanded it supports show/hide, skin switching, personality switching, reaction pause, focus mode, blink preview, Eyesidian tab, and full settings.
+The Quick UI starts compact behind a Show controls button. When expanded it supports show/hide, skin switching, personality switching, reaction pause, focus mode, blink preview, Eyessidian tab, and full settings.
 
-## Eyesidian Tab
+## Eyessidian Tab
 
-The Eyesidian tab embeds the eyes directly inside Obsidian instead of floating over the interface. Each active skin is scaled into a full tab panel overlay so it reads as part of the workspace.
+The Eyessidian tab embeds the eyes directly inside Obsidian instead of floating over the interface. Each active skin is scaled into a full tab panel overlay so it reads as part of the workspace.
 
 The tab includes live controls for:
 
@@ -181,9 +181,9 @@ When you add or remove a skin from `assets/skins.json`, the README skin list and
 
 ## Troubleshooting
 
-Eyesidian does not show in Community plugins:
+Eyessidian does not show in Community plugins:
 
-- Check that `manifest.json` is directly inside `.obsidian/plugins/eyesidian`.
+- Check that `manifest.json` is directly inside `.obsidian/plugins/eyessidian`.
 - Reload plugins.
 - Restart Obsidian.
 
@@ -192,7 +192,7 @@ The tab opens but looks wrong:
 - Run `npm run validate-assets`.
 - Run `npm run build`.
 - Run `npm run package-test`.
-- Replace the old vault plugin folder with the new `release/eyesidian-test` output.
+- Replace the old vault plugin folder with the new `release/eyessidian-test` output.
 
 The eyes look too large or too small:
 

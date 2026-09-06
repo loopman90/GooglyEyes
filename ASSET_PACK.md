@@ -1,6 +1,6 @@
-# Eyesidian Asset Pack
+# Eyessidian Asset Pack
 
-Eyesidian exposes only completed skins in the UI. The current active skins are Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Ice Hockey Horror, and Mona Lisa.
+Eyessidian exposes only completed skins in the UI. The current active skins are Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Ice Hockey Horror, and Mona Lisa.
 
 All active skins use the layered renderer. That means PNGs provide only the fixed art that should not move: a tab-panel mask, a thumbnail, and clean left/right base eyes. Iris, pupil, glow, eyelids, blinking, mouse tracking, and reaction poses are drawn at runtime with DOM/CSS.
 

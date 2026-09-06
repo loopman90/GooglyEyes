@@ -1,6 +1,6 @@
 import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf, ItemView, debounce } from "obsidian";
 
-const VIEW_TYPE_PLAYGROUND = "eyesidian-playground";
+const VIEW_TYPE_PLAYGROUND = "eyessidian-playground";
 
 type VisibilityMode = "active" | "always" | "editing" | "hover" | "manual";
 type FollowTarget = "mouse" | "text-cursor" | "smart" | "both";
@@ -33,7 +33,7 @@ interface EyePairConfig {
   offsetY: number;
 }
 
-interface EyesidianSettings {
+interface EyessidianSettings {
   enabled: boolean;
   visible: boolean;
   visibilityMode: VisibilityMode;
@@ -206,7 +206,7 @@ const DEFAULT_ACTIONS: ActionMapping[] = [
   cooldownMs: cooldownMs as number
 }));
 
-const DEFAULT_SETTINGS: EyesidianSettings = {
+const DEFAULT_SETTINGS: EyessidianSettings = {
   enabled: true,
   visible: true,
   visibilityMode: "active",
@@ -369,7 +369,7 @@ const REACTION_LABELS = labels<Reaction>({
   "drag-tracking": "Drag tracking"
 });
 
-const BEHAVIOR_PRESETS: Record<string, Partial<EyesidianSettings>> = {
+const BEHAVIOR_PRESETS: Record<string, Partial<EyessidianSettings>> = {
   subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85 },
   lively: { personality: "curious", reactionIntensity: "expressive", randomness: "medium", followSensitivity: 0.9, smoothing: 0.2, emotionStrength: 1.1, blinkSpeed: 1.05 },
   dramatic: { personality: "dramatic", reactionIntensity: "chaotic", randomness: "high", followSensitivity: 1.1, smoothing: 0.28, emotionStrength: 1.35, blinkSpeed: 1.2 },
@@ -394,12 +394,12 @@ class EyeController {
   private reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   private workspaceEventsRegistered = false;
 
-  constructor(private plugin: EyesidianPlugin) {}
+  constructor(private plugin: EyessidianPlugin) {}
 
   mount(parent: HTMLElement): void {
     if (!this.root) {
-      this.root = createDiv({ cls: "eyesidian-root" });
-      this.root.setAttr("aria-label", "Eyesidian living eyes");
+      this.root = createDiv({ cls: "eyessidian-root" });
+      this.root.setAttr("aria-label", "Eyessidian living eyes");
       this.root.setAttr("role", "img");
       this.root.tabIndex = 0;
       this.buildPairs();
@@ -436,10 +436,10 @@ class EyeController {
     this.root.toggleClass("is-focus-mode", this.isFocusMode());
     this.root.toggleClass("is-reduced-motion", this.reduceMotion.matches);
     this.root.toggleClass("show-debug", s.debugOverlay);
-    this.root.style.setProperty("--eyesidian-size", `${s.size}px`);
-    this.root.parentElement?.style.setProperty("--eyesidian-size", `${s.size}px`);
-    this.root.style.setProperty("--eyesidian-opacity", `${s.opacity}`);
-    this.root.style.setProperty("--eyesidian-z", `${s.zIndex}`);
+    this.root.style.setProperty("--eyessidian-size", `${s.size}px`);
+    this.root.parentElement?.style.setProperty("--eyessidian-size", `${s.size}px`);
+    this.root.style.setProperty("--eyessidian-opacity", `${s.opacity}`);
+    this.root.style.setProperty("--eyessidian-z", `${s.zIndex}`);
     this.root.style.setProperty("--iris-color", s.irisColor);
     this.root.style.setProperty("--pupil-color", s.pupilColor);
     this.root.style.setProperty("--eyelid-color", s.eyelidColor);
@@ -498,19 +498,19 @@ class EyeController {
     this.pairs = [];
     const count = clamp(this.plugin.settings.eyePairCount, 1, 12);
     for (let i = 0; i < count; i++) {
-      const pair = this.root.createDiv({ cls: "eyesidian-pair" });
-      const layered = pair.createDiv({ cls: "eyesidian-layered-eyes" });
-      const leftSlot = layered.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-left" });
-      leftSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-left", attr: { alt: "" } });
-      leftSlot.createDiv({ cls: "eyesidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyesidian-pupil" });
-      leftSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-upper", attr: { "aria-hidden": "true" } });
-      leftSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-lower", attr: { "aria-hidden": "true" } });
-      const rightSlot = layered.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-right" });
-      rightSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-right", attr: { alt: "" } });
-      rightSlot.createDiv({ cls: "eyesidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyesidian-pupil" });
-      rightSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-upper", attr: { "aria-hidden": "true" } });
-      rightSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-lower", attr: { "aria-hidden": "true" } });
-      pair.createEl("img", { cls: "eyesidian-peek-mask", attr: { alt: "" } });
+      const pair = this.root.createDiv({ cls: "eyessidian-pair" });
+      const layered = pair.createDiv({ cls: "eyessidian-layered-eyes" });
+      const leftSlot = layered.createDiv({ cls: "eyessidian-eye-slot eyessidian-eye-slot-left" });
+      leftSlot.createEl("img", { cls: "eyessidian-eye eyessidian-eye-left", attr: { alt: "" } });
+      leftSlot.createDiv({ cls: "eyessidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyessidian-pupil" });
+      leftSlot.createDiv({ cls: "eyessidian-lid eyessidian-lid-upper", attr: { "aria-hidden": "true" } });
+      leftSlot.createDiv({ cls: "eyessidian-lid eyessidian-lid-lower", attr: { "aria-hidden": "true" } });
+      const rightSlot = layered.createDiv({ cls: "eyessidian-eye-slot eyessidian-eye-slot-right" });
+      rightSlot.createEl("img", { cls: "eyessidian-eye eyessidian-eye-right", attr: { alt: "" } });
+      rightSlot.createDiv({ cls: "eyessidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyessidian-pupil" });
+      rightSlot.createDiv({ cls: "eyessidian-lid eyessidian-lid-upper", attr: { "aria-hidden": "true" } });
+      rightSlot.createDiv({ cls: "eyessidian-lid eyessidian-lid-lower", attr: { "aria-hidden": "true" } });
+      pair.createEl("img", { cls: "eyessidian-peek-mask", attr: { alt: "" } });
       this.pairs.push(pair);
     }
   }
@@ -619,7 +619,7 @@ class EyeController {
 
   private startDrag(event: PointerEvent): void {
     if (!this.plugin.settings.dragEnabled || !this.root) return;
-    if (this.root.closest(".eyesidian-stage")) return;
+    if (this.root.closest(".eyessidian-stage")) return;
     this.dragging = true;
     const rect = this.root.getBoundingClientRect();
     this.dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
@@ -650,11 +650,11 @@ class EyeController {
       for (const pair of this.pairs) {
         const rect = pair.getBoundingClientRect();
         const energy = this.isFocusMode() ? 0.35 : PERSONALITY_OPTIONS[s.personality].energy * this.intensity();
-        const irises = pair.querySelectorAll<HTMLElement>(".eyesidian-iris");
+        const irises = pair.querySelectorAll<HTMLElement>(".eyessidian-iris");
         if (irises.length) {
           irises.forEach((iris) => {
-            const slot = iris.closest(".eyesidian-eye-slot") as HTMLElement | null;
-            const pupil = iris.querySelector<HTMLElement>(".eyesidian-pupil");
+            const slot = iris.closest(".eyessidian-eye-slot") as HTMLElement | null;
+            const pupil = iris.querySelector<HTMLElement>(".eyessidian-pupil");
             const eyeRect = slot?.getBoundingClientRect() ?? rect;
             const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
             const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
@@ -898,9 +898,9 @@ class EyeController {
       pair.style.setProperty("--accent", skinDef.accent);
       pair.style.setProperty("--skin-iris-size", `${skinDef.irisSize}%`);
       pair.style.setProperty("--skin-pupil-size", `${skinDef.pupilSize}%`);
-      const left = pair.querySelector<HTMLImageElement>(".eyesidian-eye-left");
-      const right = pair.querySelector<HTMLImageElement>(".eyesidian-eye-right");
-      const mask = pair.querySelector<HTMLImageElement>(".eyesidian-peek-mask");
+      const left = pair.querySelector<HTMLImageElement>(".eyessidian-eye-left");
+      const right = pair.querySelector<HTMLImageElement>(".eyessidian-eye-right");
+      const mask = pair.querySelector<HTMLImageElement>(".eyessidian-peek-mask");
       if (left) left.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "left")}`) : "");
       if (right) right.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "right")}`) : "");
       if (mask) mask.setAttr("src", hasPeekMask ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${maskAsset(skinDef.id, "tab-panel")}`) : "");
@@ -923,7 +923,7 @@ class EyeController {
 
   private positionRoot(): void {
     if (!this.root) return;
-    if (this.root.closest(".eyesidian-stage")) {
+    if (this.root.closest(".eyessidian-stage")) {
       this.root.removeClasses(["pos-top-left", "pos-top-right", "pos-bottom-left", "pos-bottom-right", "pos-sidebar", "pos-statusbar", "pos-floating", "pos-custom"]);
       this.root.style.left = "";
       this.root.style.top = "";
@@ -975,7 +975,7 @@ class EyeController {
 }
 
 class QuickUiModal extends Modal {
-  constructor(app: App, private plugin: EyesidianPlugin) {
+  constructor(app: App, private plugin: EyessidianPlugin) {
     super(app);
   }
 
@@ -986,10 +986,10 @@ class QuickUiModal extends Modal {
   private render(): void {
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("eyesidian-modal");
-    contentEl.createEl("h2", { text: "Eyesidian Quick UI" });
+    contentEl.addClass("eyessidian-modal");
+    contentEl.createEl("h2", { text: "Eyessidian Quick UI" });
 
-    const header = contentEl.createDiv({ cls: "eyesidian-quick-header" });
+    const header = contentEl.createDiv({ cls: "eyessidian-quick-header" });
     header.createEl("span", { text: this.plugin.settings.quickUiExpanded ? "Quick controls are visible" : "Quick controls are hidden" });
     this.button(header, this.plugin.settings.quickUiExpanded ? "Hide controls" : "Show controls", async () => {
       this.plugin.settings.quickUiExpanded = !this.plugin.settings.quickUiExpanded;
@@ -998,7 +998,7 @@ class QuickUiModal extends Modal {
 
     if (!this.plugin.settings.quickUiExpanded) return;
 
-    const selectors = contentEl.createDiv({ cls: "eyesidian-quick-selectors" });
+    const selectors = contentEl.createDiv({ cls: "eyessidian-quick-selectors" });
     new Setting(selectors).setName("Skin").addDropdown((dropdown) => {
       SKINS.forEach((skin) => dropdown.addOption(skin.id, skin.name));
       dropdown.setValue(this.plugin.settings.skinId);
@@ -1020,14 +1020,14 @@ class QuickUiModal extends Modal {
       });
     });
 
-    const grid = contentEl.createDiv({ cls: "eyesidian-quick-grid" });
+    const grid = contentEl.createDiv({ cls: "eyessidian-quick-grid" });
     this.button(grid, this.plugin.settings.visible ? "Hide eyes" : "Show eyes", async () => this.plugin.controller.setVisible(!this.plugin.settings.visible));
     this.button(grid, "Next skin", async () => this.plugin.nextStyle());
     this.button(grid, "Next personality", async () => this.plugin.nextPersonality());
     this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", async () => this.plugin.toggleFocusMode());
     this.button(grid, this.plugin.settings.pausedReactions ? "Resume reactions" : "Pause reactions", async () => this.plugin.togglePauseReactions());
     this.button(grid, "Blink preview", async () => this.plugin.controller.react("quick ui", "blink"));
-    this.button(grid, "Eyesidian tab", async () => {
+    this.button(grid, "Eyessidian tab", async () => {
       this.close();
       this.plugin.openPlayground();
       return false;
@@ -1054,7 +1054,7 @@ class QuickUiModal extends Modal {
 class OnboardingModal extends Modal {
   private step = 0;
   private steps = [
-    "Welcome to Eyesidian",
+    "Welcome to Eyessidian",
     "Choose a style",
     "Choose a personality",
     "Choose follow behavior",
@@ -1063,7 +1063,7 @@ class OnboardingModal extends Modal {
     "Start"
   ];
 
-  constructor(app: App, private plugin: EyesidianPlugin) {
+  constructor(app: App, private plugin: EyessidianPlugin) {
     super(app);
   }
 
@@ -1074,15 +1074,15 @@ class OnboardingModal extends Modal {
   private render(): void {
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("eyesidian-modal");
+    contentEl.addClass("eyessidian-modal");
     contentEl.createEl("h2", { text: this.steps[this.step] });
     if (this.step === 1) this.select(contentEl, SKINS.map((s) => [s.id, s.name]), this.plugin.settings.skinId, (value) => this.plugin.settings.skinId = value);
     else if (this.step === 2) this.select(contentEl, Object.entries(PERSONALITY_OPTIONS).map(([id, p]) => [id, p.label]), this.plugin.settings.personality, (value) => this.plugin.settings.personality = value as Personality);
     else if (this.step === 3) this.select(contentEl, Object.entries(FOLLOW_LABELS), this.plugin.settings.followTarget, (value) => this.plugin.settings.followTarget = value as FollowTarget);
     else if (this.step === 4) this.select(contentEl, Object.entries(INTENSITY_LABELS), this.plugin.settings.reactionIntensity, (value) => this.plugin.settings.reactionIntensity = value as Intensity);
-    else if (this.step === 5) contentEl.createEl("p", { text: "Eyesidian only reacts to local UI events. It does not read note text, clipboard contents, accounts, or the internet." });
+    else if (this.step === 5) contentEl.createEl("p", { text: "Eyessidian only reacts to local UI events. It does not read note text, clipboard contents, accounts, or the internet." });
     else contentEl.createEl("p", { text: "Put living googly eyes in Obsidian." });
-    const nav = contentEl.createDiv({ cls: "eyesidian-modal-nav" });
+    const nav = contentEl.createDiv({ cls: "eyessidian-modal-nav" });
     if (this.step > 0) this.navButton(nav, "Back", () => this.step--);
     this.navButton(nav, this.step === this.steps.length - 1 ? "Start" : "Next", async () => {
       if (this.step === this.steps.length - 1) {
@@ -1119,7 +1119,7 @@ class OnboardingModal extends Modal {
 }
 
 class PlaygroundView extends ItemView {
-  constructor(leaf: WorkspaceLeaf, private plugin: EyesidianPlugin) {
+  constructor(leaf: WorkspaceLeaf, private plugin: EyessidianPlugin) {
     super(leaf);
   }
 
@@ -1128,7 +1128,7 @@ class PlaygroundView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Eyesidian";
+    return "Eyessidian";
   }
 
   async onOpen(): Promise<void> {
@@ -1142,11 +1142,11 @@ class PlaygroundView extends ItemView {
   render(): void {
     const el = this.containerEl.children[1] as HTMLElement;
     el.empty();
-    el.addClass("eyesidian-playground");
-    el.createEl("h2", { text: "Eyesidian" });
-    const stage = el.createDiv({ cls: "eyesidian-stage" });
+    el.addClass("eyessidian-playground");
+    el.createEl("h2", { text: "Eyessidian" });
+    const stage = el.createDiv({ cls: "eyessidian-stage" });
     this.plugin.controller.mount(stage);
-    const controls = el.createDiv({ cls: "eyesidian-control-row" });
+    const controls = el.createDiv({ cls: "eyessidian-control-row" });
     new Setting(controls).setName("Style").addDropdown((d) => {
       SKINS.forEach((skin) => d.addOption(skin.id, skin.name));
       d.setValue(this.plugin.settings.skinId);
@@ -1203,7 +1203,7 @@ class PlaygroundView extends ItemView {
         this.plugin.controller.refresh();
       });
     });
-    const buttons = el.createDiv({ cls: "eyesidian-reaction-grid" });
+    const buttons = el.createDiv({ cls: "eyessidian-reaction-grid" });
     [
       ["Blink", "blink"], ["Shock", "shocked"], ["Suspicious", "suspicious"], ["Sleep", "sleepy"], ["Happy", "happy"], ["Look left", "look-left"],
       ["Look right", "look-right"], ["Look up", "look-up"], ["Look down", "look-down"], ["Dizzy", "dizzy"], ["Idle", "idle-long"], ["Wake", "wake"]
@@ -1212,21 +1212,21 @@ class PlaygroundView extends ItemView {
         this.plugin.controller.react("playground", reaction as Reaction);
       });
     });
-    el.createDiv({ cls: "eyesidian-preview-note", text: "Eyesidian is embedded in this tab. It follows local UI events without reading note or clipboard content." });
+    el.createDiv({ cls: "eyessidian-preview-note", text: "Eyessidian is embedded in this tab. It follows local UI events without reading note or clipboard content." });
   }
 }
 
-class EyesidianSettingTab extends PluginSettingTab {
-  constructor(app: App, private plugin: EyesidianPlugin) {
+class EyessidianSettingTab extends PluginSettingTab {
+  constructor(app: App, private plugin: EyessidianPlugin) {
     super(app, plugin);
   }
 
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.addClass("eyesidian-settings");
-    containerEl.createEl("h2", { text: "Eyesidian" });
-    containerEl.createEl("p", { text: "Eyesidian reacts to local events only. It does not read note contents or clipboard contents." });
+    containerEl.addClass("eyessidian-settings");
+    containerEl.createEl("h2", { text: "Eyessidian" });
+    containerEl.createEl("p", { text: "Eyessidian reacts to local events only. It does not read note contents or clipboard contents." });
 
     new Setting(containerEl).setName("Enable plugin").addToggle((toggle) => toggle.setValue(this.plugin.settings.enabled).onChange((value) => this.save("enabled", value)));
     new Setting(containerEl).setName("Visibility mode").addDropdown((d) => this.dropdown(d, VISIBILITY_LABELS, this.plugin.settings.visibilityMode, (v) => this.save("visibilityMode", v as VisibilityMode)));
@@ -1257,9 +1257,9 @@ class EyesidianSettingTab extends PluginSettingTab {
       Object.entries(PERSONALITY_OPTIONS).forEach(([id, p]) => d.addOption(id, p.label));
       d.setValue(this.plugin.settings.personality).onChange((v) => this.save("personality", v as Personality));
     });
-    const skinGrid = containerEl.createDiv({ cls: "eyesidian-skin-grid" });
+    const skinGrid = containerEl.createDiv({ cls: "eyessidian-skin-grid" });
     SKINS.forEach((skin) => {
-      const card = skinGrid.createDiv({ cls: `eyesidian-skin-card ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
+      const card = skinGrid.createDiv({ cls: `eyessidian-skin-card ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
       card.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin.id)}`), alt: "" } });
       card.createEl("strong", { text: skin.name });
       card.createEl("span", { text: skin.flavor });
@@ -1329,7 +1329,7 @@ class EyesidianSettingTab extends PluginSettingTab {
 
     containerEl.createEl("h3", { text: "Preview tools" });
     new Setting(containerEl).setName("Quick UI").addButton((b) => b.setButtonText("Open").onClick(() => new QuickUiModal(this.app, this.plugin).open()));
-    new Setting(containerEl).setName("Eyesidian tab").addButton((b) => b.setButtonText("Open").onClick(() => this.plugin.openPlayground()));
+    new Setting(containerEl).setName("Eyessidian tab").addButton((b) => b.setButtonText("Open").onClick(() => this.plugin.openPlayground()));
     new Setting(containerEl).setName("Onboarding").addButton((b) => b.setButtonText("Restart").onClick(() => new OnboardingModal(this.app, this.plugin).open()));
   }
 
@@ -1352,7 +1352,7 @@ class EyesidianSettingTab extends PluginSettingTab {
     this.display();
   }
 
-  private async save<K extends keyof EyesidianSettings>(key: K, value: EyesidianSettings[K]): Promise<void> {
+  private async save<K extends keyof EyessidianSettings>(key: K, value: EyessidianSettings[K]): Promise<void> {
     this.plugin.settings[key] = value;
     await this.plugin.saveSettings();
     this.plugin.controller.refresh();
@@ -1360,8 +1360,8 @@ class EyesidianSettingTab extends PluginSettingTab {
   }
 }
 
-export default class EyesidianPlugin extends Plugin {
-  settings: EyesidianSettings = DEFAULT_SETTINGS;
+export default class EyessidianPlugin extends Plugin {
+  settings: EyessidianSettings = DEFAULT_SETTINGS;
   controller!: EyeController;
   private statusEl: HTMLElement | null = null;
 
@@ -1369,11 +1369,11 @@ export default class EyesidianPlugin extends Plugin {
     await this.loadSettings();
     this.controller = new EyeController(this);
     this.registerView(VIEW_TYPE_PLAYGROUND, (leaf) => new PlaygroundView(leaf, this));
-    this.addSettingTab(new EyesidianSettingTab(this.app, this));
-    this.addRibbonIcon("eye", "Eyesidian", () => new QuickUiModal(this.app, this).open());
+    this.addSettingTab(new EyessidianSettingTab(this.app, this));
+    this.addRibbonIcon("eye", "Eyessidian", () => new QuickUiModal(this.app, this).open());
     this.statusEl = this.addStatusBarItem();
-    this.statusEl.addClass("eyesidian-statusbar");
-    this.statusEl.setText("Eyesidian");
+    this.statusEl.addClass("eyessidian-statusbar");
+    this.statusEl.setText("Eyessidian");
     this.statusEl.addEventListener("click", () => new QuickUiModal(this.app, this).open());
     this.addCommands();
     this.app.workspace.onLayoutReady(() => {
@@ -1404,10 +1404,10 @@ export default class EyesidianPlugin extends Plugin {
   }
 
   addCommands(): void {
-    this.addCommand({ id: "toggle-eyesidian", name: "Toggle Eyesidian", callback: () => this.toggleEnabled() });
+    this.addCommand({ id: "toggle-eyessidian", name: "Toggle Eyessidian", callback: () => this.toggleEnabled() });
     this.addCommand({ id: "show-hide-eyes", name: "Show / Hide Eyes", callback: () => this.controller.setVisible(!this.settings.visible) });
     this.addCommand({ id: "open-quick-ui", name: "Open Quick UI", callback: () => new QuickUiModal(this.app, this).open(), hotkeys: [{ modifiers: ["Mod", "Shift"], key: "E" }] });
-    this.addCommand({ id: "open-playground", name: "Open Eyesidian Tab", callback: () => this.openPlayground() });
+    this.addCommand({ id: "open-playground", name: "Open Eyessidian Tab", callback: () => this.openPlayground() });
     this.addCommand({ id: "randomize-personality", name: "Randomize Personality", callback: () => this.controller.randomizePersonality() });
     this.addCommand({ id: "toggle-focus-mode", name: "Toggle Focus Mode", callback: () => this.toggleFocusMode() });
     this.addCommand({ id: "switch-next-personality", name: "Switch Next Personality", callback: () => this.nextPersonality() });
@@ -1419,7 +1419,7 @@ export default class EyesidianPlugin extends Plugin {
     this.settings.enabled = !this.settings.enabled;
     await this.saveSettings();
     this.controller.applySettings();
-    new Notice(`Eyesidian ${this.settings.enabled ? "enabled" : "disabled"}`);
+    new Notice(`Eyessidian ${this.settings.enabled ? "enabled" : "disabled"}`);
   }
 
   async toggleFocusMode(): Promise<void> {
