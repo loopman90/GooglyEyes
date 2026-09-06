@@ -14,3 +14,5 @@ assets/skins/*
 !assets/skins/dragon/**
 !assets/skins/tibetan-monk/
 !assets/skins/tibetan-monk/**
+!assets/skins/alien/
+!assets/skins/alien/**

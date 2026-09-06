@@ -37,6 +37,7 @@ Available now:
 - Manga Female
 - Dragon
 - Tibetan Monk
+- Alien
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 
