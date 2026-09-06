@@ -2,10 +2,23 @@
   --eyesidian-size: 320px;
   --eyesidian-opacity: 0.95;
   --eyesidian-z: 1000;
+  --iris-color: #42d9ff;
+  --pupil-color: #07111b;
+  --iris-glow: 0.7;
   --look-x: 0px;
   --look-y: 0px;
+  --iris-x: 0px;
+  --iris-y: 0px;
   --pupil-x: 0px;
   --pupil-y: 0px;
+  --lid-upper-left: -55%;
+  --lid-lower-left: 58%;
+  --lid-upper-right: -55%;
+  --lid-lower-right: 58%;
+  --iris-scale: 1;
+  --pupil-scale: 1;
+  --iris-opacity: 1;
+  --iris-filter: none;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -46,17 +59,7 @@
   transition: transform 160ms ease;
 }
 
-.eyesidian-expression {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  -webkit-user-drag: none;
-  transform: translate(var(--look-x), var(--look-y));
-  transition: transform 70ms linear;
-}
-
-.eyesidian-individual-eyes {
+.eyesidian-layered-eyes {
   display: none;
   position: absolute;
   inset: 26.3% 8% 26.4%;
@@ -66,11 +69,7 @@
   z-index: 1;
 }
 
-.eyesidian-pair.has-individual-assets .eyesidian-pair-fallback {
-  display: none;
-}
-
-.eyesidian-pair.has-individual-assets .eyesidian-individual-eyes {
+.eyesidian-pair.has-layered-assets .eyesidian-layered-eyes {
   display: grid;
 }
 
@@ -82,6 +81,25 @@
   border-radius: 999px;
 }
 
+.eyesidian-root.show-debug .eyesidian-eye-slot {
+  outline: 1px dashed color-mix(in srgb, var(--interactive-accent) 85%, transparent);
+  outline-offset: -1px;
+}
+
+.eyesidian-root.show-debug .eyesidian-eye-slot::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--interactive-accent);
+  transform: translate(-50%, -50%);
+  z-index: 9;
+  pointer-events: none;
+}
+
 .eyesidian-eye {
   display: block;
   width: 100%;
@@ -90,31 +108,95 @@
   -webkit-user-drag: none;
 }
 
-.eyesidian-pupil {
+.eyesidian-iris {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 28%;
+  width: 42%;
   aspect-ratio: 1;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 35% 32%, rgb(255 255 255 / 0.95) 0 7%, transparent 8%),
-    radial-gradient(circle at 54% 56%, #07111b 0 43%, #102536 58%, rgb(66 217 255 / 0.86) 72%, rgb(66 217 255 / 0.2) 100%);
+    radial-gradient(circle at 46% 44%, rgb(214 252 255 / 0.96) 0 9%, transparent 10%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--iris-color) 34%, transparent) 0 28%, color-mix(in srgb, var(--iris-color) 78%, #ffffff 4%) 43%, color-mix(in srgb, var(--iris-color) 72%, #03202d 28%) 66%, rgb(4 34 55 / 0.86) 100%);
   box-shadow:
-    0 0 8px rgb(66 217 255 / 0.45),
-    inset 0 0 8px rgb(0 0 0 / 0.7);
-  transform: translate(calc(-50% + var(--pupil-x)), calc(-50% + var(--pupil-y)));
-  transition: transform 70ms linear, width 120ms ease, opacity 120ms ease;
+    0 0 calc(18px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 72%, transparent),
+    inset 0 0 10px rgb(226 255 255 / 0.36),
+    inset 0 0 22px rgb(0 17 28 / 0.65);
+  opacity: var(--iris-opacity);
+  filter: var(--iris-filter);
+  transform: translate(calc(-50% + var(--iris-x)), calc(-50% + var(--iris-y))) scale(var(--iris-scale));
+  transition: transform 70ms linear, width 130ms ease, opacity 130ms ease, filter 130ms ease;
   z-index: 2;
   pointer-events: none;
 }
 
-.eyesidian-pair[data-reaction="blink"] .eyesidian-pupil,
-.eyesidian-pair[data-reaction="slow-blink"] .eyesidian-pupil,
-.eyesidian-pair[data-reaction="sleepy"] .eyesidian-pupil,
-.eyesidian-pair[data-reaction="sleepy-idle"] .eyesidian-pupil {
-  width: 18%;
-  opacity: 0.42;
+.eyesidian-iris::before {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border-radius: inherit;
+  background:
+    repeating-conic-gradient(from 5deg, color-mix(in srgb, var(--iris-color) 55%, #ffffff 45%) 0deg 5deg, color-mix(in srgb, var(--iris-color) 24%, transparent) 5deg 11deg);
+  mix-blend-mode: screen;
+  opacity: 0.66;
+}
+
+.eyesidian-pupil {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 47%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 31%, rgb(255 255 255 / 0.95) 0 9%, transparent 10%),
+    radial-gradient(circle at 50% 52%, var(--pupil-color) 0 45%, color-mix(in srgb, var(--pupil-color) 82%, var(--iris-color) 18%) 72%, color-mix(in srgb, var(--pupil-color) 48%, var(--iris-color) 52%) 100%);
+  box-shadow:
+    0 0 calc(10px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 58%, transparent),
+    inset 0 0 9px rgb(0 0 0 / 0.86);
+  transform: translate(calc(-50% + var(--pupil-x)), calc(-50% + var(--pupil-y))) scale(var(--pupil-scale));
+  transition: transform 70ms linear, width 120ms ease;
+  z-index: 3;
+}
+
+.eyesidian-lid {
+  position: absolute;
+  left: -6%;
+  width: 112%;
+  height: 58%;
+  border-radius: 0 0 55% 55%;
+  background:
+    linear-gradient(180deg, rgb(42 45 48), rgb(18 21 24) 62%, rgb(3 5 8));
+  box-shadow:
+    inset 0 -7px 14px rgb(0 0 0 / 0.62),
+    0 3px 7px rgb(0 0 0 / 0.35);
+  z-index: 4;
+  pointer-events: none;
+  transition: transform 145ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 120ms ease;
+}
+
+.eyesidian-lid-upper {
+  top: 0;
+  transform: translateY(var(--lid-upper-left));
+}
+
+.eyesidian-lid-lower {
+  bottom: 0;
+  border-radius: 55% 55% 0 0;
+  background:
+    linear-gradient(0deg, rgb(42 45 48), rgb(18 21 24) 62%, rgb(3 5 8));
+  box-shadow:
+    inset 0 7px 14px rgb(0 0 0 / 0.62),
+    0 -3px 7px rgb(0 0 0 / 0.28);
+  transform: translateY(var(--lid-lower-left));
+}
+
+.eyesidian-eye-slot-right .eyesidian-lid-upper {
+  transform: translateY(var(--lid-upper-right));
+}
+
+.eyesidian-eye-slot-right .eyesidian-lid-lower {
+  transform: translateY(var(--lid-lower-right));
 }
 
 .eyesidian-peek-mask {
@@ -126,7 +208,7 @@
   object-fit: cover;
   pointer-events: none;
   -webkit-user-drag: none;
-  z-index: 2;
+  z-index: 8;
 }
 
 .eyesidian-pair.has-peek-mask .eyesidian-peek-mask {

@@ -56,6 +56,10 @@ interface EyesidianSettings {
   dragEnabled: boolean;
   peekMode: boolean;
   peekFaceMask: boolean;
+  irisColor: string;
+  pupilColor: string;
+  irisGlow: number;
+  debugOverlay: boolean;
   size: number;
   opacity: number;
   zIndex: number;
@@ -171,6 +175,10 @@ const DEFAULT_SETTINGS: EyesidianSettings = {
   dragEnabled: true,
   peekMode: false,
   peekFaceMask: true,
+  irisColor: "#42d9ff",
+  pupilColor: "#07111b",
+  irisGlow: 0.7,
+  debugOverlay: false,
   size: 180,
   opacity: 0.95,
   zIndex: 1000,
@@ -186,12 +194,8 @@ const DEFAULT_SETTINGS: EyesidianSettings = {
   actionMappings: DEFAULT_ACTIONS
 };
 
-function reactionAsset(skinId: string, reaction: Reaction): string {
-  return `assets/skins/${skinId}/${reaction}.png`;
-}
-
-function eyeAsset(skinId: string, side: "left" | "right", reaction: Reaction): string {
-  return `assets/skins/${skinId}/${side}/${reaction}.png`;
+function baseEyeAsset(skinId: string, side: "left" | "right"): string {
+  return `assets/skins/${skinId}/eyes/${side}-base.png`;
 }
 
 function thumbnailAsset(skinId: string): string {
@@ -264,7 +268,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const INDIVIDUAL_EYE_SKINS = new Set(["robot"]);
+const LAYERED_SKINS = new Set(["robot"]);
 
 class EyeController {
   private root: HTMLDivElement | null = null;
@@ -325,10 +329,14 @@ class EyeController {
     this.root.toggleClass("is-peeking", s.peekMode);
     this.root.toggleClass("is-focus-mode", this.isFocusMode());
     this.root.toggleClass("is-reduced-motion", this.reduceMotion.matches);
+    this.root.toggleClass("show-debug", s.debugOverlay);
     this.root.style.setProperty("--eyesidian-size", `${s.size}px`);
     this.root.parentElement?.style.setProperty("--eyesidian-size", `${s.size}px`);
     this.root.style.setProperty("--eyesidian-opacity", `${s.opacity}`);
     this.root.style.setProperty("--eyesidian-z", `${s.zIndex}`);
+    this.root.style.setProperty("--iris-color", s.irisColor);
+    this.root.style.setProperty("--pupil-color", s.pupilColor);
+    this.root.style.setProperty("--iris-glow", `${s.irisGlow}`);
     this.positionRoot();
     this.updateAssets();
   }
@@ -382,14 +390,17 @@ class EyeController {
     const count = clamp(this.plugin.settings.eyePairCount, 1, 12);
     for (let i = 0; i < count; i++) {
       const pair = this.root.createDiv({ cls: "eyesidian-pair" });
-      pair.createEl("img", { cls: "eyesidian-expression eyesidian-pair-fallback", attr: { alt: "" } });
-      const individual = pair.createDiv({ cls: "eyesidian-individual-eyes" });
-      const leftSlot = individual.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-left" });
+      const layered = pair.createDiv({ cls: "eyesidian-layered-eyes" });
+      const leftSlot = layered.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-left" });
       leftSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-left", attr: { alt: "" } });
-      leftSlot.createDiv({ cls: "eyesidian-pupil", attr: { "aria-hidden": "true" } });
-      const rightSlot = individual.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-right" });
+      leftSlot.createDiv({ cls: "eyesidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyesidian-pupil" });
+      leftSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-upper", attr: { "aria-hidden": "true" } });
+      leftSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-lower", attr: { "aria-hidden": "true" } });
+      const rightSlot = layered.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-right" });
       rightSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-right", attr: { alt: "" } });
-      rightSlot.createDiv({ cls: "eyesidian-pupil", attr: { "aria-hidden": "true" } });
+      rightSlot.createDiv({ cls: "eyesidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyesidian-pupil" });
+      rightSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-upper", attr: { "aria-hidden": "true" } });
+      rightSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-lower", attr: { "aria-hidden": "true" } });
       pair.createEl("img", { cls: "eyesidian-peek-mask", attr: { alt: "" } });
       this.pairs.push(pair);
     }
@@ -530,32 +541,24 @@ class EyeController {
       for (const pair of this.pairs) {
         const rect = pair.getBoundingClientRect();
         const energy = this.isFocusMode() ? 0.35 : PERSONALITY_OPTIONS[s.personality].energy * this.intensity();
-        const pupils = pair.querySelectorAll<HTMLElement>(".eyesidian-pupil");
-        if (pupils.length) {
-          pupils.forEach((pupil) => {
-            const slot = pupil.closest(".eyesidian-eye-slot") as HTMLElement | null;
+        const irises = pair.querySelectorAll<HTMLElement>(".eyesidian-iris");
+        if (irises.length) {
+          irises.forEach((iris) => {
+            const slot = iris.closest(".eyesidian-eye-slot") as HTMLElement | null;
+            const pupil = iris.querySelector<HTMLElement>(".eyesidian-pupil");
             const eyeRect = slot?.getBoundingClientRect() ?? rect;
             const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
             const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
             const vx = this.eased.x - cx;
             const vy = this.eased.y - cy;
             const distance = Math.hypot(vx, vy);
-            const travel = Math.min(eyeRect.width, eyeRect.height) * 0.16 * s.followSensitivity * energy;
+            const baseTravel = Math.min(eyeRect.width, eyeRect.height) * s.followSensitivity * energy;
             const strength = clamp(distance / 280, 0, 1);
             const angle = Math.atan2(vy, vx);
-            pupil.style.setProperty("--pupil-x", `${Math.cos(angle) * travel * strength}px`);
-            pupil.style.setProperty("--pupil-y", `${Math.sin(angle) * travel * strength}px`);
-          });
-        } else {
-          const eyes = pair.querySelectorAll<HTMLElement>(".eyesidian-pair-fallback");
-          eyes.forEach((eye) => {
-            const eyeRect = eye.getBoundingClientRect();
-            const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
-            const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
-            const dx = clamp((this.eased.x - cx) / 160, -1, 1);
-            const dy = clamp((this.eased.y - cy) / 120, -1, 1);
-            eye.style.setProperty("--look-x", `${dx * 7 * s.followSensitivity * energy}px`);
-            eye.style.setProperty("--look-y", `${dy * 5 * s.followSensitivity * energy}px`);
+            iris.style.setProperty("--iris-x", `${Math.cos(angle) * baseTravel * 0.085 * strength}px`);
+            iris.style.setProperty("--iris-y", `${Math.sin(angle) * baseTravel * 0.07 * strength}px`);
+            pupil?.style.setProperty("--pupil-x", `${Math.cos(angle) * baseTravel * 0.13 * strength}px`);
+            pupil?.style.setProperty("--pupil-y", `${Math.sin(angle) * baseTravel * 0.11 * strength}px`);
           });
         }
       }
@@ -587,6 +590,74 @@ class EyeController {
     this.updateAssets();
   }
 
+  private applyReactionState(pair: HTMLElement): void {
+    const reaction = this.currentReaction;
+    const set = (name: string, value: string) => pair.style.setProperty(name, value);
+    set("--lid-upper-left", "-55%");
+    set("--lid-lower-left", "58%");
+    set("--lid-upper-right", "-55%");
+    set("--lid-lower-right", "58%");
+    set("--iris-scale", "1");
+    set("--pupil-scale", "1");
+    set("--iris-opacity", "1");
+    set("--iris-filter", "none");
+
+    if (reaction === "blink" || reaction === "slow-blink") {
+      set("--lid-upper-left", "1%");
+      set("--lid-lower-left", "2%");
+      set("--lid-upper-right", "1%");
+      set("--lid-lower-right", "2%");
+      set("--pupil-scale", "0.72");
+    } else if (reaction === "sleepy" || reaction === "sleepy-idle" || reaction === "idle-long") {
+      set("--lid-upper-left", "-8%");
+      set("--lid-lower-left", "36%");
+      set("--lid-upper-right", "-8%");
+      set("--lid-lower-right", "36%");
+      set("--iris-opacity", "0.82");
+      set("--pupil-scale", "0.86");
+    } else if (reaction === "suspicious" || reaction === "hover-suspicious") {
+      set("--lid-upper-left", "-17%");
+      set("--lid-lower-left", "47%");
+      set("--lid-upper-right", "-31%");
+      set("--lid-lower-right", "54%");
+      set("--pupil-scale", "0.92");
+    } else if (reaction === "angry" || reaction === "delete" || reaction === "cut") {
+      set("--lid-upper-left", "-12%");
+      set("--lid-lower-left", "49%");
+      set("--lid-upper-right", "-12%");
+      set("--lid-lower-right", "49%");
+      set("--iris-filter", "hue-rotate(155deg) saturate(1.25)");
+    } else if (reaction === "shocked" || reaction === "wide-stare" || reaction === "wake" || reaction === "dramatic-shock") {
+      set("--lid-upper-left", "-72%");
+      set("--lid-lower-left", "70%");
+      set("--lid-upper-right", "-72%");
+      set("--lid-lower-right", "70%");
+      set("--iris-scale", "1.08");
+      set("--pupil-scale", "0.74");
+    } else if (reaction === "happy" || reaction === "copy" || reaction === "paste" || reaction === "redo") {
+      set("--lid-upper-left", "-42%");
+      set("--lid-lower-left", "50%");
+      set("--lid-upper-right", "-42%");
+      set("--lid-lower-right", "50%");
+      set("--iris-scale", "1.03");
+    } else if (reaction === "sad" || reaction === "undo") {
+      set("--lid-upper-left", "-22%");
+      set("--lid-lower-left", "43%");
+      set("--lid-upper-right", "-22%");
+      set("--lid-lower-right", "43%");
+      set("--iris-opacity", "0.78");
+    } else if (reaction === "confused" || reaction === "dizzy" || reaction === "cross-eyed" || reaction === "eye-roll") {
+      set("--iris-scale", "0.94");
+      set("--pupil-scale", "0.9");
+    } else if (reaction === "typing" || reaction === "rapid-typing-focus") {
+      set("--lid-upper-left", "-36%");
+      set("--lid-lower-left", "53%");
+      set("--lid-upper-right", "-36%");
+      set("--lid-lower-right", "53%");
+      set("--iris-filter", "saturate(1.2)");
+    }
+  }
+
   private updateAssets(): void {
     const s = this.plugin.settings;
     for (let index = 0; index < this.pairs.length; index++) {
@@ -594,22 +665,19 @@ class EyeController {
       const config = s.pairConfigs[index];
       const skin = s.perPairVariation && config ? config.skinId : s.skinId;
       const skinDef = SKINS.find((item) => item.id === skin) ?? SKINS[0];
-      const hasIndividualAssets = INDIVIDUAL_EYE_SKINS.has(skinDef.id);
-      const hasPeekMask = hasIndividualAssets && s.peekFaceMask;
+      const hasLayeredAssets = LAYERED_SKINS.has(skinDef.id);
+      const hasPeekMask = hasLayeredAssets && s.peekFaceMask;
       pair.dataset.skin = skinDef.id;
       pair.dataset.reaction = this.currentReaction;
-      pair.toggleClass("has-individual-assets", hasIndividualAssets);
+      this.applyReactionState(pair);
+      pair.toggleClass("has-layered-assets", hasLayeredAssets);
       pair.toggleClass("has-peek-mask", hasPeekMask);
-      pair.style.setProperty("--iris", skinDef.iris);
-      pair.style.setProperty("--pupil", skinDef.pupil);
       pair.style.setProperty("--accent", skinDef.accent);
-      const fallback = pair.querySelector<HTMLImageElement>(".eyesidian-pair-fallback");
       const left = pair.querySelector<HTMLImageElement>(".eyesidian-eye-left");
       const right = pair.querySelector<HTMLImageElement>(".eyesidian-eye-right");
       const mask = pair.querySelector<HTMLImageElement>(".eyesidian-peek-mask");
-      if (fallback) fallback.setAttr("src", this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${reactionAsset(skinDef.id, this.currentReaction)}`));
-      if (left) left.setAttr("src", hasIndividualAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${eyeAsset(skinDef.id, "left", this.currentReaction)}`) : "");
-      if (right) right.setAttr("src", hasIndividualAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${eyeAsset(skinDef.id, "right", this.currentReaction)}`) : "");
+      if (left) left.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "left")}`) : "");
+      if (right) right.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "right")}`) : "");
       if (mask) mask.setAttr("src", hasPeekMask ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${maskAsset(skinDef.id, "tab-panel")}`) : "");
       pair.style.transform = `translate(${index * 10}px, ${index * 8}px)`;
     }
@@ -906,7 +974,11 @@ class EyesidianSettingTab extends PluginSettingTab {
 
     containerEl.createEl("h3", { text: "Embedded tab" });
     new Setting(containerEl).setName("Peek mode").addToggle((t) => t.setValue(this.plugin.settings.peekMode).onChange((v) => this.save("peekMode", v)));
-    new Setting(containerEl).setName("Embedded panel mask").setDesc("Adds a full-width tab panel overlay so the eyes sit inside Obsidian instead of looking like a floating mask. Supported by split skins such as Robot.").addToggle((t) => t.setValue(this.plugin.settings.peekFaceMask).onChange((v) => this.save("peekFaceMask", v)));
+    new Setting(containerEl).setName("Embedded panel mask").setDesc("Adds a full-width tab panel overlay so the eyes sit inside Obsidian instead of looking like a floating mask. Supported by layered skins such as Robot.").addToggle((t) => t.setValue(this.plugin.settings.peekFaceMask).onChange((v) => this.save("peekFaceMask", v)));
+    new Setting(containerEl).setName("Iris color").addColorPicker((picker) => picker.setValue(this.plugin.settings.irisColor).onChange((v) => this.save("irisColor", v)));
+    new Setting(containerEl).setName("Pupil color").addColorPicker((picker) => picker.setValue(this.plugin.settings.pupilColor).onChange((v) => this.save("pupilColor", v)));
+    new Setting(containerEl).setName("Iris glow").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.irisGlow).onChange((v) => this.save("irisGlow", v)));
+    new Setting(containerEl).setName("Debug eye windows").setDesc("Shows the eye-window boxes and centers while tuning a skin.").addToggle((t) => t.setValue(this.plugin.settings.debugOverlay).onChange((v) => this.save("debugOverlay", v)));
     new Setting(containerEl).setName("Size").addSlider((s) => s.setLimits(36, 220, 2).setValue(this.plugin.settings.size).onChange((v) => this.save("size", v)));
     new Setting(containerEl).setName("Opacity").addSlider((s) => s.setLimits(0.2, 1, 0.05).setValue(this.plugin.settings.opacity).onChange((v) => this.save("opacity", v)));
     new Setting(containerEl).setName("Layering / z-index").addText((t) => t.setValue(String(this.plugin.settings.zIndex)).onChange((v) => this.save("zIndex", Number(v) || 1000)));

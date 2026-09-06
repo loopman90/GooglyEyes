@@ -2,7 +2,7 @@
 
 Eyesidian exposes only completed skins in the UI. The current active skin is Robot.
 
-Eyesidian supports individual transparent PNGs per eye. Pair-level PNGs can remain as an internal fallback for a completed skin, but unfinished skins should not be listed in the active manifest or UI.
+Robot uses the layered renderer. That means PNGs provide only the fixed art that should not move: a tab-panel mask, a thumbnail, and clean left/right base eyes. Iris, pupil, glow, eyelids, blinking, mouse tracking, and reaction poses are drawn at runtime with DOM/CSS.
 
 Asset layout:
 
@@ -10,31 +10,24 @@ Asset layout:
 assets/
   skins/
     robot/
-      idle-neutral.png        # pair fallback
-      blink.png               # pair fallback
-      left/
-        idle-neutral.png
-        blink.png
-      right/
-        idle-neutral.png
-        blink.png
+      skin.json
+      eyes/
+        left-base.png         # no iris, no pupil, no lids
+        right-base.png        # no iris, no pupil, no lids
       masks/
-        tab-panel.png
-      ...
-      drag-tracking.png
+        tab-panel.png         # full embedded Obsidian panel overlay
       thumbnail.png
 ```
 
-Every active skin folder contains all reactions listed in `assets/skins.json`, plus `thumbnail.png`. Skins listed in `individualEyeSkins` also contain `left/` and `right/` reaction PNGs. Skins listed in `maskSkins` contain `masks/tab-panel.png`, a full-stage overlay that makes the eyes look embedded inside an Obsidian tab. There is no required sprite sheet.
+Every active skin folder contains `thumbnail.png` and `skin.json`. Skins listed in `layeredSkins` contain `eyes/left-base.png` and `eyes/right-base.png`. Skins listed in `maskSkins` contain `masks/tab-panel.png`, a full-stage overlay that makes the eyes look embedded inside an Obsidian tab.
 
 Current V1 count:
 
 - 1 active skin
-- 36 reaction PNGs per skin
-- 1 thumbnail PNG per skin
-- 37 pair fallback/thumbnail PNG files for Robot
-- 72 individual eye PNG files for each completed split skin
+- 2 base eye PNGs for Robot
 - 1 mask PNG for Robot
+- 1 thumbnail PNG for Robot
+- 1 skin metadata JSON for Robot
 
 Validation:
 
@@ -42,10 +35,11 @@ Validation:
 npm run validate-assets
 ```
 
-Regeneration:
+Runtime layers:
 
-```bash
-npm run generate-assets
-```
+- Iris and pupil are not baked into the PNGs, so users can recolor them.
+- Pupil and iris are separate layers, so the pupil can track the mouse farther than the iris.
+- Eyelids are CSS layers, so blink and wink motion stays smooth instead of jumping between images.
+- The panel mask sits above the eye layers, so the result reads as an embedded tab/window rather than a floating mask.
 
-The generated V1 PNGs are deterministic, local, transparent-background starter assets. A future art pass can replace any single PNG without changing the plugin architecture, as long as the same path and transparent PNG format are kept.
+Imagegen or hand-authored replacements can swap any PNG as long as the same paths and transparent PNG format are kept.

@@ -1,7 +1,7 @@
 {
   "generated": "2026-09-06T15:35:07.747Z",
   "note": "Robot-only active asset manifest. Other skins are intentionally omitted until their imagegen asset packs are complete.",
-  "individualEyeSkins": [
+  "layeredSkins": [
     "robot"
   ],
   "maskSkins": [

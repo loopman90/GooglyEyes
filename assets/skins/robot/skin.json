@@ -1,0 +1,20 @@
+{
+  "id": "robot",
+  "name": "Robot",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    { "side": "left", "x": 0.08, "y": 0.263, "w": 0.365, "h": 0.473 },
+    { "side": "right", "x": 0.555, "y": 0.263, "w": 0.365, "h": 0.473 }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#42d9ff",
+    "pupilColor": "#07111b",
+    "irisGlow": 0.7
+  }
+}

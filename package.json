@@ -6,8 +6,6 @@
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-    "generate-assets": "node scripts/generate-assets.mjs",
-    "split-robot-assets": "node scripts/split-pair-assets.mjs robot",
     "package-test": "node scripts/package-test.mjs",
     "validate-assets": "node scripts/validate-assets.mjs"
   },

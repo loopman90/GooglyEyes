@@ -35,7 +35,7 @@ Available now:
 
 Planned skins will be added one by one after their imagegen asset packs are complete. The backlog lives in `SKIN_BACKLOG.md` and is not exposed in the plugin UI.
 
-Each completed skin has PNG files for every supported reaction, plus a thumbnail. Skins can also provide true per-eye assets in `left/` and `right/`; the Robot skin is the first completed split skin with 72 individual eye PNGs. Mask-capable skins can add `masks/tab-panel.png`, a full-stage overlay that makes the eyes look embedded inside an Obsidian tab.
+The Robot skin now uses a layered renderer instead of full reaction PNGs. Its PNGs are only the embedded tab mask, thumbnail, and a clean left/right base eye without iris, pupil, or lids. Iris color, pupil color, pupil tracking, eyelids, blinking, and reactions are drawn at runtime, which makes the eyes easier to tune and keeps future skins much lighter.
 
 ## Personalities
 
@@ -60,7 +60,7 @@ The Eyesidian tab embeds the eyes directly inside Obsidian instead of floating o
 
 ## Customization
 
-Settings include visibility mode, follow target, sensitivity, smoothing, reactions, reaction intensity, randomness, cooldowns, action mappings, personality tuning, skin thumbnails, peek mode, size, opacity, layering, animation smoothness, focus mode, DND mode, subtle mode, and privacy notes.
+Settings include visibility mode, follow target, sensitivity, smoothing, reactions, reaction intensity, randomness, cooldowns, action mappings, personality tuning, skin thumbnails, iris color, pupil color, iris glow, debug eye windows, peek mode, size, opacity, layering, animation smoothness, focus mode, DND mode, subtle mode, and privacy notes.
 
 Actions use:
 
@@ -79,15 +79,14 @@ For manual installation during development:
 
 1. Copy this folder into `.obsidian/plugins/eyesidian`.
 2. Run `npm install`.
-3. Run `npm run generate-assets`.
-4. Run `npm run build`.
-5. Enable the plugin in Obsidian settings.
+3. Run `npm run build`.
+4. Enable the plugin in Obsidian settings.
 
 ## Build
 
 ```bash
 npm install
-npm run generate-assets
+npm run validate-assets
 npm run build
 ```
 
@@ -95,7 +94,7 @@ Use `npm run dev` while developing.
 
 ## Limitations
 
-- The current test build exposes only the completed Robot PNG asset pack. More skins will appear after their imagegen packs are complete.
+- The current test build exposes only the completed Robot layered asset pack. More skins will appear one by one after their base eye and mask packs are complete.
 - No community skin marketplace.
 - No custom user asset imports.
 - No achievements, dialogue system, social features, cloud sync, or online downloads.
@@ -103,7 +102,7 @@ Use `npm run dev` while developing.
 
 ## Roadmap
 
-- More polished hand-authored or generated asset packs.
+- More polished hand-authored or imagegen base/mask packs.
 - Per-eye-pair personality controls in the settings UI.
 - More hover targets and custom action trigger integrations.
 - Optional frame-based animation for skins that benefit from it.
