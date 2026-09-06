@@ -1,0 +1,25 @@
+{
+  "id": "ice-hockey",
+  "name": "Ice Hockey Horror",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    { "side": "left", "x": 0.152, "y": 0.278, "w": 0.306, "h": 0.372 },
+    { "side": "right", "x": 0.542, "y": 0.278, "w": 0.306, "h": 0.372 }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#9feeff",
+    "pupilColor": "#05090d",
+    "eyeWhiteColor": "#dcecf4",
+    "eyelidColor": "#ccd7dd",
+    "eyelidShadowColor": "#101820",
+    "irisGlow": 0.45,
+    "irisSize": 34,
+    "pupilSize": 32
+  }
+}

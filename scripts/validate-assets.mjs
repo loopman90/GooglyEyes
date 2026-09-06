@@ -14,6 +14,10 @@ const MASK_WIDTH = 1774;
 const MASK_HEIGHT = 887;
 const MIN_MASK_HOLE_TRANSPARENCY = 0.08;
 const MAX_MASK_HOLE_TRANSPARENCY = 0.3;
+const MIN_IRIS_SIZE = 26;
+const MAX_IRIS_SIZE = 44;
+const MIN_PUPIL_SIZE = 16;
+const MAX_PUPIL_SIZE = 46;
 
 function isPng(path) {
   if (!existsSync(path)) return false;
@@ -166,7 +170,16 @@ for (const skin of manifest.skins) {
     if (!existsSync(path)) missing.push(path);
     else {
       try {
-        JSON.parse(readFileSync(path, "utf8"));
+        const skinMeta = JSON.parse(readFileSync(path, "utf8"));
+        const defaults = skinMeta.defaults ?? {};
+        if (layeredSkins.has(skin)) {
+          if (typeof defaults.irisSize !== "number" || defaults.irisSize < MIN_IRIS_SIZE || defaults.irisSize > MAX_IRIS_SIZE) {
+            invalidJson.push(`${path}\n  - defaults.irisSize must be ${MIN_IRIS_SIZE}-${MAX_IRIS_SIZE}% of the eye window width`);
+          }
+          if (typeof defaults.pupilSize !== "number" || defaults.pupilSize < MIN_PUPIL_SIZE || defaults.pupilSize > MAX_PUPIL_SIZE) {
+            invalidJson.push(`${path}\n  - defaults.pupilSize must be ${MIN_PUPIL_SIZE}-${MAX_PUPIL_SIZE}% of the iris width`);
+          }
+        }
       } catch {
         invalidJson.push(path);
       }

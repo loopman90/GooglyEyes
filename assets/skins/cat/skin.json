@@ -17,6 +17,8 @@
     "pupilColor": "#050806",
     "eyelidColor": "#3b3735",
     "eyelidShadowColor": "#120e0c",
-    "irisGlow": 0.35
+    "irisGlow": 0.35,
+    "irisSize": 37,
+    "pupilSize": 22
   }
 }

@@ -1,0 +1,25 @@
+{
+  "id": "anonymous",
+  "name": "Anonymous",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    { "side": "left", "x": 0.132, "y": 0.322, "w": 0.346, "h": 0.304 },
+    { "side": "right", "x": 0.522, "y": 0.322, "w": 0.346, "h": 0.304 }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#ac1220",
+    "pupilColor": "#050203",
+    "eyeWhiteColor": "#eee7d7",
+    "eyelidColor": "#e1ddd1",
+    "eyelidShadowColor": "#1a1516",
+    "irisGlow": 0.22,
+    "irisSize": 31,
+    "pupilSize": 34
+  }
+}

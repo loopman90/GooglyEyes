@@ -1,21 +1,24 @@
 # Skin Backlog
 
-Only completed skins should appear in the Irisidian UI.
+Only completed skins should appear in the Eyesidian UI.
 
 Completed:
 
 - Robot
+- Cat
+- Manga Female
+- Dragon
+- Tibetan Monk
+- Alien
+- Hacker
+- Anonymous
+- Ice Hockey Horror
+- Mona Lisa
 
 Next candidates:
 
-- Alien
-- Manga
-- Manga Girl
 - One Eye
 - Monster
-- Troll
-- Sexy Woman
-- Sexy Man
 - Non-Binary
 - Classic Googly
 - Minimal
@@ -30,11 +33,11 @@ Next candidates:
 
 Definition of done for a skin:
 
-- 36 pair reaction PNGs, if a fallback pair layer is kept
-- 36 left eye PNGs
-- 36 right eye PNGs
+- 1 rectangular tab-panel mask PNG
+- 1 left base eye PNG
+- 1 right base eye PNG
 - 1 thumbnail PNG
-- optional `masks/tab-panel.png`
+- 1 `skin.json` metadata file
 - listed in `assets/skins.json`
 - added to `SKINS` in `main.ts`
-- visible in settings only after validation passes
+- visible in settings only after `npm run validate-assets` passes

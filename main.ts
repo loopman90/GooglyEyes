@@ -1,6 +1,6 @@
 import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf, ItemView, debounce } from "obsidian";
 
-const VIEW_TYPE_PLAYGROUND = "irisidian-playground";
+const VIEW_TYPE_PLAYGROUND = "eyesidian-playground";
 
 type VisibilityMode = "active" | "always" | "editing" | "hover" | "manual";
 type FollowTarget = "mouse" | "text-cursor" | "smart" | "both";
@@ -33,7 +33,7 @@ interface EyePairConfig {
   offsetY: number;
 }
 
-interface IrisidianSettings {
+interface EyesidianSettings {
   enabled: boolean;
   visible: boolean;
   visibilityMode: VisibilityMode;
@@ -75,6 +75,7 @@ interface IrisidianSettings {
   subtleMode: boolean;
   soundEffects: boolean;
   pausedReactions: boolean;
+  quickUiExpanded: boolean;
   onboardingComplete: boolean;
   actionMappings: ActionMapping[];
   disabledActions: string[];
@@ -90,6 +91,30 @@ interface SkinDefinition {
   eyeWhite: string;
   outline: string;
   accent: string;
+  irisSize: number;
+  pupilSize: number;
+}
+
+type SkinTuple = [string, string, string, string, string, string, string, string, number, number];
+interface PersonalityPose {
+  upperLeft: string;
+  lowerLeft: string;
+  upperRight: string;
+  lowerRight: string;
+  irisScale: string;
+  pupilScale: string;
+  irisY: number;
+  pupilY: number;
+  irisXLeft?: number;
+  irisXRight?: number;
+  pupilXLeft?: number;
+  pupilXRight?: number;
+  tiltLeft?: string;
+  tiltRight?: string;
+  lowerTiltLeft?: string;
+  lowerTiltRight?: string;
+  eyeVibe?: string;
+  irisFilter?: string;
 }
 
 const REACTIONS: Reaction[] = [
@@ -100,17 +125,21 @@ const REACTIONS: Reaction[] = [
   "rapid-typing-focus", "drag-tracking"
 ];
 
-const SKINS: SkinDefinition[] = [
-  ["robot", "Robot", "Mechanical lenses with tiny LED attitude.", "#42d9ff", "#09121c", "#eef8ff", "#6a7685", "#ffcc33"],
-  ["cat", "Cat", "Soft fur, sharp focus, vertical pupils.", "#58d34f", "#050806", "#f4ead2", "#5a514d", "#f3b08b"],
-  ["manga-female", "Manga Female", "Big anime eyes with soft lashes.", "#9b68ee", "#140d2d", "#f8f4ef", "#6a3c43", "#f4a7c4"],
-  ["dragon", "Dragon", "Ancient scales with a fiery slit gaze.", "#ff9f21", "#090403", "#e8dcc2", "#31443a", "#ff6b22"],
-  ["tibetan-monk", "Tibetan Monk", "Warm robes with a calm meditative gaze.", "#7f5634", "#0b0806", "#f4eadc", "#9b5535", "#d69b3b"],
-  ["alien", "Alien", "Bioluminescent skin with an uncanny teal stare.", "#48eed8", "#020809", "#dfe8e5", "#627f77", "#20e5d7"],
-  ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43"],
-  ["baby-yoda", "Baby Yoda", "Tiny green space-sage charm with huge curious eyes.", "#485c3c", "#050805", "#f2e8cf", "#94aa68", "#cdb77f"]
-].map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent]) => ({
-  id, name, flavor, iris, pupil, eyeWhite, outline, accent, supportsColorOverrides: true
+const SKIN_TUPLES: SkinTuple[] = [
+  ["robot", "Robot", "Mechanical lenses with tiny LED attitude.", "#42d9ff", "#09121c", "#eef8ff", "#6a7685", "#ffcc33", 34, 38],
+  ["cat", "Cat", "Soft fur, sharp focus, vertical pupils.", "#58d34f", "#050806", "#f4ead2", "#5a514d", "#f3b08b", 37, 22],
+  ["manga-female", "Manga Female", "Big anime eyes with soft lashes.", "#9b68ee", "#140d2d", "#f8f4ef", "#6a3c43", "#f4a7c4", 43, 32],
+  ["dragon", "Dragon", "Ancient scales with a fiery slit gaze.", "#ff9f21", "#090403", "#e8dcc2", "#31443a", "#ff6b22", 36, 19],
+  ["tibetan-monk", "Tibetan Monk", "Warm robes with a calm meditative gaze.", "#7f5634", "#0b0806", "#f4eadc", "#9b5535", "#d69b3b", 30, 32],
+  ["alien", "Alien", "Bioluminescent skin with an uncanny teal stare.", "#48eed8", "#020809", "#dfe8e5", "#627f77", "#20e5d7", 36, 30],
+  ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43", 31, 30],
+  ["anonymous", "Anonymous", "White mask, dark hood, and a quiet red stare.", "#ac1220", "#050203", "#eee7d7", "#e1ddd1", "#b01622", 31, 34],
+  ["ice-hockey", "Ice Hockey Horror", "Frozen hockey mask with a blood-spattered stare.", "#9feeff", "#05090d", "#dcecf4", "#ccd7dd", "#b01622", 34, 32],
+  ["mona-lisa", "Mona Lisa", "Renaissance calm with a mysterious painted gaze.", "#7d6a32", "#171006", "#efe3c5", "#a87943", "#c9a34a", 32, 34]
+];
+
+const SKINS: SkinDefinition[] = SKIN_TUPLES.map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize]) => ({
+  id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize, supportsColorOverrides: true
 }));
 
 const AVAILABLE_SKIN_IDS = new Set(SKINS.map((skin) => skin.id));
@@ -126,6 +155,19 @@ const PERSONALITY_OPTIONS: Record<Personality, { label: string; blink: number; e
   shy: { label: "Shy", blink: 1.35, energy: 0.65, lag: 1.25, chaos: 0.55 },
   focused: { label: "Focused", blink: 1.05, energy: 0.8, lag: 0.9, chaos: 0.35 },
   mischievous: { label: "Mischievous", blink: 0.95, energy: 1.2, lag: 0.9, chaos: 1.15 }
+};
+
+const PERSONALITY_POSES: Record<Personality, PersonalityPose> = {
+  calm: { upperLeft: "-56%", lowerLeft: "62%", upperRight: "-56%", lowerRight: "62%", irisScale: "0.96", pupilScale: "0.96", irisY: 2, pupilY: 3 },
+  curious: { upperLeft: "-64%", lowerLeft: "66%", upperRight: "-64%", lowerRight: "66%", irisScale: "1.02", pupilScale: "1", irisY: -2, pupilY: -3 },
+  dramatic: { upperLeft: "-76%", lowerLeft: "74%", upperRight: "-76%", lowerRight: "74%", irisScale: "1.08", pupilScale: "0.86", irisY: -3, pupilY: -4 },
+  goofy: { upperLeft: "-58%", lowerLeft: "63%", upperRight: "-69%", lowerRight: "68%", irisScale: "1.02", pupilScale: "1.06", irisY: 0, pupilY: 0, irisXLeft: 5, irisXRight: -5, pupilXLeft: 9, pupilXRight: -9, tiltLeft: "-4deg", tiltRight: "5deg", lowerTiltLeft: "2deg", lowerTiltRight: "-2deg", eyeVibe: "1.5deg" },
+  suspicious: { upperLeft: "-35%", lowerLeft: "57%", upperRight: "-47%", lowerRight: "62%", irisScale: "0.94", pupilScale: "0.92", irisY: 1, pupilY: 1, irisXLeft: 4, irisXRight: -4, pupilXLeft: 7, pupilXRight: -7, tiltLeft: "-7deg", tiltRight: "7deg", lowerTiltLeft: "3deg", lowerTiltRight: "-3deg" },
+  sleepy: { upperLeft: "-25%", lowerLeft: "48%", upperRight: "-25%", lowerRight: "48%", irisScale: "0.9", pupilScale: "0.86", irisY: 7, pupilY: 10, irisFilter: "saturate(0.75) brightness(0.88)" },
+  chaotic: { upperLeft: "-78%", lowerLeft: "75%", upperRight: "-44%", lowerRight: "59%", irisScale: "1.1", pupilScale: "0.8", irisY: -4, pupilY: -7, irisXLeft: -7, irisXRight: 7, pupilXLeft: -12, pupilXRight: 12, tiltLeft: "5deg", tiltRight: "-6deg", lowerTiltLeft: "-2deg", lowerTiltRight: "3deg", eyeVibe: "-2deg", irisFilter: "saturate(1.35)" },
+  shy: { upperLeft: "-42%", lowerLeft: "58%", upperRight: "-42%", lowerRight: "58%", irisScale: "0.92", pupilScale: "0.96", irisY: 8, pupilY: 12, irisXLeft: -3, irisXRight: 3, pupilXLeft: -5, pupilXRight: 5, irisFilter: "saturate(0.9)" },
+  focused: { upperLeft: "-44%", lowerLeft: "60%", upperRight: "-44%", lowerRight: "60%", irisScale: "0.9", pupilScale: "0.82", irisY: 0, pupilY: 0, irisFilter: "contrast(1.08) saturate(0.95)" },
+  mischievous: { upperLeft: "-38%", lowerLeft: "58%", upperRight: "-62%", lowerRight: "64%", irisScale: "1", pupilScale: "0.95", irisY: -1, pupilY: -2, irisXLeft: 5, irisXRight: 5, pupilXLeft: 8, pupilXRight: 8, tiltLeft: "8deg", tiltRight: "-4deg", lowerTiltLeft: "-3deg", lowerTiltRight: "2deg" }
 };
 
 const DEFAULT_ACTIONS: ActionMapping[] = [
@@ -164,7 +206,7 @@ const DEFAULT_ACTIONS: ActionMapping[] = [
   cooldownMs: cooldownMs as number
 }));
 
-const DEFAULT_SETTINGS: IrisidianSettings = {
+const DEFAULT_SETTINGS: EyesidianSettings = {
   enabled: true,
   visible: true,
   visibilityMode: "active",
@@ -206,6 +248,7 @@ const DEFAULT_SETTINGS: IrisidianSettings = {
   subtleMode: false,
   soundEffects: false,
   pausedReactions: false,
+  quickUiExpanded: false,
   onboardingComplete: false,
   disabledActions: [],
   actionMappings: DEFAULT_ACTIONS
@@ -285,7 +328,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "baby-yoda"]);
+const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa"]);
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",
@@ -326,7 +369,7 @@ const REACTION_LABELS = labels<Reaction>({
   "drag-tracking": "Drag tracking"
 });
 
-const BEHAVIOR_PRESETS: Record<string, Partial<IrisidianSettings>> = {
+const BEHAVIOR_PRESETS: Record<string, Partial<EyesidianSettings>> = {
   subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85 },
   lively: { personality: "curious", reactionIntensity: "expressive", randomness: "medium", followSensitivity: 0.9, smoothing: 0.2, emotionStrength: 1.1, blinkSpeed: 1.05 },
   dramatic: { personality: "dramatic", reactionIntensity: "chaotic", randomness: "high", followSensitivity: 1.1, smoothing: 0.28, emotionStrength: 1.35, blinkSpeed: 1.2 },
@@ -351,12 +394,12 @@ class EyeController {
   private reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   private workspaceEventsRegistered = false;
 
-  constructor(private plugin: IrisidianPlugin) {}
+  constructor(private plugin: EyesidianPlugin) {}
 
   mount(parent: HTMLElement): void {
     if (!this.root) {
-      this.root = createDiv({ cls: "irisidian-root" });
-      this.root.setAttr("aria-label", "Irisidian living eyes");
+      this.root = createDiv({ cls: "eyesidian-root" });
+      this.root.setAttr("aria-label", "Eyesidian living eyes");
       this.root.setAttr("role", "img");
       this.root.tabIndex = 0;
       this.buildPairs();
@@ -382,7 +425,7 @@ class EyeController {
     if (!this.root) return;
     this.buildPairs();
     this.applySettings();
-    this.react("wake up");
+    this.setReaction("idle-neutral");
   }
 
   applySettings(): void {
@@ -393,10 +436,10 @@ class EyeController {
     this.root.toggleClass("is-focus-mode", this.isFocusMode());
     this.root.toggleClass("is-reduced-motion", this.reduceMotion.matches);
     this.root.toggleClass("show-debug", s.debugOverlay);
-    this.root.style.setProperty("--irisidian-size", `${s.size}px`);
-    this.root.parentElement?.style.setProperty("--irisidian-size", `${s.size}px`);
-    this.root.style.setProperty("--irisidian-opacity", `${s.opacity}`);
-    this.root.style.setProperty("--irisidian-z", `${s.zIndex}`);
+    this.root.style.setProperty("--eyesidian-size", `${s.size}px`);
+    this.root.parentElement?.style.setProperty("--eyesidian-size", `${s.size}px`);
+    this.root.style.setProperty("--eyesidian-opacity", `${s.opacity}`);
+    this.root.style.setProperty("--eyesidian-z", `${s.zIndex}`);
     this.root.style.setProperty("--iris-color", s.irisColor);
     this.root.style.setProperty("--pupil-color", s.pupilColor);
     this.root.style.setProperty("--eyelid-color", s.eyelidColor);
@@ -455,19 +498,19 @@ class EyeController {
     this.pairs = [];
     const count = clamp(this.plugin.settings.eyePairCount, 1, 12);
     for (let i = 0; i < count; i++) {
-      const pair = this.root.createDiv({ cls: "irisidian-pair" });
-      const layered = pair.createDiv({ cls: "irisidian-layered-eyes" });
-      const leftSlot = layered.createDiv({ cls: "irisidian-eye-slot irisidian-eye-slot-left" });
-      leftSlot.createEl("img", { cls: "irisidian-eye irisidian-eye-left", attr: { alt: "" } });
-      leftSlot.createDiv({ cls: "irisidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "irisidian-pupil" });
-      leftSlot.createDiv({ cls: "irisidian-lid irisidian-lid-upper", attr: { "aria-hidden": "true" } });
-      leftSlot.createDiv({ cls: "irisidian-lid irisidian-lid-lower", attr: { "aria-hidden": "true" } });
-      const rightSlot = layered.createDiv({ cls: "irisidian-eye-slot irisidian-eye-slot-right" });
-      rightSlot.createEl("img", { cls: "irisidian-eye irisidian-eye-right", attr: { alt: "" } });
-      rightSlot.createDiv({ cls: "irisidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "irisidian-pupil" });
-      rightSlot.createDiv({ cls: "irisidian-lid irisidian-lid-upper", attr: { "aria-hidden": "true" } });
-      rightSlot.createDiv({ cls: "irisidian-lid irisidian-lid-lower", attr: { "aria-hidden": "true" } });
-      pair.createEl("img", { cls: "irisidian-peek-mask", attr: { alt: "" } });
+      const pair = this.root.createDiv({ cls: "eyesidian-pair" });
+      const layered = pair.createDiv({ cls: "eyesidian-layered-eyes" });
+      const leftSlot = layered.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-left" });
+      leftSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-left", attr: { alt: "" } });
+      leftSlot.createDiv({ cls: "eyesidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyesidian-pupil" });
+      leftSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-upper", attr: { "aria-hidden": "true" } });
+      leftSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-lower", attr: { "aria-hidden": "true" } });
+      const rightSlot = layered.createDiv({ cls: "eyesidian-eye-slot eyesidian-eye-slot-right" });
+      rightSlot.createEl("img", { cls: "eyesidian-eye eyesidian-eye-right", attr: { alt: "" } });
+      rightSlot.createDiv({ cls: "eyesidian-iris", attr: { "aria-hidden": "true" } }).createDiv({ cls: "eyesidian-pupil" });
+      rightSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-upper", attr: { "aria-hidden": "true" } });
+      rightSlot.createDiv({ cls: "eyesidian-lid eyesidian-lid-lower", attr: { "aria-hidden": "true" } });
+      pair.createEl("img", { cls: "eyesidian-peek-mask", attr: { alt: "" } });
       this.pairs.push(pair);
     }
   }
@@ -576,7 +619,7 @@ class EyeController {
 
   private startDrag(event: PointerEvent): void {
     if (!this.plugin.settings.dragEnabled || !this.root) return;
-    if (this.root.closest(".irisidian-stage")) return;
+    if (this.root.closest(".eyesidian-stage")) return;
     this.dragging = true;
     const rect = this.root.getBoundingClientRect();
     this.dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
@@ -607,11 +650,11 @@ class EyeController {
       for (const pair of this.pairs) {
         const rect = pair.getBoundingClientRect();
         const energy = this.isFocusMode() ? 0.35 : PERSONALITY_OPTIONS[s.personality].energy * this.intensity();
-        const irises = pair.querySelectorAll<HTMLElement>(".irisidian-iris");
+        const irises = pair.querySelectorAll<HTMLElement>(".eyesidian-iris");
         if (irises.length) {
           irises.forEach((iris) => {
-            const slot = iris.closest(".irisidian-eye-slot") as HTMLElement | null;
-            const pupil = iris.querySelector<HTMLElement>(".irisidian-pupil");
+            const slot = iris.closest(".eyesidian-eye-slot") as HTMLElement | null;
+            const pupil = iris.querySelector<HTMLElement>(".eyesidian-pupil");
             const eyeRect = slot?.getBoundingClientRect() ?? rect;
             const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
             const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
@@ -659,12 +702,13 @@ class EyeController {
   private applyReactionState(pair: HTMLElement): void {
     const reaction = this.currentReaction;
     const strength = this.plugin.settings.emotionStrength;
+    const pose = PERSONALITY_POSES[this.plugin.settings.personality];
     const set = (name: string, value: string) => pair.style.setProperty(name, value);
     const pct = (value: number) => `${value * strength}%`;
-    set("--lid-upper-left", "-55%");
-    set("--lid-lower-left", "58%");
-    set("--lid-upper-right", "-55%");
-    set("--lid-lower-right", "58%");
+    set("--lid-upper-left", "-63%");
+    set("--lid-lower-left", "65%");
+    set("--lid-upper-right", "-63%");
+    set("--lid-lower-right", "65%");
     set("--lid-tilt-left", "0deg");
     set("--lid-tilt-right", "0deg");
     set("--lid-lower-tilt-left", "0deg");
@@ -683,17 +727,38 @@ class EyeController {
     set("--iris-filter", "none");
     set("--eye-vibe", "0deg");
 
-    if (reaction === "blink" || reaction === "slow-blink") {
-      set("--lid-upper-left", "1%");
-      set("--lid-lower-left", "2%");
-      set("--lid-upper-right", "1%");
-      set("--lid-lower-right", "2%");
+    if (reaction === "idle-neutral") {
+      set("--lid-upper-left", pose.upperLeft);
+      set("--lid-lower-left", pose.lowerLeft);
+      set("--lid-upper-right", pose.upperRight);
+      set("--lid-lower-right", pose.lowerRight);
+      set("--lid-tilt-left", pose.tiltLeft ?? "0deg");
+      set("--lid-tilt-right", pose.tiltRight ?? "0deg");
+      set("--lid-lower-tilt-left", pose.lowerTiltLeft ?? "0deg");
+      set("--lid-lower-tilt-right", pose.lowerTiltRight ?? "0deg");
+      set("--reaction-iris-x-left", pct(pose.irisXLeft ?? 0));
+      set("--reaction-iris-x-right", pct(pose.irisXRight ?? 0));
+      set("--reaction-pupil-x-left", pct(pose.pupilXLeft ?? 0));
+      set("--reaction-pupil-x-right", pct(pose.pupilXRight ?? 0));
+      set("--reaction-iris-y-left", pct(pose.irisY));
+      set("--reaction-iris-y-right", pct(pose.irisY));
+      set("--reaction-pupil-y-left", pct(pose.pupilY));
+      set("--reaction-pupil-y-right", pct(pose.pupilY));
+      set("--iris-scale", pose.irisScale);
+      set("--pupil-scale", pose.pupilScale);
+      set("--iris-filter", pose.irisFilter ?? "none");
+      set("--eye-vibe", pose.eyeVibe ?? "0deg");
+    } else if (reaction === "blink" || reaction === "slow-blink") {
+      set("--lid-upper-left", "4%");
+      set("--lid-lower-left", "-2%");
+      set("--lid-upper-right", "4%");
+      set("--lid-lower-right", "-2%");
       set("--pupil-scale", "0.72");
     } else if (reaction === "sleepy" || reaction === "sleepy-idle" || reaction === "idle-long") {
-      set("--lid-upper-left", "-8%");
-      set("--lid-lower-left", "36%");
-      set("--lid-upper-right", "-8%");
-      set("--lid-lower-right", "36%");
+      set("--lid-upper-left", "-24%");
+      set("--lid-lower-left", "47%");
+      set("--lid-upper-right", "-24%");
+      set("--lid-lower-right", "47%");
       set("--reaction-iris-y-left", pct(5));
       set("--reaction-iris-y-right", pct(5));
       set("--reaction-pupil-y-left", pct(8));
@@ -701,10 +766,10 @@ class EyeController {
       set("--iris-opacity", "0.82");
       set("--pupil-scale", "0.86");
     } else if (reaction === "suspicious" || reaction === "hover-suspicious") {
-      set("--lid-upper-left", "-17%");
-      set("--lid-lower-left", "47%");
-      set("--lid-upper-right", "-31%");
-      set("--lid-lower-right", "54%");
+      set("--lid-upper-left", "-31%");
+      set("--lid-lower-left", "56%");
+      set("--lid-upper-right", "-43%");
+      set("--lid-lower-right", "62%");
       set("--lid-tilt-left", "-7deg");
       set("--lid-tilt-right", "7deg");
       set("--lid-lower-tilt-left", "3deg");
@@ -715,10 +780,10 @@ class EyeController {
       set("--reaction-pupil-x-right", pct(-8));
       set("--pupil-scale", "0.92");
     } else if (reaction === "angry" || reaction === "delete" || reaction === "cut") {
-      set("--lid-upper-left", "-12%");
-      set("--lid-lower-left", "49%");
-      set("--lid-upper-right", "-12%");
-      set("--lid-lower-right", "49%");
+      set("--lid-upper-left", "-27%");
+      set("--lid-lower-left", "58%");
+      set("--lid-upper-right", "-27%");
+      set("--lid-lower-right", "58%");
       set("--lid-tilt-left", "10deg");
       set("--lid-tilt-right", "-10deg");
       set("--lid-lower-tilt-left", "-4deg");
@@ -729,19 +794,19 @@ class EyeController {
       set("--reaction-pupil-y-right", pct(-5));
       set("--iris-filter", "hue-rotate(155deg) saturate(1.25)");
     } else if (reaction === "shocked" || reaction === "wide-stare" || reaction === "wake" || reaction === "dramatic-shock") {
-      set("--lid-upper-left", "-72%");
-      set("--lid-lower-left", "70%");
-      set("--lid-upper-right", "-72%");
-      set("--lid-lower-right", "70%");
+      set("--lid-upper-left", "-77%");
+      set("--lid-lower-left", "75%");
+      set("--lid-upper-right", "-77%");
+      set("--lid-lower-right", "75%");
       set("--reaction-iris-y-left", pct(-2));
       set("--reaction-iris-y-right", pct(-2));
       set("--iris-scale", "1.08");
       set("--pupil-scale", "0.74");
     } else if (reaction === "happy" || reaction === "copy" || reaction === "paste" || reaction === "redo") {
-      set("--lid-upper-left", "-42%");
-      set("--lid-lower-left", "50%");
-      set("--lid-upper-right", "-42%");
-      set("--lid-lower-right", "50%");
+      set("--lid-upper-left", "-52%");
+      set("--lid-lower-left", "59%");
+      set("--lid-upper-right", "-52%");
+      set("--lid-lower-right", "59%");
       set("--lid-tilt-left", "-4deg");
       set("--lid-tilt-right", "4deg");
       set("--lid-lower-tilt-left", "2deg");
@@ -750,10 +815,10 @@ class EyeController {
       set("--reaction-iris-y-right", pct(-2));
       set("--iris-scale", "1.03");
     } else if (reaction === "sad" || reaction === "undo") {
-      set("--lid-upper-left", "-22%");
-      set("--lid-lower-left", "43%");
-      set("--lid-upper-right", "-22%");
-      set("--lid-lower-right", "43%");
+      set("--lid-upper-left", "-35%");
+      set("--lid-lower-left", "53%");
+      set("--lid-upper-right", "-35%");
+      set("--lid-lower-right", "53%");
       set("--lid-tilt-left", "-8deg");
       set("--lid-tilt-right", "8deg");
       set("--lid-lower-tilt-left", "4deg");
@@ -784,10 +849,10 @@ class EyeController {
       set("--iris-scale", "0.94");
       set("--pupil-scale", "0.9");
     } else if (reaction === "typing" || reaction === "rapid-typing-focus") {
-      set("--lid-upper-left", "-36%");
-      set("--lid-lower-left", "53%");
-      set("--lid-upper-right", "-36%");
-      set("--lid-lower-right", "53%");
+      set("--lid-upper-left", "-47%");
+      set("--lid-lower-left", "61%");
+      set("--lid-upper-right", "-47%");
+      set("--lid-lower-right", "61%");
       set("--reaction-iris-y-left", pct(5));
       set("--reaction-iris-y-right", pct(5));
       set("--reaction-pupil-y-left", pct(7));
@@ -831,9 +896,11 @@ class EyeController {
       pair.toggleClass("has-layered-assets", hasLayeredAssets);
       pair.toggleClass("has-peek-mask", hasPeekMask);
       pair.style.setProperty("--accent", skinDef.accent);
-      const left = pair.querySelector<HTMLImageElement>(".irisidian-eye-left");
-      const right = pair.querySelector<HTMLImageElement>(".irisidian-eye-right");
-      const mask = pair.querySelector<HTMLImageElement>(".irisidian-peek-mask");
+      pair.style.setProperty("--skin-iris-size", `${skinDef.irisSize}%`);
+      pair.style.setProperty("--skin-pupil-size", `${skinDef.pupilSize}%`);
+      const left = pair.querySelector<HTMLImageElement>(".eyesidian-eye-left");
+      const right = pair.querySelector<HTMLImageElement>(".eyesidian-eye-right");
+      const mask = pair.querySelector<HTMLImageElement>(".eyesidian-peek-mask");
       if (left) left.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "left")}`) : "");
       if (right) right.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "right")}`) : "");
       if (mask) mask.setAttr("src", hasPeekMask ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${maskAsset(skinDef.id, "tab-panel")}`) : "");
@@ -856,7 +923,7 @@ class EyeController {
 
   private positionRoot(): void {
     if (!this.root) return;
-    if (this.root.closest(".irisidian-stage")) {
+    if (this.root.closest(".eyesidian-stage")) {
       this.root.removeClasses(["pos-top-left", "pos-top-right", "pos-bottom-left", "pos-bottom-right", "pos-sidebar", "pos-statusbar", "pos-floating", "pos-custom"]);
       this.root.style.left = "";
       this.root.style.top = "";
@@ -908,57 +975,7 @@ class EyeController {
 }
 
 class QuickUiModal extends Modal {
-  constructor(app: App, private plugin: IrisidianPlugin) {
-    super(app);
-  }
-
-  onOpen(): void {
-    const { contentEl } = this;
-    contentEl.empty();
-    contentEl.addClass("irisidian-modal");
-    contentEl.createEl("h2", { text: "Irisidian" });
-    const grid = contentEl.createDiv({ cls: "irisidian-quick-grid" });
-    this.button(grid, this.plugin.settings.visible ? "Hide eyes" : "Show eyes", () => this.plugin.controller.setVisible(!this.plugin.settings.visible));
-    this.button(grid, "Switch personality", () => this.plugin.nextPersonality());
-    this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", () => this.plugin.toggleFocusMode());
-    this.button(grid, this.plugin.settings.pausedReactions ? "Resume reactions" : "Pause reactions", () => this.plugin.togglePauseReactions());
-    this.button(grid, "Randomize personality", () => {
-      this.plugin.controller.randomizePersonality();
-    });
-    this.button(grid, "Irisidian tab", () => {
-      this.close();
-      this.plugin.openPlayground();
-    });
-    this.button(grid, "Full settings", () => {
-      this.close();
-      (this.app as App & { setting?: { open: () => void; openTabById: (id: string) => void } }).setting?.open();
-      (this.app as App & { setting?: { openTabById: (id: string) => void } }).setting?.openTabById(this.plugin.manifest.id);
-    });
-  }
-
-  private button(parent: HTMLElement, label: string, onClick: () => void): void {
-    const button = parent.createEl("button", { text: label, cls: "mod-cta" });
-    button.addEventListener("click", () => {
-      onClick();
-      this.plugin.controller.applySettings();
-      this.onOpen();
-    });
-  }
-}
-
-class OnboardingModal extends Modal {
-  private step = 0;
-  private steps = [
-    "Welcome to Irisidian",
-    "Choose a style",
-    "Choose a personality",
-    "Choose follow behavior",
-    "Choose reaction intensity",
-    "Quick privacy explanation",
-    "Start"
-  ];
-
-  constructor(app: App, private plugin: IrisidianPlugin) {
+  constructor(app: App, private plugin: EyesidianPlugin) {
     super(app);
   }
 
@@ -969,15 +986,103 @@ class OnboardingModal extends Modal {
   private render(): void {
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("irisidian-modal");
+    contentEl.addClass("eyesidian-modal");
+    contentEl.createEl("h2", { text: "Eyesidian Quick UI" });
+
+    const header = contentEl.createDiv({ cls: "eyesidian-quick-header" });
+    header.createEl("span", { text: this.plugin.settings.quickUiExpanded ? "Quick controls are visible" : "Quick controls are hidden" });
+    this.button(header, this.plugin.settings.quickUiExpanded ? "Hide controls" : "Show controls", async () => {
+      this.plugin.settings.quickUiExpanded = !this.plugin.settings.quickUiExpanded;
+      await this.plugin.saveSettings();
+    });
+
+    if (!this.plugin.settings.quickUiExpanded) return;
+
+    const selectors = contentEl.createDiv({ cls: "eyesidian-quick-selectors" });
+    new Setting(selectors).setName("Skin").addDropdown((dropdown) => {
+      SKINS.forEach((skin) => dropdown.addOption(skin.id, skin.name));
+      dropdown.setValue(this.plugin.settings.skinId);
+      dropdown.onChange(async (value) => {
+        this.plugin.settings.skinId = value;
+        await this.plugin.saveSettings();
+        this.plugin.controller.refresh();
+        this.render();
+      });
+    });
+    new Setting(selectors).setName("Personality").addDropdown((dropdown) => {
+      Object.entries(PERSONALITY_OPTIONS).forEach(([id, option]) => dropdown.addOption(id, option.label));
+      dropdown.setValue(this.plugin.settings.personality);
+      dropdown.onChange(async (value) => {
+        this.plugin.settings.personality = value as Personality;
+        await this.plugin.saveSettings();
+        this.plugin.controller.refresh();
+        this.render();
+      });
+    });
+
+    const grid = contentEl.createDiv({ cls: "eyesidian-quick-grid" });
+    this.button(grid, this.plugin.settings.visible ? "Hide eyes" : "Show eyes", async () => this.plugin.controller.setVisible(!this.plugin.settings.visible));
+    this.button(grid, "Next skin", async () => this.plugin.nextStyle());
+    this.button(grid, "Next personality", async () => this.plugin.nextPersonality());
+    this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", async () => this.plugin.toggleFocusMode());
+    this.button(grid, this.plugin.settings.pausedReactions ? "Resume reactions" : "Pause reactions", async () => this.plugin.togglePauseReactions());
+    this.button(grid, "Blink preview", async () => this.plugin.controller.react("quick ui", "blink"));
+    this.button(grid, "Eyesidian tab", async () => {
+      this.close();
+      this.plugin.openPlayground();
+      return false;
+    });
+    this.button(grid, "Full settings", async () => {
+      this.close();
+      (this.app as App & { setting?: { open: () => void; openTabById: (id: string) => void } }).setting?.open();
+      (this.app as App & { setting?: { openTabById: (id: string) => void } }).setting?.openTabById(this.plugin.manifest.id);
+      return false;
+    });
+  }
+
+  private button(parent: HTMLElement, label: string, onClick: () => void | boolean | Promise<void | boolean>): void {
+    const button = parent.createEl("button", { text: label, cls: "mod-cta" });
+    button.addEventListener("click", async () => {
+      const shouldRender = await onClick();
+      this.plugin.controller.applySettings();
+      if (shouldRender === false) return;
+      this.render();
+    });
+  }
+}
+
+class OnboardingModal extends Modal {
+  private step = 0;
+  private steps = [
+    "Welcome to Eyesidian",
+    "Choose a style",
+    "Choose a personality",
+    "Choose follow behavior",
+    "Choose reaction intensity",
+    "Quick privacy explanation",
+    "Start"
+  ];
+
+  constructor(app: App, private plugin: EyesidianPlugin) {
+    super(app);
+  }
+
+  onOpen(): void {
+    this.render();
+  }
+
+  private render(): void {
+    const { contentEl } = this;
+    contentEl.empty();
+    contentEl.addClass("eyesidian-modal");
     contentEl.createEl("h2", { text: this.steps[this.step] });
     if (this.step === 1) this.select(contentEl, SKINS.map((s) => [s.id, s.name]), this.plugin.settings.skinId, (value) => this.plugin.settings.skinId = value);
     else if (this.step === 2) this.select(contentEl, Object.entries(PERSONALITY_OPTIONS).map(([id, p]) => [id, p.label]), this.plugin.settings.personality, (value) => this.plugin.settings.personality = value as Personality);
     else if (this.step === 3) this.select(contentEl, Object.entries(FOLLOW_LABELS), this.plugin.settings.followTarget, (value) => this.plugin.settings.followTarget = value as FollowTarget);
     else if (this.step === 4) this.select(contentEl, Object.entries(INTENSITY_LABELS), this.plugin.settings.reactionIntensity, (value) => this.plugin.settings.reactionIntensity = value as Intensity);
-    else if (this.step === 5) contentEl.createEl("p", { text: "Irisidian only reacts to local UI events. It does not read note text, clipboard contents, accounts, or the internet." });
+    else if (this.step === 5) contentEl.createEl("p", { text: "Eyesidian only reacts to local UI events. It does not read note text, clipboard contents, accounts, or the internet." });
     else contentEl.createEl("p", { text: "Put living googly eyes in Obsidian." });
-    const nav = contentEl.createDiv({ cls: "irisidian-modal-nav" });
+    const nav = contentEl.createDiv({ cls: "eyesidian-modal-nav" });
     if (this.step > 0) this.navButton(nav, "Back", () => this.step--);
     this.navButton(nav, this.step === this.steps.length - 1 ? "Start" : "Next", async () => {
       if (this.step === this.steps.length - 1) {
@@ -1014,7 +1119,7 @@ class OnboardingModal extends Modal {
 }
 
 class PlaygroundView extends ItemView {
-  constructor(leaf: WorkspaceLeaf, private plugin: IrisidianPlugin) {
+  constructor(leaf: WorkspaceLeaf, private plugin: EyesidianPlugin) {
     super(leaf);
   }
 
@@ -1023,7 +1128,7 @@ class PlaygroundView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Irisidian";
+    return "Eyesidian";
   }
 
   async onOpen(): Promise<void> {
@@ -1037,11 +1142,11 @@ class PlaygroundView extends ItemView {
   render(): void {
     const el = this.containerEl.children[1] as HTMLElement;
     el.empty();
-    el.addClass("irisidian-playground");
-    el.createEl("h2", { text: "Irisidian" });
-    const stage = el.createDiv({ cls: "irisidian-stage" });
+    el.addClass("eyesidian-playground");
+    el.createEl("h2", { text: "Eyesidian" });
+    const stage = el.createDiv({ cls: "eyesidian-stage" });
     this.plugin.controller.mount(stage);
-    const controls = el.createDiv({ cls: "irisidian-control-row" });
+    const controls = el.createDiv({ cls: "eyesidian-control-row" });
     new Setting(controls).setName("Style").addDropdown((d) => {
       SKINS.forEach((skin) => d.addOption(skin.id, skin.name));
       d.setValue(this.plugin.settings.skinId);
@@ -1098,31 +1203,30 @@ class PlaygroundView extends ItemView {
         this.plugin.controller.refresh();
       });
     });
-    const buttons = el.createDiv({ cls: "irisidian-reaction-grid" });
+    const buttons = el.createDiv({ cls: "eyesidian-reaction-grid" });
     [
-      ["Blink", "blink"], ["Shock", "shocked"], ["Suspicious", "suspicious"], ["Sleep", "sleepy"], ["Copy", "copy"], ["Cut", "cut"],
-      ["Paste", "paste"], ["Delete", "delete"], ["Undo", "undo"], ["Dizzy", "dizzy"], ["Idle", "idle-long"], ["Random", "idle-neutral"]
+      ["Blink", "blink"], ["Shock", "shocked"], ["Suspicious", "suspicious"], ["Sleep", "sleepy"], ["Happy", "happy"], ["Look left", "look-left"],
+      ["Look right", "look-right"], ["Look up", "look-up"], ["Look down", "look-down"], ["Dizzy", "dizzy"], ["Idle", "idle-long"], ["Wake", "wake"]
     ].forEach(([label, reaction]) => {
       buttons.createEl("button", { text: label }).addEventListener("click", () => {
-        if (label === "Random") this.plugin.controller.react("idle");
-        else this.plugin.controller.react("playground", reaction as Reaction);
+        this.plugin.controller.react("playground", reaction as Reaction);
       });
     });
-    el.createDiv({ cls: "irisidian-preview-note", text: "Irisidian is embedded in this tab. It follows local UI events without reading note or clipboard content." });
+    el.createDiv({ cls: "eyesidian-preview-note", text: "Eyesidian is embedded in this tab. It follows local UI events without reading note or clipboard content." });
   }
 }
 
-class IrisidianSettingTab extends PluginSettingTab {
-  constructor(app: App, private plugin: IrisidianPlugin) {
+class EyesidianSettingTab extends PluginSettingTab {
+  constructor(app: App, private plugin: EyesidianPlugin) {
     super(app, plugin);
   }
 
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.addClass("irisidian-settings");
-    containerEl.createEl("h2", { text: "Irisidian" });
-    containerEl.createEl("p", { text: "Irisidian reacts to local events only. It does not read note contents or clipboard contents." });
+    containerEl.addClass("eyesidian-settings");
+    containerEl.createEl("h2", { text: "Eyesidian" });
+    containerEl.createEl("p", { text: "Eyesidian reacts to local events only. It does not read note contents or clipboard contents." });
 
     new Setting(containerEl).setName("Enable plugin").addToggle((toggle) => toggle.setValue(this.plugin.settings.enabled).onChange((value) => this.save("enabled", value)));
     new Setting(containerEl).setName("Visibility mode").addDropdown((d) => this.dropdown(d, VISIBILITY_LABELS, this.plugin.settings.visibilityMode, (v) => this.save("visibilityMode", v as VisibilityMode)));
@@ -1153,9 +1257,9 @@ class IrisidianSettingTab extends PluginSettingTab {
       Object.entries(PERSONALITY_OPTIONS).forEach(([id, p]) => d.addOption(id, p.label));
       d.setValue(this.plugin.settings.personality).onChange((v) => this.save("personality", v as Personality));
     });
-    const skinGrid = containerEl.createDiv({ cls: "irisidian-skin-grid" });
+    const skinGrid = containerEl.createDiv({ cls: "eyesidian-skin-grid" });
     SKINS.forEach((skin) => {
-      const card = skinGrid.createDiv({ cls: `irisidian-skin-card ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
+      const card = skinGrid.createDiv({ cls: `eyesidian-skin-card ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
       card.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin.id)}`), alt: "" } });
       card.createEl("strong", { text: skin.name });
       card.createEl("span", { text: skin.flavor });
@@ -1225,7 +1329,7 @@ class IrisidianSettingTab extends PluginSettingTab {
 
     containerEl.createEl("h3", { text: "Preview tools" });
     new Setting(containerEl).setName("Quick UI").addButton((b) => b.setButtonText("Open").onClick(() => new QuickUiModal(this.app, this.plugin).open()));
-    new Setting(containerEl).setName("Irisidian tab").addButton((b) => b.setButtonText("Open").onClick(() => this.plugin.openPlayground()));
+    new Setting(containerEl).setName("Eyesidian tab").addButton((b) => b.setButtonText("Open").onClick(() => this.plugin.openPlayground()));
     new Setting(containerEl).setName("Onboarding").addButton((b) => b.setButtonText("Restart").onClick(() => new OnboardingModal(this.app, this.plugin).open()));
   }
 
@@ -1248,7 +1352,7 @@ class IrisidianSettingTab extends PluginSettingTab {
     this.display();
   }
 
-  private async save<K extends keyof IrisidianSettings>(key: K, value: IrisidianSettings[K]): Promise<void> {
+  private async save<K extends keyof EyesidianSettings>(key: K, value: EyesidianSettings[K]): Promise<void> {
     this.plugin.settings[key] = value;
     await this.plugin.saveSettings();
     this.plugin.controller.refresh();
@@ -1256,8 +1360,8 @@ class IrisidianSettingTab extends PluginSettingTab {
   }
 }
 
-export default class IrisidianPlugin extends Plugin {
-  settings: IrisidianSettings = DEFAULT_SETTINGS;
+export default class EyesidianPlugin extends Plugin {
+  settings: EyesidianSettings = DEFAULT_SETTINGS;
   controller!: EyeController;
   private statusEl: HTMLElement | null = null;
 
@@ -1265,11 +1369,11 @@ export default class IrisidianPlugin extends Plugin {
     await this.loadSettings();
     this.controller = new EyeController(this);
     this.registerView(VIEW_TYPE_PLAYGROUND, (leaf) => new PlaygroundView(leaf, this));
-    this.addSettingTab(new IrisidianSettingTab(this.app, this));
-    this.addRibbonIcon("eye", "Irisidian", () => new QuickUiModal(this.app, this).open());
+    this.addSettingTab(new EyesidianSettingTab(this.app, this));
+    this.addRibbonIcon("eye", "Eyesidian", () => new QuickUiModal(this.app, this).open());
     this.statusEl = this.addStatusBarItem();
-    this.statusEl.addClass("irisidian-statusbar");
-    this.statusEl.setText("Irisidian");
+    this.statusEl.addClass("eyesidian-statusbar");
+    this.statusEl.setText("Eyesidian");
     this.statusEl.addEventListener("click", () => new QuickUiModal(this.app, this).open());
     this.addCommands();
     this.app.workspace.onLayoutReady(() => {
@@ -1300,10 +1404,10 @@ export default class IrisidianPlugin extends Plugin {
   }
 
   addCommands(): void {
-    this.addCommand({ id: "toggle-irisidian", name: "Toggle Irisidian", callback: () => this.toggleEnabled() });
+    this.addCommand({ id: "toggle-eyesidian", name: "Toggle Eyesidian", callback: () => this.toggleEnabled() });
     this.addCommand({ id: "show-hide-eyes", name: "Show / Hide Eyes", callback: () => this.controller.setVisible(!this.settings.visible) });
     this.addCommand({ id: "open-quick-ui", name: "Open Quick UI", callback: () => new QuickUiModal(this.app, this).open(), hotkeys: [{ modifiers: ["Mod", "Shift"], key: "E" }] });
-    this.addCommand({ id: "open-playground", name: "Open Irisidian Tab", callback: () => this.openPlayground() });
+    this.addCommand({ id: "open-playground", name: "Open Eyesidian Tab", callback: () => this.openPlayground() });
     this.addCommand({ id: "randomize-personality", name: "Randomize Personality", callback: () => this.controller.randomizePersonality() });
     this.addCommand({ id: "toggle-focus-mode", name: "Toggle Focus Mode", callback: () => this.toggleFocusMode() });
     this.addCommand({ id: "switch-next-personality", name: "Switch Next Personality", callback: () => this.nextPersonality() });
@@ -1315,7 +1419,7 @@ export default class IrisidianPlugin extends Plugin {
     this.settings.enabled = !this.settings.enabled;
     await this.saveSettings();
     this.controller.applySettings();
-    new Notice(`Irisidian ${this.settings.enabled ? "enabled" : "disabled"}`);
+    new Notice(`Eyesidian ${this.settings.enabled ? "enabled" : "disabled"}`);
   }
 
   async toggleFocusMode(): Promise<void> {
