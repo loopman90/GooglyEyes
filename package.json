@@ -10,6 +10,7 @@
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "prepackage-test": "node scripts/update-readme.mjs",
     "package-test": "node scripts/package-test.mjs",
+    "version:check": "node scripts/check-version.mjs",
     "validate-assets": "node scripts/validate-assets.mjs"
   },
   "keywords": [
