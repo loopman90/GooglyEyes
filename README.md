@@ -96,7 +96,7 @@ YourVault/.obsidian/plugins/googly-eyes/googly-eyes/manifest.json
 For testing the current local build, use the ready-made folder:
 
 ```text
-/Users/mathijssen/Documents/ChatGPT/Peek/release/googly-eyes-test
+release/googly-eyes-test
 ```
 
 1. Run `npm run package-test`.
@@ -224,4 +224,4 @@ The eyes look too large or too small:
 
 ## Version
 
-Current package version: `1.0.4`.
+Current package version: `1.0.5`.

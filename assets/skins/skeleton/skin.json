@@ -25,7 +25,7 @@
     "rightBase": "eyes/right-base.png"
   },
   "defaults": {
-    "irisColor": "#75d7ff",
+    "irisColor": "#f0d36b",
     "pupilColor": "#07090c",
     "eyeWhiteColor": "#f8f0dc",
     "eyelidColor": "#e8dcc2",

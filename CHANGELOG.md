@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.5
+
+- Added stronger expressive reactions including Furious, Restless, In love, Dreamy, Drunk, Stoned, Spacing out, Crying, Laughing, Wink, Panic, and Starstruck.
+- Added visual emotion accents such as tears, heart pupils, star pupils, jitter, wobble, and soft drifting eyes.
+- Updated default ambient emotion pools so each skin shows more fitting random expressions.
+- Added skin default eye colors and a setting to switch between per-skin defaults and custom global iris/pupil colors.
+- Cleaned the generated README test path so local user folders are not exposed.
+- Replaced a grid gap style that triggered an Obsidian CSS compatibility warning.
+
 ## 1.0.4
 
 - Added the D20 RPG layered skin with a full rectangular tabletop mask and matte runtime-colored eyes.

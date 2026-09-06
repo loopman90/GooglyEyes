@@ -15,7 +15,9 @@ type Reaction =
   | "wide-stare" | "happy" | "shocked" | "suspicious" | "angry" | "sad" | "confused" | "dizzy"
   | "cross-eyed" | "eye-roll" | "nervous" | "typing" | "cut" | "copy" | "paste" | "delete"
   | "undo" | "redo" | "idle-long" | "wake" | "hover-suspicious" | "fast-movement" | "peek"
-  | "sleepy-idle" | "chaotic-stare" | "dramatic-shock" | "rapid-typing-focus" | "drag-tracking";
+  | "sleepy-idle" | "chaotic-stare" | "dramatic-shock" | "rapid-typing-focus" | "drag-tracking"
+  | "furious" | "restless" | "in-love" | "dreamy" | "drunk" | "stoned" | "spacing-out"
+  | "crying" | "laughing" | "wink-left" | "wink-right" | "panic" | "starstruck";
 
 interface ActionMapping {
   name: string;
@@ -63,6 +65,7 @@ interface GooglyEyesSettings {
   dragEnabled: boolean;
   peekMode: boolean;
   peekFaceMask: boolean;
+  useSkinDefaultColors: boolean;
   irisColor: string;
   pupilColor: string;
   eyelidColor: string;
@@ -132,7 +135,8 @@ const REACTIONS: Reaction[] = [
   "wide-stare", "happy", "shocked", "suspicious", "angry", "sad", "confused", "dizzy", "cross-eyed",
   "eye-roll", "nervous", "typing", "cut", "copy", "paste", "delete", "undo", "redo", "idle-long",
   "wake", "hover-suspicious", "fast-movement", "peek", "sleepy-idle", "chaotic-stare", "dramatic-shock",
-  "rapid-typing-focus", "drag-tracking"
+  "rapid-typing-focus", "drag-tracking", "furious", "restless", "in-love", "dreamy", "drunk", "stoned",
+  "spacing-out", "crying", "laughing", "wink-left", "wink-right", "panic", "starstruck"
 ];
 
 const SKIN_TUPLES: SkinTuple[] = [
@@ -145,11 +149,11 @@ const SKIN_TUPLES: SkinTuple[] = [
   ["alien", "Alien", "Bioluminescent skin with an uncanny teal stare.", "#48eed8", "#020809", "#dfe8e5", "#627f77", "#20e5d7", 36, 30],
   ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43", 31, 30],
   ["anonymous", "Anonymous", "White mask, dark hood, and a quiet red stare.", "#ac1220", "#050203", "#eee7d7", "#e1ddd1", "#b01622", 31, 34],
-  ["ice-hockey", "Jason", "Frozen hockey mask with a blood-spattered stare.", "#9feeff", "#05090d", "#dcecf4", "#ccd7dd", "#b01622", 34, 32],
+  ["ice-hockey", "Jason", "Frozen hockey mask with a blood-spattered stare.", "#b82022", "#05090d", "#dcecf4", "#ccd7dd", "#b01622", 34, 32],
   ["mona-lisa", "Mona Lisa", "Renaissance calm with a mysterious painted gaze.", "#7d6a32", "#171006", "#efe3c5", "#a87943", "#c9a34a", 32, 34],
-  ["clown", "Clown", "Cartoon circus face with a bright playful stare.", "#39d7ff", "#100711", "#fff5df", "#231c25", "#ff3845", 31, 32],
+  ["clown", "Clown", "Cartoon circus face with a bright playful stare.", "#ffcc2e", "#100711", "#fff5df", "#231c25", "#ff3845", 31, 32],
   ["spy", "Spy", "Cartoon eyes peeking through newspaper cutouts.", "#4d6f8f", "#080706", "#f6f0df", "#2f2b25", "#c9b06c", 30, 30],
-  ["skeleton", "Skeleton", "Playful bone mask with deep skull sockets.", "#75d7ff", "#07090c", "#f8f0dc", "#343036", "#d8caa9", 32, 30]
+  ["skeleton", "Skeleton", "Playful bone mask with deep skull sockets.", "#f0d36b", "#07090c", "#f8f0dc", "#343036", "#d8caa9", 32, 30]
 ];
 
 const SKINS: SkinDefinition[] = SKIN_TUPLES.map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize]) => ({
@@ -179,20 +183,20 @@ const SKIN_EYE_WINDOWS: Record<string, Record<"left" | "right", EyeWindow>> = {
 };
 
 const SKIN_AMBIENT_REACTIONS: Record<string, Reaction[]> = {
-  robot: ["wide-stare", "confused", "eye-roll", "rapid-typing-focus", "suspicious"],
-  cat: ["suspicious", "look-left", "look-right", "sleepy-idle", "happy"],
-  "manga-female": ["happy", "shocked", "sad", "confused", "sleepy-idle"],
-  dragon: ["angry", "suspicious", "dramatic-shock", "chaotic-stare", "look-down"],
-  "d20-rpg": ["dramatic-shock", "wide-stare", "happy", "confused", "chaotic-stare"],
-  "tibetan-monk": ["slow-blink", "sleepy-idle", "look-down", "happy", "idle-long"],
-  alien: ["wide-stare", "confused", "dizzy", "cross-eyed", "peek"],
-  hacker: ["suspicious", "rapid-typing-focus", "look-left", "look-right", "nervous"],
-  anonymous: ["suspicious", "peek", "look-left", "look-right", "idle-long"],
-  "ice-hockey": ["suspicious", "angry", "wide-stare", "shocked", "look-left"],
-  "mona-lisa": ["idle-long", "slow-blink", "happy", "suspicious", "look-right"],
-  clown: ["happy", "cross-eyed", "dizzy", "chaotic-stare", "shocked"],
-  spy: ["peek", "suspicious", "look-left", "look-right", "wide-stare"],
-  skeleton: ["suspicious", "sleepy-idle", "shocked", "confused", "idle-long"]
+  robot: ["wide-stare", "confused", "eye-roll", "rapid-typing-focus", "suspicious", "restless", "spacing-out"],
+  cat: ["suspicious", "look-left", "look-right", "sleepy-idle", "happy", "dreamy", "wink-left"],
+  "manga-female": ["happy", "shocked", "crying", "in-love", "dreamy", "laughing", "wink-right"],
+  dragon: ["angry", "furious", "suspicious", "dramatic-shock", "chaotic-stare", "look-down"],
+  "d20-rpg": ["dramatic-shock", "wide-stare", "happy", "confused", "chaotic-stare", "panic", "starstruck"],
+  "tibetan-monk": ["slow-blink", "sleepy-idle", "look-down", "dreamy", "idle-long", "spacing-out"],
+  alien: ["wide-stare", "confused", "dizzy", "cross-eyed", "peek", "stoned", "spacing-out"],
+  hacker: ["suspicious", "rapid-typing-focus", "look-left", "look-right", "nervous", "restless", "panic"],
+  anonymous: ["suspicious", "peek", "look-left", "look-right", "idle-long", "restless"],
+  "ice-hockey": ["suspicious", "angry", "furious", "wide-stare", "shocked", "look-left"],
+  "mona-lisa": ["idle-long", "slow-blink", "happy", "suspicious", "look-right", "dreamy"],
+  clown: ["happy", "laughing", "cross-eyed", "dizzy", "chaotic-stare", "shocked", "drunk"],
+  spy: ["peek", "suspicious", "look-left", "look-right", "wide-stare", "wink-left", "restless"],
+  skeleton: ["suspicious", "sleepy-idle", "shocked", "confused", "idle-long", "spacing-out"]
 };
 
 const AVAILABLE_SKIN_IDS = new Set(SKINS.map((skin) => skin.id));
@@ -227,11 +231,11 @@ const DEFAULT_ACTIONS: ActionMapping[] = [
   ["mouse move", "event", ["idle-neutral"], 0.3, 150],
   ["click", "event", ["blink", "wide-stare"], 0.8, 500],
   ["double click", "event", ["shocked", "happy"], 1, 800],
-  ["drag", "event", ["drag-tracking", "nervous"], 1, 350],
+  ["drag", "event", ["drag-tracking", "nervous", "restless"], 1, 350],
   ["typing", "keyboard", ["typing", "look-down", "rapid-typing-focus"], 0.8, 250],
-  ["rapid typing", "keyboard", ["rapid-typing-focus", "cross-eyed", "nervous"], 1.1, 900],
-  ["idle", "idle", ["blink", "slow-blink", "sleepy-idle", "look-left", "look-right", "eye-roll"], 0.6, 5000],
-  ["wake up", "event", ["wake", "wide-stare", "happy"], 1, 1000],
+  ["rapid typing", "keyboard", ["rapid-typing-focus", "cross-eyed", "nervous", "panic"], 1.1, 900],
+  ["idle", "idle", ["blink", "slow-blink", "sleepy-idle", "dreamy", "spacing-out", "look-left", "look-right", "eye-roll"], 0.6, 5000],
+  ["wake up", "event", ["wake", "wide-stare", "happy", "spacing-out"], 1, 1000],
   ["copy", "keyboard", ["copy", "suspicious", "happy"], 0.9, 900],
   ["cut", "keyboard", ["cut", "shocked", "angry"], 1.2, 900],
   ["paste", "keyboard", ["paste", "happy", "wide-stare"], 1, 900],
@@ -241,15 +245,15 @@ const DEFAULT_ACTIONS: ActionMapping[] = [
   ["redo", "keyboard", ["redo", "happy", "confused"], 0.8, 850],
   ["new note", "event", ["wake", "happy"], 0.8, 1200],
   ["open note", "event", ["wake", "happy", "wide-stare"], 0.7, 900],
-  ["close note", "event", ["sad", "slow-blink"], 0.6, 1000],
+  ["close note", "event", ["sad", "crying", "slow-blink"], 0.6, 1000],
   ["open command palette", "event", ["wide-stare", "suspicious"], 0.9, 1000],
   ["open search", "event", ["look-left", "look-right", "typing"], 0.8, 900],
   ["switch tab", "event", ["look-left", "look-right", "confused"], 0.7, 650],
   ["hover trash", "hover", ["hover-suspicious", "shocked", "suspicious"], 1.1, 900],
   ["hover command palette", "hover", ["wide-stare", "suspicious"], 0.8, 900],
   ["hover link", "hover", ["peek", "happy", "look-down"], 0.7, 600],
-  ["scroll fast", "event", ["dizzy", "confused"], 1, 850],
-  ["quick mouse movement", "event", ["dizzy", "chaotic-stare", "fast-movement"], 1.2, 800]
+  ["scroll fast", "event", ["dizzy", "confused", "drunk"], 1, 850],
+  ["quick mouse movement", "event", ["dizzy", "chaotic-stare", "fast-movement", "panic"], 1.2, 800]
 ].map(([name, triggerType, reactionPool, intensity, cooldownMs]) => ({
   name: name as string,
   triggerType: triggerType as TriggerType,
@@ -282,6 +286,7 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   dragEnabled: true,
   peekMode: false,
   peekFaceMask: true,
+  useSkinDefaultColors: true,
   irisColor: "#42d9ff",
   pupilColor: "#07111b",
   eyelidColor: "#2a2d30",
@@ -320,6 +325,14 @@ function thumbnailAsset(skinId: string): string {
 
 function maskAsset(skinId: string, mask: "tab-panel"): string {
   return `assets/skins/${skinId}/masks/${mask}.png`;
+}
+
+function effectiveIrisColor(settings: GooglyEyesSettings, skin: SkinDefinition): string {
+  return settings.useSkinDefaultColors ? skin.iris : settings.irisColor;
+}
+
+function effectivePupilColor(settings: GooglyEyesSettings, skin: SkinDefinition): string {
+  return settings.useSkinDefaultColors ? skin.pupil : settings.pupilColor;
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -411,7 +424,20 @@ const REACTION_LABELS = labels<Reaction>({
   "chaotic-stare": "Chaotic stare",
   "dramatic-shock": "Dramatic shock",
   "rapid-typing-focus": "Rapid typing",
-  "drag-tracking": "Drag tracking"
+  "drag-tracking": "Drag tracking",
+  furious: "Furious",
+  restless: "Restless",
+  "in-love": "In love",
+  dreamy: "Dreamy",
+  drunk: "Drunk",
+  stoned: "Stoned",
+  "spacing-out": "Spacing out",
+  crying: "Crying",
+  laughing: "Laughing",
+  "wink-left": "Wink left",
+  "wink-right": "Wink right",
+  panic: "Panic",
+  starstruck: "Starstruck"
 });
 
 const BEHAVIOR_PRESETS: Record<string, Partial<GooglyEyesSettings>> = {
@@ -776,7 +802,7 @@ class EyeController {
     if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.dragging) return;
     if (this.root?.hasClass("is-hidden")) return;
     const skinId = this.plugin.settings.skinId;
-    const pool: Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "look-left", "look-right", "happy"];
+    const pool: Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy"];
     const reaction = this.resolveReaction(pick(pool, Math.max(0.45, this.randomness())));
     this.setReaction(reaction);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
@@ -924,6 +950,33 @@ class EyeController {
       set("--iris-scale", "0.95");
       set("--pupil-scale", "0.74");
       set("--iris-filter", "hue-rotate(155deg) saturate(1.55) contrast(1.12)");
+    } else if (reaction === "furious") {
+      set("--lid-upper-left", "0%");
+      set("--lid-lower-left", "31%");
+      set("--lid-upper-right", "0%");
+      set("--lid-lower-right", "31%");
+      set("--lid-tilt-left", "24deg");
+      set("--lid-tilt-right", "-24deg");
+      set("--lid-lower-tilt-left", "-11deg");
+      set("--lid-lower-tilt-right", "11deg");
+      set("--reaction-iris-x-left", pct(4));
+      set("--reaction-iris-x-right", pct(-4));
+      set("--reaction-pupil-x-left", pct(8));
+      set("--reaction-pupil-x-right", pct(-8));
+      set("--reaction-iris-y-left", pct(-12));
+      set("--reaction-iris-y-right", pct(-12));
+      set("--reaction-pupil-y-left", pct(-18));
+      set("--reaction-pupil-y-right", pct(-18));
+      set("--eye-base-y-left", pct(-5));
+      set("--eye-base-y-right", pct(-5));
+      set("--eye-base-rotate-left", "6deg");
+      set("--eye-base-rotate-right", "-6deg");
+      set("--eye-base-scale-left", "1.14");
+      set("--eye-base-scale-right", "1.14");
+      set("--iris-scale", "0.9");
+      set("--pupil-scale", "0.48");
+      set("--eye-vibe", "-4deg");
+      set("--iris-filter", "hue-rotate(150deg) saturate(2.1) contrast(1.34) brightness(0.88)");
     } else if (reaction === "shocked" || reaction === "wide-stare" || reaction === "wake" || reaction === "dramatic-shock") {
       set("--lid-upper-left", "-92%");
       set("--lid-lower-left", "88%");
@@ -964,6 +1017,44 @@ class EyeController {
       set("--iris-scale", "1.08");
       set("--pupil-scale", "1.04");
       set("--iris-filter", "brightness(1.08) saturate(1.18)");
+    } else if (reaction === "laughing") {
+      set("--lid-upper-left", "-15%");
+      set("--lid-lower-left", "28%");
+      set("--lid-upper-right", "-15%");
+      set("--lid-lower-right", "28%");
+      set("--lid-tilt-left", "-14deg");
+      set("--lid-tilt-right", "14deg");
+      set("--lid-lower-tilt-left", "-12deg");
+      set("--lid-lower-tilt-right", "12deg");
+      set("--reaction-iris-y-left", pct(-12));
+      set("--reaction-iris-y-right", pct(-12));
+      set("--reaction-pupil-y-left", pct(-15));
+      set("--reaction-pupil-y-right", pct(-15));
+      set("--eye-base-y-left", pct(-4));
+      set("--eye-base-y-right", pct(-4));
+      set("--eye-base-scale-left", "1.08");
+      set("--eye-base-scale-right", "1.08");
+      set("--iris-scale", "0.82");
+      set("--pupil-scale", "0.78");
+      set("--iris-filter", "brightness(1.12) saturate(1.22)");
+    } else if (reaction === "in-love" || reaction === "starstruck") {
+      set("--lid-upper-left", "-58%");
+      set("--lid-lower-left", "45%");
+      set("--lid-upper-right", "-58%");
+      set("--lid-lower-right", "45%");
+      set("--lid-tilt-left", "-8deg");
+      set("--lid-tilt-right", "8deg");
+      set("--reaction-iris-y-left", pct(reaction === "starstruck" ? -10 : -5));
+      set("--reaction-iris-y-right", pct(reaction === "starstruck" ? -10 : -5));
+      set("--reaction-pupil-y-left", pct(reaction === "starstruck" ? -13 : -7));
+      set("--reaction-pupil-y-right", pct(reaction === "starstruck" ? -13 : -7));
+      set("--eye-base-y-left", pct(-2));
+      set("--eye-base-y-right", pct(-2));
+      set("--eye-base-scale-left", reaction === "starstruck" ? "1.14" : "1.1");
+      set("--eye-base-scale-right", reaction === "starstruck" ? "1.14" : "1.1");
+      set("--iris-scale", reaction === "starstruck" ? "1.24" : "1.2");
+      set("--pupil-scale", reaction === "starstruck" ? "1.08" : "1.22");
+      set("--iris-filter", reaction === "starstruck" ? "brightness(1.18) saturate(1.45) contrast(1.08)" : "hue-rotate(305deg) brightness(1.16) saturate(1.55)");
     } else if (reaction === "sad" || reaction === "undo") {
       set("--lid-upper-left", "-18%");
       set("--lid-lower-left", "43%");
@@ -987,6 +1078,120 @@ class EyeController {
       set("--iris-scale", "0.82");
       set("--pupil-scale", "0.86");
       set("--iris-filter", "saturate(0.65) brightness(0.86)");
+    } else if (reaction === "crying") {
+      set("--lid-upper-left", "-8%");
+      set("--lid-lower-left", "34%");
+      set("--lid-upper-right", "-8%");
+      set("--lid-lower-right", "34%");
+      set("--lid-tilt-left", "-18deg");
+      set("--lid-tilt-right", "18deg");
+      set("--lid-lower-tilt-left", "9deg");
+      set("--lid-lower-tilt-right", "-9deg");
+      set("--reaction-iris-y-left", pct(18));
+      set("--reaction-iris-y-right", pct(18));
+      set("--reaction-pupil-y-left", pct(24));
+      set("--reaction-pupil-y-right", pct(24));
+      set("--eye-base-y-left", pct(7));
+      set("--eye-base-y-right", pct(7));
+      set("--eye-base-scale-left", "0.96");
+      set("--eye-base-scale-right", "0.96");
+      set("--iris-opacity", "0.58");
+      set("--iris-scale", "0.78");
+      set("--pupil-scale", "0.92");
+      set("--iris-filter", "hue-rotate(185deg) saturate(0.82) brightness(0.92)");
+    } else if (reaction === "dreamy" || reaction === "stoned" || reaction === "spacing-out") {
+      const isStoned = reaction === "stoned";
+      const isSpacing = reaction === "spacing-out";
+      set("--lid-upper-left", isSpacing ? "-82%" : "-3%");
+      set("--lid-lower-left", isSpacing ? "80%" : "30%");
+      set("--lid-upper-right", isSpacing ? "-82%" : "-3%");
+      set("--lid-lower-right", isSpacing ? "80%" : "30%");
+      set("--lid-tilt-left", isStoned ? "-1deg" : "-6deg");
+      set("--lid-tilt-right", isStoned ? "1deg" : "6deg");
+      set("--reaction-iris-x-left", pct(isSpacing ? -8 : 8));
+      set("--reaction-iris-x-right", pct(isSpacing ? 8 : 8));
+      set("--reaction-pupil-x-left", pct(isSpacing ? -12 : 11));
+      set("--reaction-pupil-x-right", pct(isSpacing ? 12 : 11));
+      set("--reaction-iris-y-left", pct(isSpacing ? -2 : isStoned ? 13 : -12));
+      set("--reaction-iris-y-right", pct(isSpacing ? -2 : isStoned ? 13 : -12));
+      set("--reaction-pupil-y-left", pct(isSpacing ? -3 : isStoned ? 18 : -16));
+      set("--reaction-pupil-y-right", pct(isSpacing ? -3 : isStoned ? 18 : -16));
+      set("--eye-base-y-left", pct(isSpacing ? -1 : isStoned ? 6 : -4));
+      set("--eye-base-y-right", pct(isSpacing ? -1 : isStoned ? 6 : -4));
+      set("--eye-base-scale-left", isSpacing ? "1.08" : "0.98");
+      set("--eye-base-scale-right", isSpacing ? "1.08" : "0.98");
+      set("--iris-opacity", isSpacing ? "0.42" : isStoned ? "0.66" : "0.72");
+      set("--iris-scale", isSpacing ? "0.72" : isStoned ? "1.08" : "1.05");
+      set("--pupil-scale", isSpacing ? "0.55" : isStoned ? "1.45" : "1.18");
+      set("--iris-filter", isSpacing ? "saturate(0.45) brightness(1.2)" : isStoned ? "hue-rotate(70deg) saturate(0.9) brightness(0.84)" : "hue-rotate(285deg) saturate(1.05) brightness(1.16)");
+    } else if (reaction === "restless" || reaction === "panic") {
+      const isPanic = reaction === "panic";
+      set("--lid-upper-left", isPanic ? "-78%" : "-28%");
+      set("--lid-lower-left", isPanic ? "72%" : "50%");
+      set("--lid-upper-right", isPanic ? "-78%" : "-46%");
+      set("--lid-lower-right", isPanic ? "72%" : "60%");
+      set("--lid-tilt-left", isPanic ? "8deg" : "13deg");
+      set("--lid-tilt-right", isPanic ? "-8deg" : "-11deg");
+      set("--reaction-iris-x-left", pct(isPanic ? -15 : -9));
+      set("--reaction-iris-x-right", pct(isPanic ? 15 : 12));
+      set("--reaction-pupil-x-left", pct(isPanic ? -22 : -15));
+      set("--reaction-pupil-x-right", pct(isPanic ? 22 : 18));
+      set("--reaction-iris-y-left", pct(isPanic ? -10 : 8));
+      set("--reaction-iris-y-right", pct(isPanic ? 9 : -8));
+      set("--reaction-pupil-y-left", pct(isPanic ? -15 : 12));
+      set("--reaction-pupil-y-right", pct(isPanic ? 13 : -12));
+      set("--eye-base-x-left", pct(isPanic ? -4 : -2));
+      set("--eye-base-x-right", pct(isPanic ? 4 : 2));
+      set("--eye-base-rotate-left", isPanic ? "-8deg" : "-5deg");
+      set("--eye-base-rotate-right", isPanic ? "8deg" : "5deg");
+      set("--eye-base-scale-left", isPanic ? "1.16" : "1.04");
+      set("--eye-base-scale-right", isPanic ? "1.16" : "1.04");
+      set("--eye-vibe", isPanic ? "7deg" : "4deg");
+      set("--iris-scale", isPanic ? "1.12" : "0.86");
+      set("--pupil-scale", isPanic ? "0.52" : "0.7");
+      set("--iris-filter", isPanic ? "contrast(1.25) saturate(1.35)" : "contrast(1.18) saturate(1.15)");
+    } else if (reaction === "drunk") {
+      set("--lid-upper-left", "-8%");
+      set("--lid-lower-left", "37%");
+      set("--lid-upper-right", "-31%");
+      set("--lid-lower-right", "51%");
+      set("--lid-tilt-left", "9deg");
+      set("--lid-tilt-right", "-14deg");
+      set("--reaction-iris-x-left", pct(18));
+      set("--reaction-iris-x-right", pct(-18));
+      set("--reaction-pupil-x-left", pct(26));
+      set("--reaction-pupil-x-right", pct(-26));
+      set("--reaction-iris-y-left", pct(12));
+      set("--reaction-iris-y-right", pct(-8));
+      set("--reaction-pupil-y-left", pct(18));
+      set("--reaction-pupil-y-right", pct(-12));
+      set("--eye-base-rotate-left", "-9deg");
+      set("--eye-base-rotate-right", "9deg");
+      set("--eye-base-scale-left", "1.02");
+      set("--eye-base-scale-right", "1.02");
+      set("--eye-vibe", "7deg");
+      set("--iris-scale", "0.92");
+      set("--pupil-scale", "1.18");
+      set("--iris-filter", "hue-rotate(40deg) saturate(1.35) blur(0.35px)");
+    } else if (reaction === "wink-left" || reaction === "wink-right") {
+      const leftClosed = reaction === "wink-left";
+      set("--lid-upper-left", leftClosed ? "4%" : "-54%");
+      set("--lid-lower-left", leftClosed ? "-2%" : "42%");
+      set("--lid-upper-right", leftClosed ? "-54%" : "4%");
+      set("--lid-lower-right", leftClosed ? "42%" : "-2%");
+      set("--lid-tilt-left", leftClosed ? "-2deg" : "-10deg");
+      set("--lid-tilt-right", leftClosed ? "10deg" : "2deg");
+      set("--lid-lower-tilt-left", leftClosed ? "0deg" : "-7deg");
+      set("--lid-lower-tilt-right", leftClosed ? "7deg" : "0deg");
+      set("--reaction-iris-y-left", pct(leftClosed ? 10 : -7));
+      set("--reaction-iris-y-right", pct(leftClosed ? -7 : 10));
+      set("--reaction-pupil-y-left", pct(leftClosed ? 15 : -10));
+      set("--reaction-pupil-y-right", pct(leftClosed ? -10 : 15));
+      set("--eye-base-scale-left", leftClosed ? "0.96" : "1.08");
+      set("--eye-base-scale-right", leftClosed ? "1.08" : "0.96");
+      set("--iris-scale", "1.02");
+      set("--pupil-scale", "0.98");
+      set("--iris-filter", "brightness(1.08) saturate(1.14)");
     } else if (reaction === "confused" || reaction === "dizzy" || reaction === "cross-eyed" || reaction === "eye-roll") {
       if (reaction === "cross-eyed") {
         set("--reaction-iris-x-left", pct(15));
@@ -1100,6 +1305,8 @@ class EyeController {
       const eyeWindows = SKIN_EYE_WINDOWS[skinDef.id] ?? DEFAULT_EYE_WINDOWS;
       pair.setCssProps({
         "--accent": skinDef.accent,
+        "--iris-color": effectiveIrisColor(s, skinDef),
+        "--pupil-color": effectivePupilColor(s, skinDef),
         "--skin-iris-size": `${skinDef.irisSize}%`,
         "--skin-pupil-size": `${skinDef.pupilSize}%`,
         "--eye-left-x": `${eyeWindows.left.x * 100}%`,
@@ -1177,7 +1384,9 @@ class EyeController {
 
   private ambientReactionDuration(reaction: Reaction): number {
     if (this.reduceMotion.matches) return 900;
-    const base = reaction === "sleepy-idle" || reaction === "idle-long" ? 3000 : reaction === "dizzy" || reaction === "chaotic-stare" ? 2400 : 2600;
+    const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love"];
+    const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck"];
+    const base = longRead.includes(reaction) ? 3600 : punchy.includes(reaction) ? 3000 : 2800;
     return base + Math.random() * 850 + this.plugin.settings.reactionHoldMs;
   }
 
@@ -1437,8 +1646,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("Per-pair variation").addToggle((t) => t.setValue(this.plugin.settings.perPairVariation).onChange((v) => this.save("perPairVariation", v)));
 
     new Setting(containerEl).setName("Look").setHeading();
-    new Setting(containerEl).setName("Iris color").addColorPicker((picker) => picker.setValue(this.plugin.settings.irisColor).onChange((v) => this.save("irisColor", v)));
-    new Setting(containerEl).setName("Pupil color").addColorPicker((picker) => picker.setValue(this.plugin.settings.pupilColor).onChange((v) => this.save("pupilColor", v)));
+    new Setting(containerEl).setName("Use skin default eye colors").setDesc("Each skin gets a matching iris and pupil color. Turn this off to use one custom color set for every skin.").addToggle((toggle) => toggle.setValue(this.plugin.settings.useSkinDefaultColors).onChange((v) => this.save("useSkinDefaultColors", v)));
+    new Setting(containerEl).setName("Iris color").addColorPicker((picker) => picker.setValue(this.plugin.settings.irisColor).onChange((v) => this.saveCustomEyeColor("irisColor", v)));
+    new Setting(containerEl).setName("Pupil color").addColorPicker((picker) => picker.setValue(this.plugin.settings.pupilColor).onChange((v) => this.saveCustomEyeColor("pupilColor", v)));
     new Setting(containerEl).setName("Eyelid color").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidColor).onChange((v) => this.save("eyelidColor", v)));
     new Setting(containerEl).setName("Eyelid shadow").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidShadowColor).onChange((v) => this.save("eyelidShadowColor", v)));
     new Setting(containerEl).setName("Iris glow").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.irisGlow).onChange((v) => this.save("irisGlow", v)));
@@ -1528,6 +1738,15 @@ class GooglyEyesSettingTab extends PluginSettingTab {
       this.display();
     });
   }
+
+  private saveCustomEyeColor(key: "irisColor" | "pupilColor", value: string): void {
+    this.plugin.settings[key] = value;
+    this.plugin.settings.useSkinDefaultColors = false;
+    void this.plugin.saveSettings().then(() => {
+      this.plugin.controller.refresh();
+      this.display();
+    });
+  }
 }
 
 export default class GooglyEyesPlugin extends Plugin {
@@ -1570,6 +1789,11 @@ export default class GooglyEyesPlugin extends Plugin {
       ...loaded,
       actionMappings: this.mergeActions(loaded?.actionMappings ?? [])
     };
+    if (loaded && loaded.useSkinDefaultColors === undefined && (loaded.irisColor !== undefined || loaded.pupilColor !== undefined)) {
+      const loadedIris = loaded.irisColor ?? DEFAULT_SETTINGS.irisColor;
+      const loadedPupil = loaded.pupilColor ?? DEFAULT_SETTINGS.pupilColor;
+      this.settings.useSkinDefaultColors = loadedIris === DEFAULT_SETTINGS.irisColor && loadedPupil === DEFAULT_SETTINGS.pupilColor;
+    }
     if (!AVAILABLE_SKIN_IDS.has(this.settings.skinId)) this.settings.skinId = DEFAULT_SETTINGS.skinId;
     if (loaded?.size === 96) this.settings.size = DEFAULT_SETTINGS.size;
     this.settings.pairConfigs = this.settings.pairConfigs.filter((config) => AVAILABLE_SKIN_IDS.has(config.skinId));

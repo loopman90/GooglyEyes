@@ -114,7 +114,7 @@ YourVault/.obsidian/plugins/googly-eyes/googly-eyes/manifest.json
 For testing the current local build, use the ready-made folder:
 
 \`\`\`text
-${join(root, "release", "googly-eyes-test")}
+release/googly-eyes-test
 \`\`\`
 
 1. Run \`npm run package-test\`.

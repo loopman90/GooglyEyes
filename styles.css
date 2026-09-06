@@ -236,6 +236,142 @@
   z-index: 3;
 }
 
+.googly-eyes-pair[data-reaction="crying"] .googly-eyes-eye-slot::before {
+  content: "";
+  position: absolute;
+  left: 57%;
+  top: 58%;
+  width: 14%;
+  height: 29%;
+  border-radius: 50% 50% 58% 58%;
+  background:
+    radial-gradient(circle at 34% 23%, rgb(255 255 255 / 0.92) 0 12%, transparent 13%),
+    linear-gradient(180deg, rgb(156 232 255 / 0.95), rgb(45 154 255 / 0.72));
+  box-shadow: 0 0 8px rgb(83 190 255 / 0.56);
+  transform: translateY(-4%);
+  animation: googly-eyes-tear 1150ms ease-in-out infinite;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.googly-eyes-pair[data-reaction="in-love"] .googly-eyes-pupil::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 66%;
+  height: 66%;
+  background:
+    radial-gradient(circle at 32% 32%, #ff4f8c 0 32%, transparent 33%),
+    radial-gradient(circle at 68% 32%, #ff4f8c 0 32%, transparent 33%),
+    linear-gradient(135deg, transparent 0 32%, #ff4f8c 33% 70%, transparent 71%);
+  filter: drop-shadow(0 0 6px rgb(255 103 164 / 0.78));
+  transform: translate(-50%, -42%) rotate(45deg) scale(0.75);
+  animation: googly-eyes-heart-pulse 900ms ease-in-out infinite;
+  pointer-events: none;
+}
+
+.googly-eyes-pair[data-reaction="starstruck"] .googly-eyes-pupil::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 86%;
+  height: 86%;
+  background: #ffe45c;
+  clip-path: polygon(50% 0%, 61% 33%, 96% 35%, 68% 56%, 79% 91%, 50% 70%, 21% 91%, 32% 56%, 4% 35%, 39% 33%);
+  filter: drop-shadow(0 0 6px rgb(255 226 94 / 0.8));
+  transform: translate(-50%, -50%) scale(0.84);
+  animation: googly-eyes-star-pop 1000ms ease-in-out infinite;
+  pointer-events: none;
+}
+
+.googly-eyes-pair[data-reaction="laughing"] .googly-eyes-iris {
+  opacity: 0.72;
+}
+
+.googly-eyes-pair[data-reaction="restless"] .googly-eyes-eye {
+  animation: googly-eyes-jitter 180ms steps(2, end) infinite;
+}
+
+.googly-eyes-pair[data-reaction="panic"] .googly-eyes-eye {
+  animation: googly-eyes-jitter 110ms steps(2, end) infinite;
+}
+
+.googly-eyes-pair[data-reaction="drunk"] .googly-eyes-eye {
+  animation: googly-eyes-wobble 720ms ease-in-out infinite;
+}
+
+.googly-eyes-pair[data-reaction="stoned"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="dreamy"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="spacing-out"] .googly-eyes-iris {
+  animation: googly-eyes-soft-drift 2200ms ease-in-out infinite;
+}
+
+@keyframes googly-eyes-tear {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(-8%) scale(0.86);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(16%) scale(1);
+  }
+}
+
+@keyframes googly-eyes-heart-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -42%) rotate(45deg) scale(0.68);
+  }
+  50% {
+    transform: translate(-50%, -42%) rotate(45deg) scale(0.88);
+  }
+}
+
+@keyframes googly-eyes-star-pop {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(-5deg) scale(0.72);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(8deg) scale(0.96);
+  }
+}
+
+@keyframes googly-eyes-jitter {
+  0% {
+    translate: -1px 0;
+  }
+  50% {
+    translate: 1px 1px;
+  }
+  100% {
+    translate: 0 -1px;
+  }
+}
+
+@keyframes googly-eyes-wobble {
+  0%,
+  100% {
+    rotate: -3deg;
+  }
+  50% {
+    rotate: 4deg;
+  }
+}
+
+@keyframes googly-eyes-soft-drift {
+  0%,
+  100% {
+    filter: var(--iris-filter);
+  }
+  50% {
+    filter: var(--iris-filter) brightness(1.08);
+  }
+}
+
 .googly-eyes-pair[data-skin="cat"] .googly-eyes-iris {
   background:
     radial-gradient(circle at 39% 34%, rgb(255 255 255 / 0.82) 0 7%, transparent 8%),
@@ -555,7 +691,7 @@
   display: grid;
   grid-template-columns: 54px 1fr;
   grid-template-rows: auto auto;
-  column-gap: 10px;
+  gap: 0 10px;
   align-items: center;
   padding: 8px;
   border: 1px solid var(--background-modifier-border);
