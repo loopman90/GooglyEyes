@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.10
+
+- Replaced the starstruck `clip-path` effect with gradient-based CSS for better Obsidian review compatibility.
+
 ## 1.0.9
 
 - Added Cowboy, Pumpkin Halloween, Goblin, and Troll layered skins.

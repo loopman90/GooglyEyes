@@ -282,8 +282,12 @@
   top: 50%;
   width: 86%;
   height: 86%;
-  background: #ffe45c;
-  clip-path: polygon(50% 0%, 61% 33%, 96% 35%, 68% 56%, 79% 91%, 50% 70%, 21% 91%, 32% 56%, 4% 35%, 39% 33%);
+  background:
+    radial-gradient(circle, #fff7a8 0 19%, transparent 20%),
+    linear-gradient(90deg, transparent 0 42%, #ffe45c 43% 57%, transparent 58%),
+    linear-gradient(0deg, transparent 0 42%, #ffe45c 43% 57%, transparent 58%),
+    linear-gradient(45deg, transparent 0 44%, #ffe45c 45% 55%, transparent 56%),
+    linear-gradient(135deg, transparent 0 44%, #ffe45c 45% 55%, transparent 56%);
   filter: drop-shadow(0 0 6px rgb(255 226 94 / 0.8));
   transform: translate(-50%, -50%) scale(0.84);
   animation: googly-eyes-star-pop 1000ms ease-in-out infinite;
