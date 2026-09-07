@@ -109,6 +109,10 @@
   display: block;
 }
 
+.googly-eyes-pair.has-single-eye .googly-eyes-eye-slot-right {
+  display: none;
+}
+
 .googly-eyes-eye-slot {
   position: absolute;
   left: var(--eye-slot-x);

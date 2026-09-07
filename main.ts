@@ -102,6 +102,7 @@ interface GooglyEyesSettings {
 interface SkinDefinition {
   id: string;
   name: string;
+  eyeLayout: "dual" | "single";
   flavor: string;
   supportsColorOverrides: boolean;
   iris: string;
@@ -1283,6 +1284,7 @@ class EyeController {
       this.applyReactionState(pair);
       pair.toggleClass("has-layered-assets", hasLayeredAssets);
       pair.toggleClass("has-peek-mask", hasPeekMask);
+      pair.toggleClass("has-single-eye", skinDef.eyeLayout === "single");
       const eyeWindows = SKIN_EYE_WINDOWS[skinDef.id] ?? DEFAULT_EYE_WINDOWS;
       pair.setCssProps({
         "--accent": skinDef.accent,

@@ -1,0 +1,47 @@
+{
+  "id": "classic-googly",
+  "name": "Classic Googly",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Clean toy rings with bright playful eyes.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.122,
+      "y": 0.222,
+      "w": 0.309,
+      "h": 0.5
+    },
+    {
+      "side": "right",
+      "x": 0.574,
+      "y": 0.222,
+      "w": 0.309,
+      "h": 0.5
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "happy",
+    "laughing",
+    "cross-eyed",
+    "dizzy",
+    "wink-left",
+    "wink-right",
+    "chaotic-stare"
+  ],
+  "defaults": {
+    "irisColor": "#1e88ff",
+    "pupilColor": "#050505",
+    "eyeWhiteColor": "#fffaf0",
+    "eyelidColor": "#f2f2f2",
+    "eyelidShadowColor": "#d13b2f",
+    "irisGlow": 0.45,
+    "irisSize": 30,
+    "pupilSize": 42
+  }
+}

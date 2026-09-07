@@ -14,13 +14,15 @@ Completed:
 - Anonymous
 - Ice Hockey Horror
 - Clown
+- SpaceHelmet
+- Classic Googly
+- Detective Noir
+- One Eye
 
 Next candidates:
 
-- One Eye
 - Monster
 - Non-Binary
-- Classic Googly
 - Minimal
 - Pixel
 - Cartoon
@@ -28,7 +30,6 @@ Next candidates:
 - Spooky
 - Cyberpunk
 - Retro PC
-- Space
 - D&D / Fantasy
 
 Definition of done for a skin:

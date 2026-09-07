@@ -1,0 +1,46 @@
+{
+  "id": "detective-noir",
+  "name": "Detective Noir",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Fedora shadows with a warm suspicious stare.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.197,
+      "y": 0.368,
+      "w": 0.248,
+      "h": 0.236
+    },
+    {
+      "side": "right",
+      "x": 0.563,
+      "y": 0.368,
+      "w": 0.248,
+      "h": 0.236
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "suspicious",
+    "peek",
+    "look-left",
+    "look-right",
+    "slow-blink",
+    "restless"
+  ],
+  "defaults": {
+    "irisColor": "#c28a3a",
+    "pupilColor": "#120b04",
+    "eyeWhiteColor": "#f1dfbd",
+    "eyelidColor": "#2d2118",
+    "eyelidShadowColor": "#0a0705",
+    "irisGlow": 0.32,
+    "irisSize": 31,
+    "pupilSize": 30
+  }
+}

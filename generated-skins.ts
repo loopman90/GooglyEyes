@@ -3,6 +3,7 @@ export const GENERATED_SKINS = [
   {
     "id": "robot",
     "name": "Robot",
+    "eyeLayout": "dual",
     "flavor": "Mechanical lenses with tiny LED attitude.",
     "iris": "#42d9ff",
     "pupil": "#07111b",
@@ -47,6 +48,7 @@ export const GENERATED_SKINS = [
   {
     "id": "cat",
     "name": "Cat",
+    "eyeLayout": "dual",
     "flavor": "Soft fur, sharp focus, vertical pupils.",
     "iris": "#58d34f",
     "pupil": "#050806",
@@ -91,6 +93,7 @@ export const GENERATED_SKINS = [
   {
     "id": "manga-female",
     "name": "Manga Female",
+    "eyeLayout": "dual",
     "flavor": "Big anime eyes with soft lashes.",
     "iris": "#9b68ee",
     "pupil": "#140d2d",
@@ -135,6 +138,7 @@ export const GENERATED_SKINS = [
   {
     "id": "dragon",
     "name": "Dragon",
+    "eyeLayout": "dual",
     "flavor": "Ancient scales with a fiery slit gaze.",
     "iris": "#ff9f21",
     "pupil": "#090403",
@@ -178,6 +182,7 @@ export const GENERATED_SKINS = [
   {
     "id": "cyberpunk-female",
     "name": "Cyberpunk Female",
+    "eyeLayout": "dual",
     "flavor": "Neon makeup, chrome accents, and a sharp magenta gaze.",
     "iris": "#ff4fd8",
     "pupil": "#080510",
@@ -222,6 +227,7 @@ export const GENERATED_SKINS = [
   {
     "id": "d20-rpg",
     "name": "D20 RPG",
+    "eyeLayout": "dual",
     "flavor": "Tabletop dice, parchment maps, and dungeon master focus.",
     "iris": "#3fcf7f",
     "pupil": "#100806",
@@ -264,8 +270,187 @@ export const GENERATED_SKINS = [
     ]
   },
   {
+    "id": "space-helmet",
+    "name": "SpaceHelmet",
+    "eyeLayout": "dual",
+    "flavor": "Astronaut visor with cool cyan focus.",
+    "iris": "#20d9ff",
+    "pupil": "#020916",
+    "eyeWhite": "#eaf7ff",
+    "outline": "#d4e6ef",
+    "accent": "#0d2032",
+    "irisSize": 34,
+    "pupilSize": 28,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/space-helmet/eyes/left-base.png",
+      "rightBase": "assets/skins/space-helmet/eyes/right-base.png",
+      "thumbnail": "assets/skins/space-helmet/thumbnail.png",
+      "mask": "assets/skins/space-helmet/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.166,
+        "y": 0.302,
+        "w": 0.263,
+        "h": 0.353
+      },
+      "right": {
+        "side": "right",
+        "x": 0.572,
+        "y": 0.302,
+        "w": 0.263,
+        "h": 0.353
+      }
+    },
+    "ambientReactions": [
+      "wide-stare",
+      "dreamy",
+      "spacing-out",
+      "starstruck",
+      "look-up",
+      "slow-blink"
+    ]
+  },
+  {
+    "id": "classic-googly",
+    "name": "Classic Googly",
+    "eyeLayout": "dual",
+    "flavor": "Clean toy rings with bright playful eyes.",
+    "iris": "#1e88ff",
+    "pupil": "#050505",
+    "eyeWhite": "#fffaf0",
+    "outline": "#f2f2f2",
+    "accent": "#d13b2f",
+    "irisSize": 30,
+    "pupilSize": 42,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/classic-googly/eyes/left-base.png",
+      "rightBase": "assets/skins/classic-googly/eyes/right-base.png",
+      "thumbnail": "assets/skins/classic-googly/thumbnail.png",
+      "mask": "assets/skins/classic-googly/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.122,
+        "y": 0.222,
+        "w": 0.309,
+        "h": 0.5
+      },
+      "right": {
+        "side": "right",
+        "x": 0.574,
+        "y": 0.222,
+        "w": 0.309,
+        "h": 0.5
+      }
+    },
+    "ambientReactions": [
+      "happy",
+      "laughing",
+      "cross-eyed",
+      "dizzy",
+      "wink-left",
+      "wink-right",
+      "chaotic-stare"
+    ]
+  },
+  {
+    "id": "detective-noir",
+    "name": "Detective Noir",
+    "eyeLayout": "dual",
+    "flavor": "Fedora shadows with a warm suspicious stare.",
+    "iris": "#c28a3a",
+    "pupil": "#120b04",
+    "eyeWhite": "#f1dfbd",
+    "outline": "#2d2118",
+    "accent": "#0a0705",
+    "irisSize": 31,
+    "pupilSize": 30,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/detective-noir/eyes/left-base.png",
+      "rightBase": "assets/skins/detective-noir/eyes/right-base.png",
+      "thumbnail": "assets/skins/detective-noir/thumbnail.png",
+      "mask": "assets/skins/detective-noir/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.197,
+        "y": 0.368,
+        "w": 0.248,
+        "h": 0.236
+      },
+      "right": {
+        "side": "right",
+        "x": 0.563,
+        "y": 0.368,
+        "w": 0.248,
+        "h": 0.236
+      }
+    },
+    "ambientReactions": [
+      "suspicious",
+      "peek",
+      "look-left",
+      "look-right",
+      "slow-blink",
+      "restless"
+    ]
+  },
+  {
+    "id": "one-eye",
+    "name": "One Eye",
+    "eyeLayout": "single",
+    "flavor": "Single cyclops opening with a curious lime stare.",
+    "iris": "#b7ff35",
+    "pupil": "#050806",
+    "eyeWhite": "#f2ffe8",
+    "outline": "#58b55f",
+    "accent": "#33185d",
+    "irisSize": 29,
+    "pupilSize": 32,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/one-eye/eyes/left-base.png",
+      "rightBase": "assets/skins/one-eye/eyes/right-base.png",
+      "thumbnail": "assets/skins/one-eye/thumbnail.png",
+      "mask": "assets/skins/one-eye/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.282,
+        "y": 0.286,
+        "w": 0.436,
+        "h": 0.384
+      },
+      "right": {
+        "side": "right",
+        "x": 0.282,
+        "y": 0.286,
+        "w": 0.436,
+        "h": 0.384
+      }
+    },
+    "ambientReactions": [
+      "wide-stare",
+      "confused",
+      "dizzy",
+      "happy",
+      "suspicious",
+      "spacing-out",
+      "wink-left"
+    ]
+  },
+  {
     "id": "tibetan-monk",
     "name": "Tibetan Monk",
+    "eyeLayout": "dual",
     "flavor": "Warm robes with a calm meditative gaze.",
     "iris": "#7f5634",
     "pupil": "#0b0806",
@@ -309,6 +494,7 @@ export const GENERATED_SKINS = [
   {
     "id": "alien",
     "name": "Alien",
+    "eyeLayout": "dual",
     "flavor": "Bioluminescent skin with an uncanny teal stare.",
     "iris": "#48eed8",
     "pupil": "#020809",
@@ -353,6 +539,7 @@ export const GENERATED_SKINS = [
   {
     "id": "hacker",
     "name": "Hacker",
+    "eyeLayout": "dual",
     "flavor": "Dark hood, terminal glow, and sharp focus.",
     "iris": "#58ff37",
     "pupil": "#010502",
@@ -397,6 +584,7 @@ export const GENERATED_SKINS = [
   {
     "id": "anonymous",
     "name": "Anonymous",
+    "eyeLayout": "dual",
     "flavor": "White mask, dark hood, and a quiet red stare.",
     "iris": "#ac1220",
     "pupil": "#050203",
@@ -440,6 +628,7 @@ export const GENERATED_SKINS = [
   {
     "id": "ice-hockey",
     "name": "Jason",
+    "eyeLayout": "dual",
     "flavor": "Frozen hockey mask with a blood-spattered stare.",
     "iris": "#b82022",
     "pupil": "#05090d",
@@ -483,6 +672,7 @@ export const GENERATED_SKINS = [
   {
     "id": "clown",
     "name": "Clown",
+    "eyeLayout": "dual",
     "flavor": "Cartoon circus face with a bright playful stare.",
     "iris": "#ffcc2e",
     "pupil": "#100711",
@@ -527,6 +717,7 @@ export const GENERATED_SKINS = [
   {
     "id": "spy",
     "name": "Spy",
+    "eyeLayout": "dual",
     "flavor": "Cartoon eyes peeking through newspaper cutouts.",
     "iris": "#4d6f8f",
     "pupil": "#080706",
@@ -571,6 +762,7 @@ export const GENERATED_SKINS = [
   {
     "id": "skeleton",
     "name": "Skeleton",
+    "eyeLayout": "dual",
     "flavor": "Playful bone mask with deep skull sockets.",
     "iris": "#f0d36b",
     "pupil": "#07090c",
@@ -614,6 +806,7 @@ export const GENERATED_SKINS = [
   {
     "id": "wizard",
     "name": "Wizard",
+    "eyeLayout": "dual",
     "flavor": "Moonlit hat, silver brows, and a violet spellcaster gaze.",
     "iris": "#8f6bff",
     "pupil": "#090316",
@@ -657,7 +850,7 @@ export const GENERATED_SKINS = [
   }
 ] as const;
 
-export const GENERATED_LAYERED_SKINS = new Set(["robot","cat","manga-female","dragon","cyberpunk-female","d20-rpg","tibetan-monk","alien","hacker","anonymous","ice-hockey","clown","spy","skeleton","wizard"]);
+export const GENERATED_LAYERED_SKINS = new Set(["robot","cat","manga-female","dragon","cyberpunk-female","d20-rpg","space-helmet","classic-googly","detective-noir","one-eye","tibetan-monk","alien","hacker","anonymous","ice-hockey","clown","spy","skeleton","wizard"]);
 
 export const GENERATED_SKIN_EYE_WINDOWS = Object.fromEntries(
   GENERATED_SKINS.map((skin) => [skin.id, skin.eyeWindows])

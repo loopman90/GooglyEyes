@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.7
+
+- Added SpaceHelmet, Classic Googly, Detective Noir, and One Eye layered skins.
+- Added single-eye layout support so One Eye renders as one centered runtime eye.
+- Added unique per-skin iris, pupil, eyelid, glow, and ambient reaction defaults for the new skins.
+- Tuned new mask eye windows and generated clean base-eye PNGs without fixed iris, pupils, lashes, or eyelids.
+
 ## 1.0.6
 
 - Removed the Mona Lisa skin from the active plugin and packaged assets.

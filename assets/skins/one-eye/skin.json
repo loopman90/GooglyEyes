@@ -1,0 +1,48 @@
+{
+  "id": "one-eye",
+  "name": "One Eye",
+  "renderer": "layered",
+  "eyeLayout": "single",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Single cyclops opening with a curious lime stare.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.282,
+      "y": 0.286,
+      "w": 0.436,
+      "h": 0.384
+    },
+    {
+      "side": "right",
+      "x": 0.282,
+      "y": 0.286,
+      "w": 0.436,
+      "h": 0.384
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "wide-stare",
+    "confused",
+    "dizzy",
+    "happy",
+    "suspicious",
+    "spacing-out",
+    "wink-left"
+  ],
+  "defaults": {
+    "irisColor": "#b7ff35",
+    "pupilColor": "#050806",
+    "eyeWhiteColor": "#f2ffe8",
+    "eyelidColor": "#58b55f",
+    "eyelidShadowColor": "#33185d",
+    "irisGlow": 0.65,
+    "irisSize": 29,
+    "pupilSize": 32
+  }
+}

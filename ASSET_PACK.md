@@ -110,7 +110,7 @@ Runtime eye scale rule:
 
 Current V1 count:
 
-- 15 active skins
+- 19 active skins
 - 2 base eye PNGs per skin
 - 1 mask PNG per skin
 - 1 thumbnail PNG per skin

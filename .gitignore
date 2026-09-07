@@ -14,6 +14,14 @@ assets/skins/*
 !assets/skins/dragon/**
 !assets/skins/d20-rpg/
 !assets/skins/d20-rpg/**
+!assets/skins/space-helmet/
+!assets/skins/space-helmet/**
+!assets/skins/classic-googly/
+!assets/skins/classic-googly/**
+!assets/skins/detective-noir/
+!assets/skins/detective-noir/**
+!assets/skins/one-eye/
+!assets/skins/one-eye/**
 !assets/skins/tibetan-monk/
 !assets/skins/tibetan-monk/**
 !assets/skins/alien/
@@ -24,8 +32,6 @@ assets/skins/*
 !assets/skins/anonymous/**
 !assets/skins/ice-hockey/
 !assets/skins/ice-hockey/**
-!assets/skins/mona-lisa/
-!assets/skins/mona-lisa/**
 !assets/skins/clown/
 !assets/skins/clown/**
 !assets/skins/cyberpunk-female/

@@ -1,0 +1,46 @@
+{
+  "id": "space-helmet",
+  "name": "SpaceHelmet",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Astronaut visor with cool cyan focus.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.166,
+      "y": 0.302,
+      "w": 0.263,
+      "h": 0.353
+    },
+    {
+      "side": "right",
+      "x": 0.572,
+      "y": 0.302,
+      "w": 0.263,
+      "h": 0.353
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "wide-stare",
+    "dreamy",
+    "spacing-out",
+    "starstruck",
+    "look-up",
+    "slow-blink"
+  ],
+  "defaults": {
+    "irisColor": "#20d9ff",
+    "pupilColor": "#020916",
+    "eyeWhiteColor": "#eaf7ff",
+    "eyelidColor": "#d4e6ef",
+    "eyelidShadowColor": "#0d2032",
+    "irisGlow": 0.8,
+    "irisSize": 34,
+    "pupilSize": 28
+  }
+}
