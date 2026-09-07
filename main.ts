@@ -319,19 +319,54 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
 
 function reactionIrisFilter(reaction: Reaction): string {
   switch (reaction) {
+    case "sad":
+    case "crying":
+    case "loneliness":
+    case "sleepy":
+    case "sleepy-idle":
+    case "tired-but-awake":
+    case "bored":
+    case "apathy":
+    case "acceptance":
+      return "brightness(0.96) saturate(0.96)";
+    case "angry":
+    case "furious":
+    case "frustration":
+    case "determination":
+    case "concentration":
+    case "alertness":
+    case "suspense":
+      return "brightness(0.98) contrast(1.04)";
+    case "happy":
+    case "laughing":
+    case "surprise-delight":
+    case "excitement":
+    case "gratitude":
+    case "trust":
+    case "contentment":
+    case "relief":
+    case "pride":
+    case "satisfaction":
+      return "brightness(1.03)";
+    case "in-love":
+    case "sympathy":
+    case "embarrassment":
+    case "shame":
+    case "guilt":
+    case "playfulness":
+    case "mischief":
+      return "brightness(1.02) saturate(1.02)";
     case "starstruck":
     case "awe":
-    case "excitement":
-    case "surprise-delight":
-      return "brightness(1.08) saturate(1.08)";
-    case "in-love":
-      return "brightness(1.06) saturate(1.12)";
+      return "brightness(1.06) saturate(1.04)";
+    case "dizzy":
+    case "confusion-spiral":
+      return "brightness(1.02) saturate(0.96) blur(0.2px)";
     case "stoned":
     case "drunk":
-      return "brightness(0.96) saturate(0.9) blur(0.25px)";
+      return "brightness(0.96) saturate(0.88) blur(0.25px)";
     case "spacing-out":
-    case "apathy":
-      return "saturate(0.75) brightness(0.94)";
+      return "brightness(0.98) saturate(0.9) blur(0.18px)";
     default:
       return "none";
   }
@@ -690,6 +725,7 @@ class EyeController {
   private lastAction = new Map<string, number>();
   private lastMouse = { x: 0, y: 0, t: Date.now() };
   private typingHits: number[] = [];
+  private lifeSeed = Math.random() * Math.PI * 2;
   private reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   private workspaceEventsRegistered = false;
   private resizeObserver: ResizeObserver | null = null;
@@ -1003,10 +1039,13 @@ class EyeController {
   private loop = (): void => {
     const s = this.plugin.settings;
     if (this.root && !this.root.hasClass("is-hidden")) {
+      const now = Date.now();
       const smoothing = clamp(s.smoothing / PERSONALITY_OPTIONS[s.personality].lag, 0.04, 0.8);
       this.eased.x += (this.target.x - this.eased.x) * smoothing;
       this.eased.y += (this.target.y - this.eased.y) * smoothing;
+      const lifePupilScale = this.reduceMotion.matches ? 1 : this.pupilLifeScale(now);
       for (const pair of this.pairs) {
+        pair.setCssProps({ "--life-pupil-scale": lifePupilScale.toFixed(3) });
         const rect = pair.getBoundingClientRect();
         const energy = this.isFocusMode() ? 0.35 : PERSONALITY_OPTIONS[s.personality].energy * this.intensity();
         const irises = pair.querySelectorAll<HTMLElement>(".googly-eyes-iris");
@@ -1121,6 +1160,7 @@ class EyeController {
     set("--eye-base-rotate-right", "0deg");
     set("--iris-scale", "1");
     set("--pupil-scale", "1");
+    set("--life-pupil-scale", "1");
     set("--iris-opacity", "1");
     set("--iris-filter", "none");
     set("--eye-white-filter", reactionEyeWhiteFilter(reaction));
@@ -2431,17 +2471,37 @@ class EyeController {
     return { low: 0.2, medium: 0.55, high: 0.85, custom: this.plugin.settings.customRandomness }[this.plugin.settings.randomness];
   }
 
+  private pupilLifeScale(now: number): number {
+    const personality = PERSONALITY_OPTIONS[this.plugin.settings.personality];
+    const idle = this.currentReaction === "idle-neutral";
+    const baseAmplitude = idle ? 0.026 : 0.014;
+    const amplitude = clamp(baseAmplitude * personality.energy * this.intensity() * (0.7 + this.randomness() * 0.4), 0.006, 0.045);
+    const t = now / 1000;
+    const slowPulse = Math.sin(t * 0.85 + this.lifeSeed) * 0.62;
+    const unevenPulse = Math.sin(t * 1.57 + this.lifeSeed * 1.9) * 0.26;
+    const tinyCatch = Math.sin(t * 2.83 + this.lifeSeed * 0.4) * 0.08;
+    return clamp(1 + (slowPulse + unevenPulse + tinyCatch) * amplitude, 0.94, 1.07);
+  }
+
   private reactionDuration(reaction: Reaction, multiplier: number): number {
-    const base = reaction.includes("typing") ? 380 : reaction.includes("shock") || reaction === "shocked" ? 780 : 560;
-    return this.reduceMotion.matches ? 180 : base * multiplier * this.intensity() + this.plugin.settings.reactionHoldMs;
+    const longRead: Reaction[] = ["sad", "crying", "loneliness", "sleepy", "sleepy-idle", "dreamy", "stoned", "spacing-out", "in-love", "relief", "gratitude", "trust", "contentment", "calm", "acceptance", "awe", "bored", "apathy", "tired-but-awake"];
+    const punchyRead: Reaction[] = ["shocked", "wide-stare", "dramatic-shock", "panic", "surprise-fear", "surprise-delight", "excitement", "furious", "frustration", "impatience", "overwhelmed", "confusion-spiral", "dizzy", "laughing", "starstruck"];
+    const base = reaction.includes("typing")
+      ? 650
+      : longRead.includes(reaction)
+        ? 1800
+        : punchyRead.includes(reaction) || reaction.includes("shock")
+          ? 1450
+          : 1150;
+    return this.reduceMotion.matches ? 240 : base * multiplier * this.intensity() + 350 + this.plugin.settings.reactionHoldMs;
   }
 
   private ambientReactionDuration(reaction: Reaction): number {
     if (this.reduceMotion.matches) return 900;
     const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love", "relief", "loneliness", "apathy", "acceptance", "calm", "hope", "satisfaction", "gratitude", "trust", "tired-but-awake", "contentment", "awe"];
     const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck", "frustration", "surprise-delight", "confusion-spiral", "fear-freeze", "excitement", "overwhelmed", "impatience", "surprise-fear", "alertness", "suspense"];
-    const base = longRead.includes(reaction) ? 3600 : punchy.includes(reaction) ? 3000 : 2800;
-    return base + Math.random() * 850 + this.plugin.settings.reactionHoldMs;
+    const base = longRead.includes(reaction) ? 5200 : punchy.includes(reaction) ? 4200 : 3600;
+    return base + Math.random() * 1200 + this.plugin.settings.reactionHoldMs;
   }
 
   private isFocusMode(): boolean {

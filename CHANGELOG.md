@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.18
+
+- Rebuilt the Spy and Pumpkin Halloween masks as full rectangular tab-filling overlays with transparent eye holes.
+- Added distinct pupil treatments for Cat, Dragon, Atlas, and C-4PO so animal and robot skins feel less like standard eyes.
+- Reduced unrealistic iris color shifts during emotions and moved expression emphasis toward lids, pupil size, eye whites, and motion.
+- Lengthened emotion timing, added smoother expression build-up, and introduced subtle organic pupil micro-dilation.
+- Updated generated skin metadata, GitHub Pages skin assets, and the copy-ready test package.
+
 ## 1.0.17
 
 - Added Iris size and Pupil size sliders that scale each skin's tuned default eye proportions.

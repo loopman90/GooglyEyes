@@ -60,6 +60,7 @@
   --lid-lower-tilt-right: 0deg;
   --iris-scale: 1;
   --pupil-scale: 1;
+  --life-pupil-scale: 1;
   --iris-opacity: 1;
   --iris-filter: none;
   --eye-white-filter: none;
@@ -123,6 +124,11 @@
   display: block;
 }
 
+.googly-eyes-pair:not([data-reaction="idle-neutral"]) .googly-eyes-layered-eyes {
+  animation: googly-eyes-expression-build 620ms cubic-bezier(0.18, 0.9, 0.24, 1) both;
+  transform-origin: 50% 50%;
+}
+
 .googly-eyes-pair.has-single-eye .googly-eyes-eye-slot-right {
   display: none;
 }
@@ -140,7 +146,7 @@
     inset 0 -10px 18px rgb(0 0 0 / 0.28),
     inset 0 0 18px rgb(0 0 0 / 0.24);
   transform: rotate(var(--eye-vibe));
-  transition: transform 130ms ease;
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .googly-eyes-eye-slot-left {
@@ -206,7 +212,7 @@
   filter: var(--eye-white-filter);
   transform: translate(var(--eye-base-x), var(--eye-base-y)) rotate(var(--eye-base-rotate)) scale(var(--eye-base-scale));
   transform-origin: 50% 50%;
-  transition: transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 180ms ease;
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 280ms ease;
   -webkit-user-drag: none;
 }
 
@@ -227,7 +233,7 @@
   opacity: var(--iris-opacity);
   filter: var(--iris-filter);
   transform: translate(calc(-50% + var(--iris-x) + var(--reaction-iris-x)), calc(-50% + var(--iris-y) + var(--reaction-iris-y))) scale(var(--iris-scale));
-  transition: transform 70ms linear, width 130ms ease, opacity 130ms ease, filter 130ms ease;
+  transition: transform 190ms cubic-bezier(0.2, 0.8, 0.2, 1), width 220ms ease, opacity 220ms ease, filter 260ms ease;
   z-index: 2;
   pointer-events: none;
 }
@@ -256,8 +262,8 @@
   box-shadow:
     0 0 calc(10px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 58%, transparent),
     inset 0 0 9px rgb(0 0 0 / 0.86);
-  transform: translate(calc(-50% + var(--pupil-x) + var(--reaction-pupil-x)), calc(-50% + var(--pupil-y) + var(--reaction-pupil-y))) scale(var(--pupil-scale));
-  transition: transform 70ms linear, width 120ms ease;
+  transform: translate(calc(-50% + var(--pupil-x) + var(--reaction-pupil-x)), calc(-50% + var(--pupil-y) + var(--reaction-pupil-y))) scale(var(--pupil-scale)) scale(var(--life-pupil-scale));
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), width 220ms ease;
   z-index: 3;
 }
 
@@ -337,7 +343,7 @@
 }
 
 .googly-eyes-pair[data-reaction="furious"] .googly-eyes-eye-slot::after {
-  animation: googly-eyes-rage-pulse 260ms ease-in-out infinite;
+  animation: googly-eyes-rage-pulse 520ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="dizzy"] .googly-eyes-iris::after,
@@ -353,7 +359,7 @@
 }
 
 .googly-eyes-pair[data-reaction="dizzy"] .googly-eyes-iris::after {
-  animation: googly-eyes-spin 700ms linear infinite;
+  animation: googly-eyes-spin 1200ms linear infinite;
 }
 
 .googly-eyes-pair[data-reaction="drunk"] .googly-eyes-iris::after {
@@ -377,12 +383,12 @@
   background:
     radial-gradient(circle at 44% 46%, rgb(181 255 146 / 0.28), transparent 42%),
     linear-gradient(90deg, transparent, rgb(140 255 110 / 0.18), transparent);
-  animation: googly-eyes-haze 1800ms ease-in-out infinite;
+  animation: googly-eyes-haze 2600ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="spacing-out"] .googly-eyes-eye-slot::after {
   background: radial-gradient(circle, rgb(255 255 255 / 0.5), transparent 54%);
-  animation: googly-eyes-empty-stare 2200ms ease-in-out infinite;
+  animation: googly-eyes-empty-stare 3200ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="disgust"] .googly-eyes-eye-slot::after {
@@ -424,13 +430,13 @@
   inset: 4%;
   border-radius: inherit;
   background: radial-gradient(circle at 50% 42%, rgb(255 255 255 / 0.34), transparent 60%);
-  animation: googly-eyes-gentle-glow 1800ms ease-in-out infinite;
+  animation: googly-eyes-gentle-glow 2600ms ease-in-out infinite;
   pointer-events: none;
   z-index: 4;
 }
 
 .googly-eyes-pair[data-reaction="curiosity"] .googly-eyes-eye {
-  animation: googly-eyes-curious-tilt 900ms ease-in-out infinite;
+  animation: googly-eyes-curious-tilt 1500ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="jealousy"] .googly-eyes-iris,
@@ -438,11 +444,11 @@
 .googly-eyes-pair[data-reaction="skepticism"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="mischief"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="doubt"] .googly-eyes-iris {
-  animation: googly-eyes-side-eye 1350ms ease-in-out infinite;
+  animation: googly-eyes-side-eye 2200ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="pride"] .googly-eyes-eye-slot {
-  animation: googly-eyes-pride-lift 1600ms ease-in-out infinite;
+  animation: googly-eyes-pride-lift 2400ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="bored"] .googly-eyes-iris {
@@ -476,7 +482,7 @@
     linear-gradient(0deg, transparent 0 44%, #fff06a 45% 55%, transparent 56%);
   filter: drop-shadow(0 0 7px rgb(255 226 80 / 0.76));
   transform: translate(-50%, -50%) scale(0.76);
-  animation: googly-eyes-idea-spark 900ms ease-in-out infinite;
+  animation: googly-eyes-idea-spark 1500ms ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -487,7 +493,7 @@
     radial-gradient(circle, #fffbd1 0 22%, transparent 23%),
     linear-gradient(90deg, transparent 0 42%, #ffd84c 43% 57%, transparent 58%),
     linear-gradient(0deg, transparent 0 42%, #ffd84c 43% 57%, transparent 58%);
-  animation: googly-eyes-delight-pop 680ms ease-out infinite;
+  animation: googly-eyes-delight-pop 1150ms ease-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="passion"] .googly-eyes-eye-slot::after,
@@ -497,14 +503,14 @@
   inset: -6%;
   border-radius: inherit;
   background: radial-gradient(circle at 50% 50%, rgb(255 72 38 / 0.34), transparent 64%);
-  animation: googly-eyes-passion-flare 760ms ease-in-out infinite;
+  animation: googly-eyes-passion-flare 1300ms ease-in-out infinite;
   pointer-events: none;
   z-index: 4;
 }
 
 .googly-eyes-pair[data-reaction="frustration"] .googly-eyes-eye,
 .googly-eyes-pair[data-reaction="impatience"] .googly-eyes-eye {
-  animation: googly-eyes-tight-shiver 920ms ease-in-out infinite;
+  animation: googly-eyes-tight-shiver 1350ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="annoyance"] .googly-eyes-iris {
@@ -512,7 +518,7 @@
 }
 
 .googly-eyes-pair[data-reaction="impatience"] .googly-eyes-eye {
-  animation: googly-eyes-impatient-tick 760ms steps(2, end) infinite;
+  animation: googly-eyes-impatient-tick 1200ms steps(2, end) infinite;
 }
 
 .googly-eyes-pair[data-reaction="fear-freeze"] .googly-eyes-eye,
@@ -541,16 +547,16 @@
   border-radius: inherit;
   background:
     conic-gradient(from 0deg, transparent 0 18%, rgb(255 255 255 / 0.62) 19% 27%, transparent 28% 48%, rgb(255 255 255 / 0.48) 49% 58%, transparent 59% 100%);
-  animation: googly-eyes-spin 900ms linear infinite;
+  animation: googly-eyes-spin 1400ms linear infinite;
   pointer-events: none;
 }
 
 .googly-eyes-pair[data-reaction="excitement"] .googly-eyes-eye {
-  animation: googly-eyes-excited-spark 360ms ease-in-out infinite;
+  animation: googly-eyes-excited-spark 760ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="playfulness"] .googly-eyes-eye {
-  animation: googly-eyes-playful-hop 620ms ease-in-out infinite;
+  animation: googly-eyes-playful-hop 1150ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="suspense"] .googly-eyes-eye {
@@ -573,7 +579,7 @@
 }
 
 .googly-eyes-pair[data-reaction="overwhelmed"] .googly-eyes-eye {
-  animation: googly-eyes-overwhelmed-swim 520ms ease-in-out infinite;
+  animation: googly-eyes-overwhelmed-swim 1050ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="loneliness"] .googly-eyes-eye-slot::after {
@@ -592,20 +598,20 @@
 }
 
 .googly-eyes-pair[data-reaction="restless"] .googly-eyes-eye {
-  animation-duration: 860ms;
+  animation-duration: 1250ms;
 }
 
 .googly-eyes-pair[data-reaction="panic"] .googly-eyes-eye {
-  animation: googly-eyes-jitter 560ms ease-in-out infinite;
+  animation: googly-eyes-jitter 920ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="chaotic-stare"] .googly-eyes-eye,
 .googly-eyes-pair[data-reaction="fast-movement"] .googly-eyes-eye {
-  animation: googly-eyes-chaos-snap 720ms cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  animation: googly-eyes-chaos-snap 1100ms cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 }
 
 .googly-eyes-pair[data-reaction="drunk"] .googly-eyes-eye {
-  animation: googly-eyes-wobble 720ms ease-in-out infinite;
+  animation: googly-eyes-wobble 1600ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="stoned"] .googly-eyes-iris,
@@ -619,7 +625,7 @@
 }
 
 .googly-eyes-pair[data-reaction="laughing"] .googly-eyes-eye-slot {
-  animation: googly-eyes-laugh-bounce 420ms ease-in-out infinite;
+  animation: googly-eyes-laugh-bounce 820ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="wide-stare"] .googly-eyes-iris,
@@ -627,7 +633,22 @@
 .googly-eyes-pair[data-reaction="dramatic-shock"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="surprise-fear"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="awe"] .googly-eyes-iris {
-  animation: googly-eyes-alert-pop 620ms ease-out infinite;
+  animation: googly-eyes-alert-pop 1050ms ease-out infinite;
+}
+
+@keyframes googly-eyes-expression-build {
+  0% {
+    opacity: 0.82;
+    transform: scale(0.985);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.012);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes googly-eyes-tear {
@@ -1030,12 +1051,12 @@
 
 .googly-eyes-pair[data-skin="cat"] .googly-eyes-pupil {
   width: var(--skin-pupil-size);
-  height: 82%;
+  height: 90%;
   aspect-ratio: auto;
-  border-radius: 52%;
+  border-radius: 46% / 52%;
   background:
     radial-gradient(ellipse at 36% 28%, rgb(255 255 255 / 0.55) 0 8%, transparent 9%),
-    linear-gradient(90deg, color-mix(in srgb, var(--pupil-color) 88%, var(--iris-color) 12%), var(--pupil-color) 46% 54%, color-mix(in srgb, var(--pupil-color) 88%, var(--iris-color) 12%));
+    linear-gradient(90deg, color-mix(in srgb, var(--pupil-color) 76%, var(--iris-color) 24%) 0 18%, var(--pupil-color) 43% 57%, color-mix(in srgb, var(--pupil-color) 76%, var(--iris-color) 24%) 82% 100%);
 }
 
 .googly-eyes-pair[data-skin="manga-female"] .googly-eyes-iris {
@@ -1062,6 +1083,62 @@
     radial-gradient(circle at 50% 52%, var(--pupil-color) 0 48%, color-mix(in srgb, var(--pupil-color) 72%, var(--iris-color) 28%) 100%);
 }
 
+.googly-eyes-pair[data-skin="c-4po"] .googly-eyes-iris {
+  background:
+    radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.88) 0 8%, transparent 9%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--iris-color) 62%, #ffffff 38%) 0 26%, var(--iris-color) 42%, #c97805 66%, #4f2800 100%);
+  box-shadow:
+    0 0 calc(30px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 76%, transparent),
+    inset 0 0 10px rgb(255 255 255 / 0.36),
+    inset 0 0 22px rgb(77 40 0 / 0.74);
+}
+
+.googly-eyes-pair[data-skin="c-4po"] .googly-eyes-iris::before {
+  background:
+    radial-gradient(circle, transparent 0 48%, rgb(255 238 153 / 0.38) 49% 52%, transparent 53%),
+    repeating-conic-gradient(from 0deg, rgb(255 232 132 / 0.42) 0deg 6deg, transparent 6deg 18deg);
+  opacity: 0.72;
+}
+
+.googly-eyes-pair[data-skin="c-4po"] .googly-eyes-pupil {
+  width: var(--skin-pupil-size);
+  background:
+    radial-gradient(circle at 38% 30%, rgb(255 255 255 / 0.86) 0 12%, transparent 13%),
+    radial-gradient(circle at 50% 52%, var(--pupil-color) 0 24%, #ffb21a 42%, #633000 76%, #140700 100%);
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--pupil-color) 82%, transparent),
+    inset 0 0 8px rgb(255 255 255 / 0.28);
+}
+
+.googly-eyes-pair[data-skin="atlas"] .googly-eyes-iris {
+  background:
+    radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.92) 0 8%, transparent 9%),
+    radial-gradient(circle at 50% 50%, #e7fbff 0 18%, var(--iris-color) 36%, #0978b8 64%, #062a4d 100%);
+  box-shadow:
+    0 0 calc(36px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 82%, transparent),
+    inset 0 0 12px rgb(255 255 255 / 0.48),
+    inset 0 0 26px rgb(2 18 44 / 0.78);
+}
+
+.googly-eyes-pair[data-skin="atlas"] .googly-eyes-iris::before {
+  background:
+    radial-gradient(circle, transparent 0 40%, rgb(186 247 255 / 0.55) 41% 45%, transparent 46% 58%, rgb(30 203 255 / 0.34) 59% 63%, transparent 64%),
+    linear-gradient(90deg, transparent 0 48%, rgb(255 255 255 / 0.24) 49% 51%, transparent 52% 100%),
+    linear-gradient(0deg, transparent 0 48%, rgb(255 255 255 / 0.18) 49% 51%, transparent 52% 100%);
+  opacity: 0.78;
+}
+
+.googly-eyes-pair[data-skin="atlas"] .googly-eyes-pupil {
+  width: var(--skin-pupil-size);
+  background:
+    radial-gradient(circle at 35% 28%, rgb(255 255 255 / 0.98) 0 13%, transparent 14%),
+    radial-gradient(circle at 50% 52%, #ffffff 0 14%, var(--pupil-color) 30%, var(--iris-color) 58%, #07345f 100%);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--pupil-color) 88%, transparent),
+    0 0 36px color-mix(in srgb, var(--iris-color) 72%, transparent),
+    inset 0 0 7px rgb(255 255 255 / 0.4);
+}
+
 .googly-eyes-pair[data-skin="dragon"] .googly-eyes-iris {
   background:
     radial-gradient(circle at 35% 33%, rgb(255 235 170 / 0.78) 0 7%, transparent 8%),
@@ -1080,12 +1157,12 @@
 
 .googly-eyes-pair[data-skin="dragon"] .googly-eyes-pupil {
   width: var(--skin-pupil-size);
-  height: 88%;
+  height: 96%;
   aspect-ratio: auto;
-  border-radius: 50%;
+  border-radius: 42% / 52%;
   background:
     radial-gradient(ellipse at 36% 26%, rgb(255 214 130 / 0.42) 0 7%, transparent 8%),
-    linear-gradient(90deg, color-mix(in srgb, var(--pupil-color) 82%, #6f170a 18%), var(--pupil-color) 44% 56%, color-mix(in srgb, var(--pupil-color) 82%, #6f170a 18%));
+    linear-gradient(90deg, color-mix(in srgb, var(--pupil-color) 58%, #ff8a1b 42%) 0 12%, color-mix(in srgb, var(--pupil-color) 86%, #6f170a 14%) 31% 38%, var(--pupil-color) 45% 55%, color-mix(in srgb, var(--pupil-color) 86%, #6f170a 14%) 62% 69%, color-mix(in srgb, var(--pupil-color) 58%, #ff8a1b 42%) 88% 100%);
 }
 
 .googly-eyes-pair[data-skin="tibetan-monk"] .googly-eyes-iris {

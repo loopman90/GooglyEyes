@@ -36,13 +36,13 @@
   ],
   "defaults": {
     "irisColor": "#ffb21a",
-    "pupilColor": "#120900",
+    "pupilColor": "#fff3a6",
     "eyeWhiteColor": "#fff0ba",
     "eyelidColor": "#c9962a",
     "eyelidShadowColor": "#362000",
     "irisGlow": 0.9,
-    "irisSize": 38,
-    "pupilSize": 18
+    "irisSize": 44,
+    "pupilSize": 24
   },
   "eyeStyle": {
     "slotRadius": "0px",

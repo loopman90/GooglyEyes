@@ -270,12 +270,12 @@ export const GENERATED_SKINS = [
     "eyeLayout": "dual",
     "flavor": "Golden robot faceplate with warm lamp eyes.",
     "iris": "#ffb21a",
-    "pupil": "#120900",
+    "pupil": "#fff3a6",
     "eyeWhite": "#fff0ba",
     "outline": "#c9962a",
     "accent": "#362000",
-    "irisSize": 38,
-    "pupilSize": 18,
+    "irisSize": 44,
+    "pupilSize": 24,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -323,12 +323,12 @@ export const GENERATED_SKINS = [
     "eyeLayout": "single",
     "flavor": "White robot faceplate with one cool blue lamp eye.",
     "iris": "#1ecbff",
-    "pupil": "#020817",
+    "pupil": "#baf7ff",
     "eyeWhite": "#d8f8ff",
     "outline": "#dce8f2",
     "accent": "#102438",
-    "irisSize": 38,
-    "pupilSize": 18,
+    "irisSize": 44,
+    "pupilSize": 24,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1031,17 +1031,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1477,
-        "y": 0.2108,
-        "w": 0.3021,
-        "h": 0.2706
+        "x": 0.1962,
+        "y": 0.2694,
+        "w": 0.2418,
+        "h": 0.2931
       },
       "right": {
         "side": "right",
-        "x": 0.5485,
-        "y": 0.2108,
-        "w": 0.3044,
-        "h": 0.2706
+        "x": 0.5614,
+        "y": 0.2728,
+        "w": 0.2424,
+        "h": 0.2943
       }
     },
     "ambientReactions": [
@@ -1241,17 +1241,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.0958,
-        "y": 0.2951,
-        "w": 0.3495,
-        "h": 0.5
+        "x": 0.0817,
+        "y": 0.3033,
+        "w": 0.3083,
+        "h": 0.4476
       },
       "right": {
         "side": "right",
-        "x": 0.5485,
-        "y": 0.3019,
-        "w": 0.3602,
-        "h": 0.5
+        "x": 0.611,
+        "y": 0.3055,
+        "w": 0.3078,
+        "h": 0.4543
       }
     },
     "ambientReactions": [
