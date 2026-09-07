@@ -480,6 +480,16 @@
   pointer-events: none;
 }
 
+.googly-eyes-pair[data-reaction="surprise-delight"] .googly-eyes-pupil::after {
+  width: 74%;
+  height: 74%;
+  background:
+    radial-gradient(circle, #fffbd1 0 22%, transparent 23%),
+    linear-gradient(90deg, transparent 0 42%, #ffd84c 43% 57%, transparent 58%),
+    linear-gradient(0deg, transparent 0 42%, #ffd84c 43% 57%, transparent 58%);
+  animation: googly-eyes-delight-pop 680ms ease-out infinite;
+}
+
 .googly-eyes-pair[data-reaction="passion"] .googly-eyes-eye-slot::after,
 .googly-eyes-pair[data-reaction="excitement"] .googly-eyes-eye-slot::after {
   content: "";
@@ -493,9 +503,16 @@
 }
 
 .googly-eyes-pair[data-reaction="frustration"] .googly-eyes-eye,
-.googly-eyes-pair[data-reaction="annoyance"] .googly-eyes-eye,
 .googly-eyes-pair[data-reaction="impatience"] .googly-eyes-eye {
   animation: googly-eyes-tight-shiver 920ms ease-in-out infinite;
+}
+
+.googly-eyes-pair[data-reaction="annoyance"] .googly-eyes-iris {
+  animation: googly-eyes-annoyed-glance 1400ms ease-in-out infinite;
+}
+
+.googly-eyes-pair[data-reaction="impatience"] .googly-eyes-eye {
+  animation: googly-eyes-impatient-tick 760ms steps(2, end) infinite;
 }
 
 .googly-eyes-pair[data-reaction="fear-freeze"] .googly-eyes-eye,
@@ -825,6 +842,22 @@
   }
 }
 
+@keyframes googly-eyes-delight-pop {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(-4deg) scale(0.74);
+    opacity: 0.68;
+  }
+  35% {
+    transform: translate(-50%, -50%) rotate(8deg) scale(1.08);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(0.88);
+    opacity: 0.86;
+  }
+}
+
 @keyframes googly-eyes-passion-flare {
   0%,
   100% {
@@ -866,6 +899,31 @@
   100% {
     translate: 0 0.18%;
     rotate: 0deg;
+  }
+}
+
+@keyframes googly-eyes-annoyed-glance {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  64% {
+    translate: 0 0;
+  }
+  78% {
+    translate: -4% 1%;
+  }
+}
+
+@keyframes googly-eyes-impatient-tick {
+  0%,
+  100% {
+    translate: -0.55% 0;
+    rotate: -0.3deg;
+  }
+  50% {
+    translate: 0.55% 0;
+    rotate: 0.3deg;
   }
 }
 

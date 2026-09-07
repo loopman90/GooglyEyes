@@ -180,6 +180,8 @@ The tab includes live controls for:
 - Eye pairs
 - Iris color
 - Eyelid color
+- Iris size
+- Pupil size
 - Emotion strength
 - Visual reaction previews
 

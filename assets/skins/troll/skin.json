@@ -8,17 +8,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.1234,
-      "y": 0.3202,
-      "w": 0.3337,
-      "h": 0.2706
+      "x": 0.1161,
+      "y": 0.31,
+      "w": 0.2937,
+      "h": 0.3393
     },
     {
       "side": "right",
-      "x": 0.5434,
-      "y": 0.3202,
-      "w": 0.3337,
-      "h": 0.2706
+      "x": 0.5834,
+      "y": 0.3191,
+      "w": 0.301,
+      "h": 0.336
     }
   ],
   "assets": {
@@ -34,12 +34,12 @@
     "confused"
   ],
   "defaults": {
-    "irisColor": "#6fd2ff",
+    "irisColor": "#b7a34f",
     "pupilColor": "#040b10",
-    "eyeWhiteColor": "#e6eef2",
+    "eyeWhiteColor": "#d8dbc9",
     "eyelidColor": "#4a5b60",
     "eyelidShadowColor": "#151d20",
-    "irisGlow": 0.42,
+    "irisGlow": 0.28,
     "irisSize": 40,
     "pupilSize": 16
   },

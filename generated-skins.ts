@@ -110,14 +110,14 @@ export const GENERATED_SKINS = [
     "id": "manga-female",
     "name": "Manga Female",
     "eyeLayout": "dual",
-    "flavor": "Big anime eyes with soft lashes.",
+    "flavor": "Bright manga eye openings with clean stylized pupils.",
     "iris": "#9b68ee",
     "pupil": "#140d2d",
     "eyeWhite": "#f3efe4",
     "outline": "#d99a96",
     "accent": "#5b252b",
-    "irisSize": 43,
-    "pupilSize": 16,
+    "irisSize": 68,
+    "pupilSize": 30,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -136,17 +136,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.115,
-        "y": 0.2931,
-        "w": 0.3754,
-        "h": 0.4408
+        "x": 0.1026,
+        "y": 0.3247,
+        "w": 0.3078,
+        "h": 0.4284
       },
       "right": {
         "side": "right",
-        "x": 0.5101,
-        "y": 0.2931,
-        "w": 0.3754,
-        "h": 0.4408
+        "x": 0.5868,
+        "y": 0.3213,
+        "w": 0.3061,
+        "h": 0.4318
       }
     },
     "ambientReactions": [
@@ -189,17 +189,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.0507,
-        "y": 0.3517,
-        "w": 0.3788,
-        "h": 0.248
+        "x": 0.044,
+        "y": 0.2649,
+        "w": 0.3517,
+        "h": 0.4656
       },
       "right": {
         "side": "right",
-        "x": 0.571,
-        "y": 0.3517,
-        "w": 0.3788,
-        "h": 0.248
+        "x": 0.6048,
+        "y": 0.2649,
+        "w": 0.3517,
+        "h": 0.4656
       }
     },
     "ambientReactions": [
@@ -241,17 +241,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.155,
-        "y": 0.3484,
-        "w": 0.2954,
-        "h": 0.2796
+        "x": 0.1105,
+        "y": 0.3608,
+        "w": 0.2931,
+        "h": 0.301
       },
       "right": {
         "side": "right",
-        "x": 0.5502,
-        "y": 0.3484,
-        "w": 0.2954,
-        "h": 0.2796
+        "x": 0.597,
+        "y": 0.3596,
+        "w": 0.2926,
+        "h": 0.3021
       }
     },
     "ambientReactions": [
@@ -400,17 +400,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1229,
-        "y": 0.3213,
-        "w": 0.3247,
-        "h": 0.4092
+        "x": 0.1623,
+        "y": 0.4307,
+        "w": 0.2334,
+        "h": 0.4295
       },
       "right": {
         "side": "right",
-        "x": 0.553,
-        "y": 0.3213,
-        "w": 0.3247,
-        "h": 0.4092
+        "x": 0.6043,
+        "y": 0.4307,
+        "w": 0.2339,
+        "h": 0.4295
       }
     },
     "ambientReactions": [
@@ -611,17 +611,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1719,
-        "y": 0.3743,
-        "w": 0.3168,
-        "h": 0.2424
+        "x": 0.1635,
+        "y": 0.4104,
+        "w": 0.2694,
+        "h": 0.2446
       },
       "right": {
         "side": "right",
-        "x": 0.5118,
-        "y": 0.3743,
-        "w": 0.3168,
-        "h": 0.2424
+        "x": 0.5676,
+        "y": 0.4081,
+        "w": 0.2706,
+        "h": 0.2492
       }
     },
     "ambientReactions": [
@@ -663,17 +663,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.2035,
-        "y": 0.2131,
-        "w": 0.5936,
-        "h": 0.4746
+        "x": 0.2069,
+        "y": 0.2694,
+        "w": 0.5868,
+        "h": 0.5242
       },
       "right": {
         "side": "right",
-        "x": 0.2035,
-        "y": 0.2131,
-        "w": 0.5936,
-        "h": 0.4746
+        "x": 0.2069,
+        "y": 0.2694,
+        "w": 0.5868,
+        "h": 0.5242
       }
     },
     "ambientReactions": [
@@ -688,16 +688,16 @@ export const GENERATED_SKINS = [
   },
   {
     "id": "tibetan-monk",
-    "name": "Tibetan Monk",
+    "name": "Air Monk",
     "eyeLayout": "dual",
-    "flavor": "Warm robes with a calm meditative gaze.",
+    "flavor": "Air temple markings with a calm meditative gaze.",
     "iris": "#7f5634",
     "pupil": "#0b0806",
     "eyeWhite": "#f4eadc",
     "outline": "#9b5535",
     "accent": "#3d2018",
-    "irisSize": 38,
-    "pupilSize": 16,
+    "irisSize": 44,
+    "pupilSize": 18,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -716,17 +716,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.2029,
-        "y": 0.2988,
-        "w": 0.2745,
-        "h": 0.2435
+        "x": 0.1505,
+        "y": 0.4656,
+        "w": 0.2649,
+        "h": 0.2604
       },
       "right": {
         "side": "right",
-        "x": 0.5231,
-        "y": 0.2988,
-        "w": 0.2745,
-        "h": 0.2435
+        "x": 0.5862,
+        "y": 0.4656,
+        "w": 0.2638,
+        "h": 0.2604
       }
     },
     "ambientReactions": [
@@ -768,17 +768,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.0344,
-        "y": 0.3641,
-        "w": 0.3918,
-        "h": 0.2424
+        "x": 0.04,
+        "y": 0.2514,
+        "w": 0.354,
+        "h": 0.4791
       },
       "right": {
         "side": "right",
-        "x": 0.5744,
-        "y": 0.3641,
-        "w": 0.3918,
-        "h": 0.2424
+        "x": 0.6065,
+        "y": 0.2525,
+        "w": 0.354,
+        "h": 0.4746
       }
     },
     "ambientReactions": [
@@ -821,17 +821,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.0857,
-        "y": 0.3698,
-        "w": 0.3794,
-        "h": 0.2424
+        "x": 0.1466,
+        "y": 0.4194,
+        "w": 0.2401,
+        "h": 0.2413
       },
       "right": {
         "side": "right",
-        "x": 0.5355,
-        "y": 0.3698,
-        "w": 0.3794,
-        "h": 0.2424
+        "x": 0.6082,
+        "y": 0.4171,
+        "w": 0.239,
+        "h": 0.2435
       }
     },
     "ambientReactions": [
@@ -874,17 +874,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1471,
-        "y": 0.3698,
-        "w": 0.3467,
-        "h": 0.221
+        "x": 0.2063,
+        "y": 0.4915,
+        "w": 0.2238,
+        "h": 0.1781
       },
       "right": {
         "side": "right",
-        "x": 0.5068,
-        "y": 0.3698,
-        "w": 0.3467,
-        "h": 0.221
+        "x": 0.5722,
+        "y": 0.4915,
+        "w": 0.2204,
+        "h": 0.177
       }
     },
     "ambientReactions": [
@@ -1136,17 +1136,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.23,
-        "y": 0.2875,
-        "w": 0.2807,
-        "h": 0.3968
+        "x": 0.2165,
+        "y": 0.478,
+        "w": 0.2187,
+        "h": 0.3292
       },
       "right": {
         "side": "right",
-        "x": 0.4899,
-        "y": 0.2875,
-        "w": 0.2807,
-        "h": 0.3968
+        "x": 0.571,
+        "y": 0.4814,
+        "w": 0.2142,
+        "h": 0.3224
       }
     },
     "ambientReactions": [
@@ -1189,17 +1189,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.2153,
-        "y": 0.3168,
-        "w": 0.2802,
-        "h": 0.3472
+        "x": 0.208,
+        "y": 0.4228,
+        "w": 0.2379,
+        "h": 0.3923
       },
       "right": {
         "side": "right",
-        "x": 0.5203,
-        "y": 0.3168,
-        "w": 0.2802,
-        "h": 0.3472
+        "x": 0.5524,
+        "y": 0.4194,
+        "w": 0.2384,
+        "h": 0.3968
       }
     },
     "ambientReactions": [
@@ -1241,17 +1241,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1533,
-        "y": 0.2638,
-        "w": 0.2852,
-        "h": 0.4284
+        "x": 0.0958,
+        "y": 0.2951,
+        "w": 0.3495,
+        "h": 0.5
       },
       "right": {
         "side": "right",
-        "x": 0.562,
-        "y": 0.2638,
-        "w": 0.2852,
-        "h": 0.4284
+        "x": 0.5485,
+        "y": 0.3019,
+        "w": 0.3602,
+        "h": 0.5
       }
     },
     "ambientReactions": [
@@ -1293,17 +1293,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.2046,
-        "y": 0.407,
-        "w": 0.2909,
-        "h": 0.2672
+        "x": 0.1302,
+        "y": 0.2875,
+        "w": 0.2852,
+        "h": 0.4498
       },
       "right": {
         "side": "right",
-        "x": 0.5727,
-        "y": 0.407,
-        "w": 0.2909,
-        "h": 0.2672
+        "x": 0.5834,
+        "y": 0.2897,
+        "w": 0.2841,
+        "h": 0.4464
       }
     },
     "ambientReactions": [
@@ -1320,9 +1320,9 @@ export const GENERATED_SKINS = [
     "name": "Troll",
     "eyeLayout": "dual",
     "flavor": "Stone cave face with a heavy grumpy gaze.",
-    "iris": "#6fd2ff",
+    "iris": "#b7a34f",
     "pupil": "#040b10",
-    "eyeWhite": "#e6eef2",
+    "eyeWhite": "#d8dbc9",
     "outline": "#4a5b60",
     "accent": "#151d20",
     "irisSize": 40,
@@ -1345,17 +1345,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1234,
-        "y": 0.3202,
-        "w": 0.3337,
-        "h": 0.2706
+        "x": 0.1161,
+        "y": 0.31,
+        "w": 0.2937,
+        "h": 0.3393
       },
       "right": {
         "side": "right",
-        "x": 0.5434,
-        "y": 0.3202,
-        "w": 0.3337,
-        "h": 0.2706
+        "x": 0.5834,
+        "y": 0.3191,
+        "w": 0.301,
+        "h": 0.336
       }
     },
     "ambientReactions": [

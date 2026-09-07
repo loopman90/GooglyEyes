@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.17
+
+- Added Iris size and Pupil size sliders that scale each skin's tuned default eye proportions.
+- Kept per-skin eye placement intact while allowing user-controlled iris and pupil sizing.
+- Updated README, GitHub Pages copy, generated assets, and the copy-ready test package.
+
 ## 1.0.16
 
 - Reworked emotion color behavior so skin iris colors stay stable by default and reactions mainly tint the eye whites.

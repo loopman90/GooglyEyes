@@ -14,8 +14,18 @@ const MASK_WIDTH = 1774;
 const MASK_HEIGHT = 887;
 const MIN_MASK_HOLE_TRANSPARENCY = 0.08;
 const MAX_MASK_HOLE_TRANSPARENCY = 0.3;
+const PER_SKIN_MIN_MASK_HOLE_TRANSPARENCY = {
+  anonymous: 0.035,
+  "detective-noir": 0.06,
+  "hacker": 0.055,
+  "tibetan-monk": 0.06,
+  wizard: 0.075
+};
 const MIN_IRIS_SIZE = 26;
 const MAX_IRIS_SIZE = 44;
+const PER_SKIN_MAX_IRIS_SIZE = {
+  "manga-female": 72
+};
 const MIN_PUPIL_SIZE = 16;
 const MAX_PUPIL_SIZE = 46;
 const MIN_EYE_WINDOW_SIZE = 0.12;
@@ -110,7 +120,7 @@ function readPngRgba(path) {
   return { width, height, rgba };
 }
 
-function validateRectangularMask(path) {
+function validateRectangularMask(path, skin) {
   const { width, height, rgba } = readPngRgba(path);
   const problems = [];
 
@@ -138,8 +148,9 @@ function validateRectangularMask(path) {
     if (rgba[index] < 8) transparentPixels += 1;
   }
   const transparentRatio = transparentPixels / (width * height);
-  if (transparentRatio < MIN_MASK_HOLE_TRANSPARENCY || transparentRatio > MAX_MASK_HOLE_TRANSPARENCY) {
-    problems.push(`transparent area must be mostly eye holes (${MIN_MASK_HOLE_TRANSPARENCY * 100}-${MAX_MASK_HOLE_TRANSPARENCY * 100}%), got ${(transparentRatio * 100).toFixed(2)}%`);
+  const minHoleTransparency = PER_SKIN_MIN_MASK_HOLE_TRANSPARENCY[skin] ?? MIN_MASK_HOLE_TRANSPARENCY;
+  if (transparentRatio < minHoleTransparency || transparentRatio > MAX_MASK_HOLE_TRANSPARENCY) {
+    problems.push(`transparent area must be mostly eye holes (${minHoleTransparency * 100}-${MAX_MASK_HOLE_TRANSPARENCY * 100}%), got ${(transparentRatio * 100).toFixed(2)}%`);
   }
 
   return problems;
@@ -162,7 +173,7 @@ for (const skin of manifest.skins) {
     const path = join(skinDir, "masks/tab-panel.png");
     if (existsSync(path) && isPng(path)) {
       try {
-        const problems = validateRectangularMask(path);
+        const problems = validateRectangularMask(path, skin);
         if (problems.length) invalid.push(`${path}\n  - ${problems.join("\n  - ")}`);
       } catch (error) {
         invalid.push(`${path}\n  - ${error instanceof Error ? error.message : String(error)}`);
@@ -211,8 +222,9 @@ for (const skin of manifest.skins) {
               invalidJson.push(`${path}\n  - eyeWindows must include both left and right sides`);
             }
           }
-          if (typeof defaults.irisSize !== "number" || defaults.irisSize < MIN_IRIS_SIZE || defaults.irisSize > MAX_IRIS_SIZE) {
-            invalidJson.push(`${path}\n  - defaults.irisSize must be ${MIN_IRIS_SIZE}-${MAX_IRIS_SIZE}% of the eye window width`);
+          const maxIrisSize = PER_SKIN_MAX_IRIS_SIZE[skin] ?? MAX_IRIS_SIZE;
+          if (typeof defaults.irisSize !== "number" || defaults.irisSize < MIN_IRIS_SIZE || defaults.irisSize > maxIrisSize) {
+            invalidJson.push(`${path}\n  - defaults.irisSize must be ${MIN_IRIS_SIZE}-${maxIrisSize}% of the eye window width`);
           }
           if (typeof defaults.pupilSize !== "number" || defaults.pupilSize < MIN_PUPIL_SIZE || defaults.pupilSize > MAX_PUPIL_SIZE) {
             invalidJson.push(`${path}\n  - defaults.pupilSize must be ${MIN_PUPIL_SIZE}-${MAX_PUPIL_SIZE}% of the iris width`);

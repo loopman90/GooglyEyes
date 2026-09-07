@@ -80,6 +80,8 @@ interface GooglyEyesSettings {
   useSkinDefaultColors: boolean;
   irisColor: string;
   pupilColor: string;
+  irisSizeScale: number;
+  pupilSizeScale: number;
   eyelidColor: string;
   eyelidShadowColor: string;
   irisGlow: number;
@@ -191,11 +193,13 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "paste":
     case "redo":
     case "laughing":
-    case "surprise-delight":
-    case "excitement":
     case "inspiration":
     case "hope":
       return "sepia(0.22) saturate(1.32) hue-rotate(350deg) brightness(1.08)";
+    case "surprise-delight":
+      return "sepia(0.2) saturate(1.42) hue-rotate(344deg) brightness(1.16) contrast(1.04)";
+    case "excitement":
+      return "sepia(0.28) saturate(1.58) hue-rotate(332deg) brightness(1.14) contrast(1.08)";
     case "passion":
     case "pride":
     case "satisfaction":
@@ -220,8 +224,11 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "embarrassment":
       return "sepia(0.2) saturate(1.34) hue-rotate(300deg) brightness(1.02)";
     case "panic":
+      return "sepia(0.05) saturate(1.3) hue-rotate(170deg) brightness(1.24) contrast(1.14)";
     case "fear-freeze":
+      return "sepia(0.08) saturate(0.95) hue-rotate(176deg) brightness(1.1) contrast(1.18)";
     case "surprise-fear":
+      return "sepia(0.06) saturate(1.16) hue-rotate(168deg) brightness(1.2) contrast(1.12)";
     case "shocked":
     case "wide-stare":
     case "wake":
@@ -247,12 +254,17 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "tired-but-awake":
       return "grayscale(0.28) sepia(0.08) saturate(0.74) hue-rotate(162deg) brightness(0.88)";
     case "calm":
-    case "acceptance":
-    case "relief":
-    case "trust":
-    case "gratitude":
-    case "contentment":
       return "sepia(0.14) saturate(0.92) hue-rotate(52deg) brightness(1.04)";
+    case "acceptance":
+      return "grayscale(0.12) sepia(0.12) saturate(0.78) hue-rotate(58deg) brightness(0.98)";
+    case "relief":
+      return "sepia(0.1) saturate(0.72) hue-rotate(72deg) brightness(1.1)";
+    case "trust":
+      return "sepia(0.08) saturate(0.74) hue-rotate(88deg) brightness(1.08)";
+    case "gratitude":
+      return "sepia(0.18) saturate(1.0) hue-rotate(26deg) brightness(1.08)";
+    case "contentment":
+      return "sepia(0.12) saturate(0.72) hue-rotate(48deg) brightness(1.02)";
     case "disgust":
       return "sepia(0.32) saturate(1.4) hue-rotate(58deg) brightness(0.88)";
     case "dizzy":
@@ -263,8 +275,11 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "overwhelmed":
       return "sepia(0.18) saturate(1.22) hue-rotate(214deg) brightness(1.0)";
     case "drunk":
+      return "sepia(0.22) saturate(1.1) hue-rotate(24deg) brightness(0.96)";
     case "stoned":
+      return "sepia(0.24) saturate(1.22) hue-rotate(78deg) brightness(0.9)";
     case "dreamy":
+      return "sepia(0.16) saturate(1.1) hue-rotate(254deg) brightness(1.06)";
     case "spacing-out":
       return "sepia(0.2) saturate(1.18) hue-rotate(238deg) brightness(0.98)";
     case "determination":
@@ -307,7 +322,10 @@ function reactionIrisFilter(reaction: Reaction): string {
     case "starstruck":
     case "awe":
     case "excitement":
+    case "surprise-delight":
       return "brightness(1.08) saturate(1.08)";
+    case "in-love":
+      return "brightness(1.06) saturate(1.12)";
     case "stoned":
     case "drunk":
       return "brightness(0.96) saturate(0.9) blur(0.25px)";
@@ -426,6 +444,8 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   useSkinDefaultColors: true,
   irisColor: "#42d9ff",
   pupilColor: "#07111b",
+  irisSizeScale: 1,
+  pupilSizeScale: 1,
   eyelidColor: "#2a2d30",
   eyelidShadowColor: "#030508",
   irisGlow: 0.7,
@@ -470,6 +490,14 @@ function effectiveIrisColor(settings: GooglyEyesSettings, skin: SkinDefinition):
 
 function effectivePupilColor(settings: GooglyEyesSettings, skin: SkinDefinition): string {
   return settings.useSkinDefaultColors ? skin.pupil : settings.pupilColor;
+}
+
+function effectiveIrisSize(settings: GooglyEyesSettings, skin: SkinDefinition): number {
+  return clamp(skin.irisSize * settings.irisSizeScale, 12, 90);
+}
+
+function effectivePupilSize(settings: GooglyEyesSettings, skin: SkinDefinition): number {
+  return clamp(skin.pupilSize * settings.pupilSizeScale, 6, 78);
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -1416,7 +1444,7 @@ class EyeController {
       set("--eye-base-scale-left", "1.18");
       set("--eye-base-scale-right", "1.18");
       set("--iris-scale", "1.28");
-      set("--pupil-scale", "0.64");
+      set("--pupil-scale", "1.08");
       set("--iris-filter", "brightness(1.26) saturate(1.38)");
     } else if (reaction === "distrust") {
       set("--lid-upper-left", "-10%");
@@ -1547,7 +1575,7 @@ class EyeController {
       set("--eye-base-scale-left", "1.16");
       set("--eye-base-scale-right", "1.16");
       set("--iris-scale", "1.18");
-      set("--pupil-scale", "0.72");
+      set("--pupil-scale", "1.04");
       set("--iris-filter", "brightness(1.24) saturate(1.55)");
     } else if (reaction === "satisfaction") {
       set("--lid-upper-left", "-36%");
@@ -1633,26 +1661,26 @@ class EyeController {
       set("--pupil-scale", "0.74");
       set("--iris-filter", "hue-rotate(195deg) saturate(0.42) brightness(0.78)");
     } else if (reaction === "gratitude") {
-      set("--lid-upper-left", "-38%");
-      set("--lid-lower-left", "44%");
-      set("--lid-upper-right", "-38%");
-      set("--lid-lower-right", "44%");
+      set("--lid-upper-left", "-46%");
+      set("--lid-lower-left", "50%");
+      set("--lid-upper-right", "-46%");
+      set("--lid-lower-right", "50%");
       set("--lid-tilt-left", "-6deg");
       set("--lid-tilt-right", "6deg");
-      set("--reaction-iris-y-left", pct(5));
-      set("--reaction-iris-y-right", pct(5));
-      set("--reaction-pupil-y-left", pct(7));
-      set("--reaction-pupil-y-right", pct(7));
+      set("--reaction-iris-y-left", pct(3));
+      set("--reaction-iris-y-right", pct(3));
+      set("--reaction-pupil-y-left", pct(4));
+      set("--reaction-pupil-y-right", pct(4));
       set("--eye-base-y-left", pct(2));
       set("--eye-base-y-right", pct(2));
       set("--iris-scale", "1.08");
-      set("--pupil-scale", "1.02");
+      set("--pupil-scale", "1.12");
       set("--iris-filter", "hue-rotate(18deg) brightness(1.12) saturate(1.1)");
     } else if (reaction === "trust") {
-      set("--lid-upper-left", "-66%");
-      set("--lid-lower-left", "66%");
-      set("--lid-upper-right", "-66%");
-      set("--lid-lower-right", "66%");
+      set("--lid-upper-left", "-62%");
+      set("--lid-lower-left", "64%");
+      set("--lid-upper-right", "-62%");
+      set("--lid-lower-right", "64%");
       set("--reaction-iris-y-left", pct(0));
       set("--reaction-iris-y-right", pct(0));
       set("--reaction-pupil-y-left", pct(0));
@@ -1660,7 +1688,7 @@ class EyeController {
       set("--eye-base-scale-left", "1.02");
       set("--eye-base-scale-right", "1.02");
       set("--iris-scale", "1");
-      set("--pupil-scale", "0.92");
+      set("--pupil-scale", "1.06");
       set("--iris-filter", "saturate(0.9) brightness(1.08)");
     } else if (reaction === "doubt") {
       set("--lid-upper-left", "-25%");
@@ -1770,7 +1798,7 @@ class EyeController {
       set("--eye-base-scale-left", "1.2");
       set("--eye-base-scale-right", "1.2");
       set("--iris-scale", "1.2");
-      set("--pupil-scale", "0.68");
+      set("--pupil-scale", "1");
       set("--iris-filter", "brightness(1.28) saturate(1.18)");
     } else if (reaction === "tired-but-awake") {
       set("--lid-upper-left", "-7%");
@@ -1984,10 +2012,14 @@ class EyeController {
       set("--lid-lower-right", isCalm ? "57%" : isAcceptance ? "44%" : isApathy ? "22%" : "34%");
       set("--lid-tilt-left", isCalm ? "0deg" : isAcceptance ? "-3deg" : "1deg");
       set("--lid-tilt-right", isCalm ? "0deg" : isAcceptance ? "3deg" : "-1deg");
-      set("--reaction-iris-y-left", pct(isCalm ? 1 : isAcceptance ? 9 : isApathy ? 3 : 16));
-      set("--reaction-iris-y-right", pct(isCalm ? 1 : isAcceptance ? 9 : isApathy ? 3 : 16));
-      set("--reaction-pupil-y-left", pct(isCalm ? 1 : isAcceptance ? 13 : isApathy ? 4 : 22));
-      set("--reaction-pupil-y-right", pct(isCalm ? 1 : isAcceptance ? 13 : isApathy ? 4 : 22));
+      set("--reaction-iris-x-left", pct(isApathy ? 0 : isAcceptance ? 0 : isCalm ? 0 : -6));
+      set("--reaction-iris-x-right", pct(isApathy ? 0 : isAcceptance ? 0 : isCalm ? 0 : -6));
+      set("--reaction-pupil-x-left", pct(isApathy ? 0 : isAcceptance ? 0 : isCalm ? 0 : -9));
+      set("--reaction-pupil-x-right", pct(isApathy ? 0 : isAcceptance ? 0 : isCalm ? 0 : -9));
+      set("--reaction-iris-y-left", pct(isCalm ? 1 : isAcceptance ? 10 : isApathy ? 3 : 18));
+      set("--reaction-iris-y-right", pct(isCalm ? 1 : isAcceptance ? 10 : isApathy ? 3 : 18));
+      set("--reaction-pupil-y-left", pct(isCalm ? 1 : isAcceptance ? 14 : isApathy ? 4 : 25));
+      set("--reaction-pupil-y-right", pct(isCalm ? 1 : isAcceptance ? 14 : isApathy ? 4 : 25));
       set("--eye-base-y-left", pct(isCalm ? 0 : isAcceptance ? 3 : isApathy ? 1 : 6));
       set("--eye-base-y-right", pct(isCalm ? 0 : isAcceptance ? 3 : isApathy ? 1 : 6));
       set("--eye-base-scale-left", isCalm ? "1" : isApathy ? "0.9" : "0.96");
@@ -2062,7 +2094,7 @@ class EyeController {
       set("--eye-base-rotate-right", "2deg");
       set("--iris-opacity", "0.58");
       set("--iris-scale", "1.18");
-      set("--pupil-scale", "1.65");
+      set("--pupil-scale", "1.5");
       set("--iris-filter", "hue-rotate(78deg) saturate(0.78) brightness(0.78) blur(0.45px)");
     } else if (reaction === "spacing-out") {
       set("--lid-upper-left", "-88%");
@@ -2323,8 +2355,8 @@ class EyeController {
         "--accent": skinDef.accent,
         "--iris-color": effectiveIrisColor(s, skinDef),
         "--pupil-color": effectivePupilColor(s, skinDef),
-        "--skin-iris-size": `${skinDef.irisSize}%`,
-        "--skin-pupil-size": `${skinDef.pupilSize}%`,
+        "--skin-iris-size": `${effectiveIrisSize(s, skinDef)}%`,
+        "--skin-pupil-size": `${effectivePupilSize(s, skinDef)}%`,
         "--skin-eye-slot-radius": skinDef.eyeStyle.slotRadius,
         "--skin-lid-left": skinDef.eyeStyle.lidLeft,
         "--skin-lid-width": skinDef.eyeStyle.lidWidth,
@@ -2658,6 +2690,8 @@ class GooglyEyesSettingTab extends PluginSettingTab {
           this.toggleDef("Use skin default eye colors", "useSkinDefaultColors", "Each skin gets a matching iris and pupil color. Turn this off to use one custom color set."),
           this.colorDef("Iris color", "irisColor"),
           this.colorDef("Pupil color", "pupilColor", advanced),
+          this.sliderDef("Iris size", "irisSizeScale", 0.6, 1.6, 0.05),
+          this.sliderDef("Pupil size", "pupilSizeScale", 0.5, 2, 0.05),
           this.colorDef("Eyelid color", "eyelidColor"),
           this.colorDef("Eyelid shadow", "eyelidShadowColor", advanced),
           this.sliderDef("Iris glow", "irisGlow", 0, 1.5, 0.05, advanced)
@@ -2929,6 +2963,8 @@ export default class GooglyEyesPlugin extends Plugin {
     }
     if (!AVAILABLE_SKIN_IDS.has(this.settings.skinId)) this.settings.skinId = DEFAULT_SETTINGS.skinId;
     if (loaded?.size === 96) this.settings.size = DEFAULT_SETTINGS.size;
+    this.settings.irisSizeScale = clamp(this.settings.irisSizeScale, 0.6, 1.6);
+    this.settings.pupilSizeScale = clamp(this.settings.pupilSizeScale, 0.5, 2);
     this.settings.pairConfigs = this.settings.pairConfigs.filter((config) => AVAILABLE_SKIN_IDS.has(config.skinId));
     const quickMouse = this.settings.actionMappings.find((mapping) => mapping.name === "quick mouse movement");
     if (quickMouse && quickMouse.reactionPool.some((reaction) => reaction === "panic" || reaction === "chaotic-stare" || reaction === "dizzy")) {
@@ -2985,6 +3021,8 @@ export default class GooglyEyesPlugin extends Plugin {
     this.settings.customX = DEFAULT_SETTINGS.customX;
     this.settings.customY = DEFAULT_SETTINGS.customY;
     this.settings.size = DEFAULT_SETTINGS.size;
+    this.settings.irisSizeScale = DEFAULT_SETTINGS.irisSizeScale;
+    this.settings.pupilSizeScale = DEFAULT_SETTINGS.pupilSizeScale;
     this.settings.opacity = DEFAULT_SETTINGS.opacity;
     this.settings.focusModeActive = false;
     this.settings.pausedReactions = false;

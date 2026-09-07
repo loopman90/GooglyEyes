@@ -6,6 +6,7 @@ import { deflateSync, inflateSync } from "node:zlib";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const MASK_WIDTH = 1774;
 const MASK_HEIGHT = 887;
+const requestedSkins = new Set(process.argv.slice(2));
 const SKIN_TUNING = {
   alien: { irisSize: 40, pupilSize: 18, minDistance: 0.32 },
   anonymous: { irisSize: 34, pupilSize: 16, minDistance: 0.23 },
@@ -16,11 +17,11 @@ const SKIN_TUNING = {
   dragon: { irisSize: 38, pupilSize: 16, minDistance: 0.32 },
   goblin: { irisSize: 42, pupilSize: 16, minDistance: 0.23 },
   hacker: { irisSize: 42, pupilSize: 16, minDistance: 0.26 },
-  "manga-female": { irisSize: 43, pupilSize: 16, minDistance: 0.2 },
+  "manga-female": { irisSize: 68, pupilSize: 30, minDistance: 0.2 },
   "one-eye": { irisSize: 44, pupilSize: 16, minDistance: 0 },
   panda: { irisSize: 42, pupilSize: 16, minDistance: 0.34 },
   "pumpkin-halloween": { irisSize: 42, pupilSize: 16, minDistance: 0.28 },
-  "tibetan-monk": { irisSize: 38, pupilSize: 16, minDistance: 0.18 },
+  "tibetan-monk": { irisSize: 44, pupilSize: 18, minDistance: 0.18 },
   troll: { irisSize: 40, pupilSize: 16, minDistance: 0.24 },
   wizard: { irisSize: 42, pupilSize: 16, minDistance: 0.18 }
 };
@@ -279,7 +280,17 @@ function renderEyeBase(mask, window, colorHex, outPath) {
   const width = 640;
   const height = clamp(Math.round(width * aspect), 260, 760);
   const rgba = Buffer.alloc(width * height * 4);
-  let visiblePixels = 0;
+  let transparentSamples = 0;
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const u = width === 1 ? 0 : x / (width - 1);
+      const v = height === 1 ? 0 : y / (height - 1);
+      const mx = Math.round((window.x + window.w * u) * (mask.width - 1));
+      const my = Math.round((window.y + window.h * v) * (mask.height - 1));
+      if (alphaAt(mask, mx, my) < 42) transparentSamples += 1;
+    }
+  }
+  const useFallbackOval = transparentSamples < width * height * 0.04;
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const u = width === 1 ? 0 : x / (width - 1);
@@ -287,10 +298,8 @@ function renderEyeBase(mask, window, colorHex, outPath) {
       const mx = Math.round((window.x + window.w * u) * (mask.width - 1));
       const my = Math.round((window.y + window.h * v) * (mask.height - 1));
       const oval = ((u - 0.5) / 0.49) ** 2 + ((v - 0.5) / 0.46) ** 2 <= 1;
-      const transparent = alphaAt(mask, mx, my) < 42;
       const index = (y * width + x) * 4;
-      if (!transparent && !oval) continue;
-      if (transparent) visiblePixels += 1;
+      if (useFallbackOval && !oval) continue;
       const dx = (u - 0.5) / 0.5;
       const dy = (v - 0.48) / 0.52;
       const radial = clamp(Math.hypot(dx, dy), 0, 1);
@@ -300,29 +309,6 @@ function renderEyeBase(mask, window, colorHex, outPath) {
       rgba[index + 1] = clamp(mix(color[1], 255, highlight) * shade, 0, 255);
       rgba[index + 2] = clamp(mix(color[2], 255, highlight) * shade, 0, 255);
       rgba[index + 3] = 255;
-    }
-  }
-  if (visiblePixels < width * height * 0.04) {
-    for (let y = 0; y < height; y += 1) {
-      for (let x = 0; x < width; x += 1) {
-        const u = width === 1 ? 0 : x / (width - 1);
-        const v = height === 1 ? 0 : y / (height - 1);
-        const oval = ((u - 0.5) / 0.49) ** 2 + ((v - 0.5) / 0.46) ** 2 <= 1;
-        const index = (y * width + x) * 4;
-        if (!oval) {
-          rgba[index + 3] = 0;
-          continue;
-        }
-        const dx = (u - 0.5) / 0.5;
-        const dy = (v - 0.48) / 0.52;
-        const radial = clamp(Math.hypot(dx, dy), 0, 1);
-        const shade = 1 - radial * 0.26 - Math.max(0, v - 0.52) * 0.14;
-        const highlight = Math.exp(-((u - 0.36) ** 2 + (v - 0.28) ** 2) / 0.018) * 0.18;
-        rgba[index] = clamp(mix(color[0], 255, highlight) * shade, 0, 255);
-        rgba[index + 1] = clamp(mix(color[1], 255, highlight) * shade, 0, 255);
-        rgba[index + 2] = clamp(mix(color[2], 255, highlight) * shade, 0, 255);
-        rgba[index + 3] = 255;
-      }
     }
   }
   writePngRgba(outPath, width, height, rgba);
@@ -343,6 +329,7 @@ const manifest = readJson(join(root, "assets", "skins.json"));
 let rebuilt = 0;
 
 for (const skinId of manifest.skins) {
+  if (requestedSkins.size && !requestedSkins.has(skinId)) continue;
   const skinDir = join(root, "assets", "skins", skinId);
   const skinPath = join(skinDir, "skin.json");
   const skin = readJson(skinPath);

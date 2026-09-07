@@ -1,23 +1,23 @@
 {
   "id": "tibetan-monk",
-  "name": "Tibetan Monk",
+  "name": "Air Monk",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",
   "thumbnail": "thumbnail.png",
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.2029,
-      "y": 0.2988,
-      "w": 0.2745,
-      "h": 0.2435
+      "x": 0.1505,
+      "y": 0.4656,
+      "w": 0.2649,
+      "h": 0.2604
     },
     {
       "side": "right",
-      "x": 0.5231,
-      "y": 0.2988,
-      "w": 0.2745,
-      "h": 0.2435
+      "x": 0.5862,
+      "y": 0.4656,
+      "w": 0.2638,
+      "h": 0.2604
     }
   ],
   "assets": {
@@ -31,10 +31,10 @@
     "eyelidColor": "#9b5535",
     "eyelidShadowColor": "#3d2018",
     "irisGlow": 0.18,
-    "irisSize": 38,
-    "pupilSize": 16
+    "irisSize": 44,
+    "pupilSize": 18
   },
-  "flavor": "Warm robes with a calm meditative gaze.",
+  "flavor": "Air temple markings with a calm meditative gaze.",
   "ambientReactions": [
     "slow-blink",
     "sleepy-idle",

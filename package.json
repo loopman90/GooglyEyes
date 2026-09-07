@@ -1,6 +1,6 @@
 {
   "name": "googly-eyes",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Put living reactive eyes in your workspace.",
   "main": "main.js",
   "scripts": {
