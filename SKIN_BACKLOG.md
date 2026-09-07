@@ -14,10 +14,19 @@ Completed:
 - Anonymous
 - Ice Hockey Horror
 - Clown
+- Cyberpunk Female
+- D20 RPG
 - SpaceHelmet
 - Classic Googly
 - Detective Noir
 - One Eye
+- Spy
+- Skeleton
+- Wizard
+- Cowboy
+- Pumpkin Halloween
+- Goblin
+- Troll
 
 Next candidates:
 

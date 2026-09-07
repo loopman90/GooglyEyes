@@ -20,7 +20,11 @@
     "clown",
     "spy",
     "skeleton",
-    "wizard"
+    "wizard",
+    "cowboy",
+    "pumpkin-halloween",
+    "goblin",
+    "troll"
   ],
   "maskSkins": [
     "robot",
@@ -41,7 +45,11 @@
     "clown",
     "spy",
     "skeleton",
-    "wizard"
+    "wizard",
+    "cowboy",
+    "pumpkin-halloween",
+    "goblin",
+    "troll"
   ],
   "skins": [
     "robot",
@@ -62,7 +70,11 @@
     "clown",
     "spy",
     "skeleton",
-    "wizard"
+    "wizard",
+    "cowboy",
+    "pumpkin-halloween",
+    "goblin",
+    "troll"
   ],
   "reactions": [
     "idle-neutral",

@@ -1,0 +1,46 @@
+{
+  "id": "goblin",
+  "name": "Goblin",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Green fantasy trouble with a sneaky bright gaze.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.22,
+      "y": 0.365,
+      "w": 0.285,
+      "h": 0.3
+    },
+    {
+      "side": "right",
+      "x": 0.565,
+      "y": 0.365,
+      "w": 0.285,
+      "h": 0.3
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "hover-suspicious",
+    "suspicious",
+    "cross-eyed",
+    "laughing",
+    "peek",
+    "restless"
+  ],
+  "defaults": {
+    "irisColor": "#d6b23a",
+    "pupilColor": "#090704",
+    "eyeWhiteColor": "#efe7b8",
+    "eyelidColor": "#527314",
+    "eyelidShadowColor": "#192606",
+    "irisGlow": 0.45,
+    "irisSize": 33,
+    "pupilSize": 31
+  }
+}

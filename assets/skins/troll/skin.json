@@ -1,0 +1,46 @@
+{
+  "id": "troll",
+  "name": "Troll",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Stone cave face with a heavy grumpy gaze.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.23,
+      "y": 0.305,
+      "w": 0.245,
+      "h": 0.315
+    },
+    {
+      "side": "right",
+      "x": 0.585,
+      "y": 0.305,
+      "w": 0.245,
+      "h": 0.315
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "angry",
+    "furious",
+    "look-down",
+    "sleepy",
+    "slow-blink",
+    "confused"
+  ],
+  "defaults": {
+    "irisColor": "#6fd2ff",
+    "pupilColor": "#040b10",
+    "eyeWhiteColor": "#e6eef2",
+    "eyelidColor": "#4a5b60",
+    "eyelidShadowColor": "#151d20",
+    "irisGlow": 0.42,
+    "irisSize": 32,
+    "pupilSize": 28
+  }
+}

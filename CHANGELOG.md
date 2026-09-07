@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.9
+
+- Added Cowboy, Pumpkin Halloween, Goblin, and Troll layered skins.
+- Added clean base-eye PNGs for the new skins without fixed iris, pupils, lashes, or eyelids.
+- Tuned each new skin with unique default eye colors, eyelid colors, ambient reactions, and scalable eye windows.
+
 ## 1.0.8
 
 - Reduced automated review warnings around DOM type checks, settings key typing, and UI callbacks.

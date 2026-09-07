@@ -847,10 +847,186 @@ export const GENERATED_SKINS = [
       "wide-stare",
       "wink-right"
     ]
+  },
+  {
+    "id": "cowboy",
+    "name": "Cowboy",
+    "eyeLayout": "dual",
+    "flavor": "Dusty western hat with a curious frontier stare.",
+    "iris": "#39b7a3",
+    "pupil": "#130a04",
+    "eyeWhite": "#fff4df",
+    "outline": "#7a421d",
+    "accent": "#2f1507",
+    "irisSize": 32,
+    "pupilSize": 30,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/cowboy/eyes/left-base.png",
+      "rightBase": "assets/skins/cowboy/eyes/right-base.png",
+      "thumbnail": "assets/skins/cowboy/thumbnail.png",
+      "mask": "assets/skins/cowboy/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.255,
+        "y": 0.365,
+        "w": 0.205,
+        "h": 0.405
+      },
+      "right": {
+        "side": "right",
+        "x": 0.557,
+        "y": 0.365,
+        "w": 0.205,
+        "h": 0.405
+      }
+    },
+    "ambientReactions": [
+      "suspicious",
+      "look-left",
+      "look-right",
+      "slow-blink",
+      "wink-right",
+      "restless"
+    ]
+  },
+  {
+    "id": "pumpkin-halloween",
+    "name": "Pumpkin Halloween",
+    "eyeLayout": "dual",
+    "flavor": "Glowing jack-o-lantern mischief for spooky notes.",
+    "iris": "#95ff24",
+    "pupil": "#13020a",
+    "eyeWhite": "#fff0bf",
+    "outline": "#ff8a12",
+    "accent": "#4d1104",
+    "irisSize": 34,
+    "pupilSize": 29,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/pumpkin-halloween/eyes/left-base.png",
+      "rightBase": "assets/skins/pumpkin-halloween/eyes/right-base.png",
+      "thumbnail": "assets/skins/pumpkin-halloween/thumbnail.png",
+      "mask": "assets/skins/pumpkin-halloween/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.205,
+        "y": 0.255,
+        "w": 0.275,
+        "h": 0.495
+      },
+      "right": {
+        "side": "right",
+        "x": 0.545,
+        "y": 0.255,
+        "w": 0.275,
+        "h": 0.495
+      }
+    },
+    "ambientReactions": [
+      "chaotic-stare",
+      "shocked",
+      "laughing",
+      "dizzy",
+      "spacing-out",
+      "wink-left"
+    ]
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin",
+    "eyeLayout": "dual",
+    "flavor": "Green fantasy trouble with a sneaky bright gaze.",
+    "iris": "#d6b23a",
+    "pupil": "#090704",
+    "eyeWhite": "#efe7b8",
+    "outline": "#527314",
+    "accent": "#192606",
+    "irisSize": 33,
+    "pupilSize": 31,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/goblin/eyes/left-base.png",
+      "rightBase": "assets/skins/goblin/eyes/right-base.png",
+      "thumbnail": "assets/skins/goblin/thumbnail.png",
+      "mask": "assets/skins/goblin/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.22,
+        "y": 0.365,
+        "w": 0.285,
+        "h": 0.3
+      },
+      "right": {
+        "side": "right",
+        "x": 0.565,
+        "y": 0.365,
+        "w": 0.285,
+        "h": 0.3
+      }
+    },
+    "ambientReactions": [
+      "hover-suspicious",
+      "suspicious",
+      "cross-eyed",
+      "laughing",
+      "peek",
+      "restless"
+    ]
+  },
+  {
+    "id": "troll",
+    "name": "Troll",
+    "eyeLayout": "dual",
+    "flavor": "Stone cave face with a heavy grumpy gaze.",
+    "iris": "#6fd2ff",
+    "pupil": "#040b10",
+    "eyeWhite": "#e6eef2",
+    "outline": "#4a5b60",
+    "accent": "#151d20",
+    "irisSize": 32,
+    "pupilSize": 28,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/troll/eyes/left-base.png",
+      "rightBase": "assets/skins/troll/eyes/right-base.png",
+      "thumbnail": "assets/skins/troll/thumbnail.png",
+      "mask": "assets/skins/troll/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.23,
+        "y": 0.305,
+        "w": 0.245,
+        "h": 0.315
+      },
+      "right": {
+        "side": "right",
+        "x": 0.585,
+        "y": 0.305,
+        "w": 0.245,
+        "h": 0.315
+      }
+    },
+    "ambientReactions": [
+      "angry",
+      "furious",
+      "look-down",
+      "sleepy",
+      "slow-blink",
+      "confused"
+    ]
   }
 ] as const;
 
-export const GENERATED_LAYERED_SKINS = new Set(["robot","cat","manga-female","dragon","cyberpunk-female","d20-rpg","space-helmet","classic-googly","detective-noir","one-eye","tibetan-monk","alien","hacker","anonymous","ice-hockey","clown","spy","skeleton","wizard"]);
+export const GENERATED_LAYERED_SKINS = new Set(["robot","cat","manga-female","dragon","cyberpunk-female","d20-rpg","space-helmet","classic-googly","detective-noir","one-eye","tibetan-monk","alien","hacker","anonymous","ice-hockey","clown","spy","skeleton","wizard","cowboy","pumpkin-halloween","goblin","troll"]);
 
 export const GENERATED_SKIN_EYE_WINDOWS = Object.fromEntries(
   GENERATED_SKINS.map((skin) => [skin.id, skin.eyeWindows])

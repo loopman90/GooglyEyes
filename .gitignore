@@ -42,3 +42,13 @@ assets/skins/*
 !assets/skins/skeleton/**
 !assets/skins/wizard/
 !assets/skins/wizard/**
+!assets/skins/cowboy/
+!assets/skins/cowboy/**
+!assets/skins/pumpkin-halloween/
+!assets/skins/pumpkin-halloween/**
+!assets/skins/goblin/
+!assets/skins/goblin/**
+!assets/skins/troll/
+!assets/skins/troll/**
+assets/skins/troll/*.png
+!assets/skins/troll/thumbnail.png

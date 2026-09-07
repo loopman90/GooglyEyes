@@ -1,0 +1,46 @@
+{
+  "id": "pumpkin-halloween",
+  "name": "Pumpkin Halloween",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Glowing jack-o-lantern mischief for spooky notes.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.205,
+      "y": 0.255,
+      "w": 0.275,
+      "h": 0.495
+    },
+    {
+      "side": "right",
+      "x": 0.545,
+      "y": 0.255,
+      "w": 0.275,
+      "h": 0.495
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "chaotic-stare",
+    "shocked",
+    "laughing",
+    "dizzy",
+    "spacing-out",
+    "wink-left"
+  ],
+  "defaults": {
+    "irisColor": "#95ff24",
+    "pupilColor": "#13020a",
+    "eyeWhiteColor": "#fff0bf",
+    "eyelidColor": "#ff8a12",
+    "eyelidShadowColor": "#4d1104",
+    "irisGlow": 0.75,
+    "irisSize": 34,
+    "pupilSize": 29
+  }
+}

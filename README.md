@@ -57,6 +57,10 @@ The current build exposes only completed skins in the UI:
 - Spy
 - Skeleton
 - Wizard
+- Cowboy
+- Pumpkin Halloween
+- Goblin
+- Troll
 
 Planned skins are added one by one after their imagegen asset packs are complete. Unfinished skins are not exposed in the plugin UI.
 
@@ -115,7 +119,7 @@ release/googly-eyes-test
 8. Enable GooglyEyes.
 9. Run `Open tab`.
 
-The test package includes Robot, Cat, Manga Female, Dragon, Cyberpunk Female, D20 RPG, SpaceHelmet, Classic Googly, Detective Noir, One Eye, Tibetan Monk, Alien, Hacker, Anonymous, Jason, Clown, Spy, Skeleton, and Wizard.
+The test package includes Robot, Cat, Manga Female, Dragon, Cyberpunk Female, D20 RPG, SpaceHelmet, Classic Googly, Detective Noir, One Eye, Tibetan Monk, Alien, Hacker, Anonymous, Jason, Clown, Spy, Skeleton, Wizard, Cowboy, Pumpkin Halloween, Goblin, and Troll.
 
 ## Developer Setup
 
@@ -231,4 +235,4 @@ The eyes look too large or too small:
 
 ## Version
 
-Current package version: `1.0.8`.
+Current package version: `1.0.9`.

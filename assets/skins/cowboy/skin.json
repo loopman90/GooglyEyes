@@ -1,0 +1,46 @@
+{
+  "id": "cowboy",
+  "name": "Cowboy",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Dusty western hat with a curious frontier stare.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.255,
+      "y": 0.365,
+      "w": 0.205,
+      "h": 0.405
+    },
+    {
+      "side": "right",
+      "x": 0.557,
+      "y": 0.365,
+      "w": 0.205,
+      "h": 0.405
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "suspicious",
+    "look-left",
+    "look-right",
+    "slow-blink",
+    "wink-right",
+    "restless"
+  ],
+  "defaults": {
+    "irisColor": "#39b7a3",
+    "pupilColor": "#130a04",
+    "eyeWhiteColor": "#fff4df",
+    "eyelidColor": "#7a421d",
+    "eyelidShadowColor": "#2f1507",
+    "irisGlow": 0.35,
+    "irisSize": 32,
+    "pupilSize": 30
+  }
+}
