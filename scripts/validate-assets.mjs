@@ -217,6 +217,11 @@ for (const skin of manifest.skins) {
           if (typeof defaults.pupilSize !== "number" || defaults.pupilSize < MIN_PUPIL_SIZE || defaults.pupilSize > MAX_PUPIL_SIZE) {
             invalidJson.push(`${path}\n  - defaults.pupilSize must be ${MIN_PUPIL_SIZE}-${MAX_PUPIL_SIZE}% of the iris width`);
           }
+          const eyeStyle = skinMeta.eyeStyle ?? {};
+          const requiredEyeStyle = ["slotRadius", "lidLeft", "lidWidth", "lidHeight", "lidUpperRadius", "lidLowerRadius"];
+          if (requiredEyeStyle.some((key) => typeof eyeStyle[key] !== "string" || !eyeStyle[key].trim())) {
+            invalidJson.push(`${path}\n  - eyeStyle must define slotRadius, lidLeft, lidWidth, lidHeight, lidUpperRadius, and lidLowerRadius`);
+          }
         }
       } catch {
         invalidJson.push(path);

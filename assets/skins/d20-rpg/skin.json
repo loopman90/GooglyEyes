@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.155,
-      "y": 0.326,
-      "w": 0.279,
-      "h": 0.29
+      "x": 0.1381,
+      "y": 0.2909,
+      "w": 0.3129,
+      "h": 0.3596
     },
     {
       "side": "right",
-      "x": 0.569,
-      "y": 0.326,
-      "w": 0.278,
-      "h": 0.29
+      "x": 0.5519,
+      "y": 0.2909,
+      "w": 0.3123,
+      "h": 0.3596
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#7b4f2b",
     "eyelidShadowColor": "#2b170f",
     "irisGlow": 0.32,
-    "irisSize": 32,
-    "pupilSize": 28
+    "irisSize": 38,
+    "pupilSize": 18
   },
   "flavor": "Tabletop dice, parchment maps, and dungeon master focus.",
   "ambientReactions": [
@@ -43,5 +43,13 @@
     "chaotic-stare",
     "panic",
     "starstruck"
-  ]
+  ],
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
+  }
 }

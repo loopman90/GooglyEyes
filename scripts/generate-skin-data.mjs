@@ -37,6 +37,14 @@ const skins = manifest.skins.map((id) => {
     accent: assertString(defaults.eyelidShadowColor ?? defaults.accentColor, "#ffcc33"),
     irisSize: Number(defaults.irisSize ?? 34),
     pupilSize: Number(defaults.pupilSize ?? 30),
+    eyeStyle: {
+      slotRadius: assertString(skin.eyeStyle?.slotRadius, "999px"),
+      lidLeft: assertString(skin.eyeStyle?.lidLeft, "-28%"),
+      lidWidth: assertString(skin.eyeStyle?.lidWidth, "156%"),
+      lidHeight: assertString(skin.eyeStyle?.lidHeight, "112%"),
+      lidUpperRadius: assertString(skin.eyeStyle?.lidUpperRadius, "0 0 55% 55%"),
+      lidLowerRadius: assertString(skin.eyeStyle?.lidLowerRadius, "55% 55% 0 0")
+    },
     supportsColorOverrides: true,
     assets: {
       leftBase: `assets/skins/${id}/${assertString(skin.assets?.leftBase, "eyes/left-base.png")}`,

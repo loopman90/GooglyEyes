@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.16,
-      "y": 0.383,
-      "w": 0.322,
-      "h": 0.194
+      "x": 0.1471,
+      "y": 0.3698,
+      "w": 0.3467,
+      "h": 0.221
     },
     {
       "side": "right",
-      "x": 0.519,
-      "y": 0.383,
-      "w": 0.322,
-      "h": 0.194
+      "x": 0.5068,
+      "y": 0.3698,
+      "w": 0.3467,
+      "h": 0.221
     }
   ],
   "assets": {
@@ -31,7 +31,7 @@
     "eyelidColor": "#e1ddd1",
     "eyelidShadowColor": "#1a1516",
     "irisGlow": 0.22,
-    "irisSize": 36,
+    "irisSize": 34,
     "pupilSize": 16
   },
   "flavor": "White mask, dark hood, and a quiet red stare.",
@@ -42,5 +42,13 @@
     "look-right",
     "idle-long",
     "restless"
-  ]
+  ],
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
+  }
 }

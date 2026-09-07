@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.211,
-      "y": 0.315,
-      "w": 0.258,
-      "h": 0.212
+      "x": 0.2029,
+      "y": 0.2988,
+      "w": 0.2745,
+      "h": 0.2435
     },
     {
       "side": "right",
-      "x": 0.532,
-      "y": 0.315,
-      "w": 0.258,
-      "h": 0.212
+      "x": 0.5231,
+      "y": 0.2988,
+      "w": 0.2745,
+      "h": 0.2435
     }
   ],
   "assets": {
@@ -42,5 +42,13 @@
     "dreamy",
     "idle-long",
     "spacing-out"
-  ]
+  ],
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
+  }
 }

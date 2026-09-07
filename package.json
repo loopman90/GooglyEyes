@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "generate-skin-data": "node scripts/generate-skin-data.mjs",
+    "rebuild-mask-eyes": "node scripts/rebuild-mask-driven-eyes.mjs",
     "update-readme": "npm run generate-skin-data && node scripts/update-readme.mjs",
     "prebuild": "npm run update-readme",
     "dev": "node esbuild.config.mjs",

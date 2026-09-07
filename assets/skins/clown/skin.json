@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.165,
-      "y": 0.31,
-      "w": 0.235,
-      "h": 0.235
+      "x": 0.1528,
+      "y": 0.283,
+      "w": 0.2599,
+      "h": 0.2886
     },
     {
       "side": "right",
-      "x": 0.6,
-      "y": 0.31,
-      "w": 0.235,
-      "h": 0.235
+      "x": 0.5874,
+      "y": 0.283,
+      "w": 0.2599,
+      "h": 0.2886
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#ff9aa6",
     "eyelidShadowColor": "#590913",
     "irisGlow": 0.35,
-    "irisSize": 31,
-    "pupilSize": 32
+    "irisSize": 38,
+    "pupilSize": 18
   },
   "flavor": "Cartoon circus face with a bright playful stare.",
   "ambientReactions": [
@@ -43,5 +43,13 @@
     "chaotic-stare",
     "shocked",
     "drunk"
-  ]
+  ],
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
+  }
 }

@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.161,
-      "y": 0.209,
-      "w": 0.294,
-      "h": 0.433
+      "x": 0.1432,
+      "y": 0.175,
+      "w": 0.3286,
+      "h": 0.5
     },
     {
       "side": "right",
-      "x": 0.544,
-      "y": 0.209,
-      "w": 0.285,
-      "h": 0.43
+      "x": 0.5271,
+      "y": 0.1733,
+      "w": 0.3191,
+      "h": 0.5
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#e8dcc2",
     "eyelidShadowColor": "#5d5549",
     "irisGlow": 0.24,
-    "irisSize": 32,
-    "pupilSize": 30
+    "irisSize": 38,
+    "pupilSize": 18
   },
   "flavor": "Playful bone mask with deep skull sockets.",
   "ambientReactions": [
@@ -42,5 +42,13 @@
     "confused",
     "idle-long",
     "spacing-out"
-  ]
+  ],
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
+  }
 }

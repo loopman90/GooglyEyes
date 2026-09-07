@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.164,
-      "y": 0.237,
-      "w": 0.269,
-      "h": 0.219
+      "x": 0.1477,
+      "y": 0.2108,
+      "w": 0.3021,
+      "h": 0.2706
     },
     {
       "side": "right",
-      "x": 0.565,
-      "y": 0.237,
-      "w": 0.272,
-      "h": 0.219
+      "x": 0.5485,
+      "y": 0.2108,
+      "w": 0.3044,
+      "h": 0.2706
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#d8c7a9",
     "eyelidShadowColor": "#4a3c2e",
     "irisGlow": 0.16,
-    "irisSize": 30,
-    "pupilSize": 30
+    "irisSize": 38,
+    "pupilSize": 18
   },
   "flavor": "Cartoon eyes peeking through newspaper cutouts.",
   "ambientReactions": [
@@ -43,5 +43,13 @@
     "wide-stare",
     "wink-left",
     "restless"
-  ]
+  ],
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
+  }
 }

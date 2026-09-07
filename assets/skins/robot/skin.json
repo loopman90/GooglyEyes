@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.129,
-      "y": 0.329,
-      "w": 0.267,
-      "h": 0.342
+      "x": 0.1116,
+      "y": 0.2852,
+      "w": 0.3021,
+      "h": 0.4295
     },
     {
       "side": "right",
-      "x": 0.604,
-      "y": 0.329,
-      "w": 0.267,
-      "h": 0.342
+      "x": 0.5868,
+      "y": 0.2852,
+      "w": 0.3021,
+      "h": 0.4295
     }
   ],
   "assets": {
@@ -28,8 +28,8 @@
     "irisColor": "#42d9ff",
     "pupilColor": "#07111b",
     "irisGlow": 0.7,
-    "irisSize": 34,
-    "pupilSize": 38
+    "irisSize": 38,
+    "pupilSize": 18
   },
   "flavor": "Mechanical lenses with tiny LED attitude.",
   "ambientReactions": [
@@ -40,5 +40,13 @@
     "suspicious",
     "restless",
     "spacing-out"
-  ]
+  ],
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
+  }
 }

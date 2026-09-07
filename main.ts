@@ -121,6 +121,14 @@ interface SkinDefinition {
   accent: string;
   irisSize: number;
   pupilSize: number;
+  eyeStyle: {
+    slotRadius: string;
+    lidLeft: string;
+    lidWidth: string;
+    lidHeight: string;
+    lidUpperRadius: string;
+    lidLowerRadius: string;
+  };
   eyeWindows: Record<"left" | "right", EyeWindow>;
   assets: {
     leftBase: string;
@@ -2317,6 +2325,12 @@ class EyeController {
         "--pupil-color": effectivePupilColor(s, skinDef),
         "--skin-iris-size": `${skinDef.irisSize}%`,
         "--skin-pupil-size": `${skinDef.pupilSize}%`,
+        "--skin-eye-slot-radius": skinDef.eyeStyle.slotRadius,
+        "--skin-lid-left": skinDef.eyeStyle.lidLeft,
+        "--skin-lid-width": skinDef.eyeStyle.lidWidth,
+        "--skin-lid-height": skinDef.eyeStyle.lidHeight,
+        "--skin-lid-upper-radius": skinDef.eyeStyle.lidUpperRadius,
+        "--skin-lid-lower-radius": skinDef.eyeStyle.lidLowerRadius,
         "--eye-left-x": `${eyeWindows.left.x * 100}%`,
         "--eye-left-y": `${eyeWindows.left.y * 100}%`,
         "--eye-left-w": `${eyeWindows.left.w * 100}%`,

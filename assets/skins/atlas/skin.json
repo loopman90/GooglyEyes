@@ -42,7 +42,15 @@
     "eyelidColor": "#dce8f2",
     "eyelidShadowColor": "#102438",
     "irisGlow": 0.95,
-    "irisSize": 40,
-    "pupilSize": 28
+    "irisSize": 38,
+    "pupilSize": 18
+  },
+  "eyeStyle": {
+    "slotRadius": "0px",
+    "lidLeft": "-34%",
+    "lidWidth": "168%",
+    "lidHeight": "122%",
+    "lidUpperRadius": "0 0 46% 46%",
+    "lidLowerRadius": "46% 46% 0 0"
   }
 }

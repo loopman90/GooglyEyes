@@ -9,6 +9,12 @@
   --iris-glow: 0.7;
   --skin-iris-size: 34%;
   --skin-pupil-size: 38%;
+  --skin-eye-slot-radius: 999px;
+  --skin-lid-left: -28%;
+  --skin-lid-width: 156%;
+  --skin-lid-height: 112%;
+  --skin-lid-upper-radius: 0 0 55% 55%;
+  --skin-lid-lower-radius: 55% 55% 0 0;
   --eye-left-x: 8%;
   --eye-left-y: 26.3%;
   --eye-left-w: 36.5%;
@@ -128,7 +134,7 @@
   width: var(--eye-slot-w);
   height: var(--eye-slot-h);
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--skin-eye-slot-radius);
   box-shadow:
     inset 0 4px 9px rgb(255 255 255 / 0.16),
     inset 0 -10px 18px rgb(0 0 0 / 0.28),
@@ -1138,10 +1144,10 @@
 
 .googly-eyes-lid {
   position: absolute;
-  left: -28%;
-  width: 156%;
-  height: 112%;
-  border-radius: 0 0 55% 55%;
+  left: var(--skin-lid-left);
+  width: var(--skin-lid-width);
+  height: var(--skin-lid-height);
+  border-radius: var(--skin-lid-upper-radius);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--eyelid-color) 92%, #ffffff 8%), var(--eyelid-color) 62%, var(--eyelid-shadow-color));
   box-shadow:
@@ -1159,7 +1165,7 @@
 
 .googly-eyes-lid-lower {
   bottom: 0;
-  border-radius: 55% 55% 0 0;
+  border-radius: var(--skin-lid-lower-radius);
   background:
     linear-gradient(0deg, color-mix(in srgb, var(--eyelid-color) 92%, #ffffff 8%), var(--eyelid-color) 62%, var(--eyelid-shadow-color));
   box-shadow:

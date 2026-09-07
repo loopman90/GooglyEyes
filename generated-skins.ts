@@ -10,8 +10,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f4eadc",
     "outline": "#2a2d30",
     "accent": "#ffcc33",
-    "irisSize": 34,
-    "pupilSize": 38,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/robot/eyes/left-base.png",
@@ -22,17 +30,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.129,
-        "y": 0.329,
-        "w": 0.267,
-        "h": 0.342
+        "x": 0.1116,
+        "y": 0.2852,
+        "w": 0.3021,
+        "h": 0.4295
       },
       "right": {
         "side": "right",
-        "x": 0.604,
-        "y": 0.329,
-        "w": 0.267,
-        "h": 0.342
+        "x": 0.5868,
+        "y": 0.2852,
+        "w": 0.3021,
+        "h": 0.4295
       }
     },
     "ambientReactions": [
@@ -55,8 +63,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f4ffe8",
     "outline": "#3b3735",
     "accent": "#120e0c",
-    "irisSize": 42,
+    "irisSize": 44,
     "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/cat/eyes/left-base.png",
@@ -67,17 +83,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.145,
-        "y": 0.31,
-        "w": 0.28,
-        "h": 0.34
+        "x": 0.1285,
+        "y": 0.2694,
+        "w": 0.3134,
+        "h": 0.4216
       },
       "right": {
         "side": "right",
-        "x": 0.575,
-        "y": 0.31,
-        "w": 0.28,
-        "h": 0.34
+        "x": 0.5586,
+        "y": 0.2694,
+        "w": 0.3134,
+        "h": 0.4216
       }
     },
     "ambientReactions": [
@@ -100,8 +116,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f3efe4",
     "outline": "#d99a96",
     "accent": "#5b252b",
-    "irisSize": 40,
+    "irisSize": 43,
     "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/manga-female/eyes/left-base.png",
@@ -112,17 +136,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.135,
-        "y": 0.335,
-        "w": 0.335,
-        "h": 0.355
+        "x": 0.115,
+        "y": 0.2931,
+        "w": 0.3754,
+        "h": 0.4408
       },
       "right": {
         "side": "right",
-        "x": 0.53,
-        "y": 0.335,
-        "w": 0.335,
-        "h": 0.355
+        "x": 0.5101,
+        "y": 0.2931,
+        "w": 0.3754,
+        "h": 0.4408
       }
     },
     "ambientReactions": [
@@ -145,8 +169,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f4efe0",
     "outline": "#1d2a24",
     "accent": "#050403",
-    "irisSize": 44,
+    "irisSize": 38,
     "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/dragon/eyes/left-base.png",
@@ -157,17 +189,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.065,
-        "y": 0.368,
-        "w": 0.351,
-        "h": 0.216
+        "x": 0.0507,
+        "y": 0.3517,
+        "w": 0.3788,
+        "h": 0.248
       },
       "right": {
         "side": "right",
-        "x": 0.585,
-        "y": 0.368,
-        "w": 0.351,
-        "h": 0.216
+        "x": 0.571,
+        "y": 0.3517,
+        "w": 0.3788,
+        "h": 0.248
       }
     },
     "ambientReactions": [
@@ -189,8 +221,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f4eef6",
     "outline": "#292033",
     "accent": "#07040d",
-    "irisSize": 39,
-    "pupilSize": 18,
+    "irisSize": 42,
+    "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/cyberpunk-female/eyes/left-base.png",
@@ -201,17 +241,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.165,
-        "y": 0.368,
-        "w": 0.276,
-        "h": 0.241
+        "x": 0.155,
+        "y": 0.3484,
+        "w": 0.2954,
+        "h": 0.2796
       },
       "right": {
         "side": "right",
-        "x": 0.56,
-        "y": 0.368,
-        "w": 0.276,
-        "h": 0.241
+        "x": 0.5502,
+        "y": 0.3484,
+        "w": 0.2954,
+        "h": 0.2796
       }
     },
     "ambientReactions": [
@@ -235,7 +275,15 @@ export const GENERATED_SKINS = [
     "outline": "#c9962a",
     "accent": "#362000",
     "irisSize": 38,
-    "pupilSize": 30,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/c-4po/eyes/left-base.png",
@@ -246,17 +294,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.17,
-        "y": 0.305,
-        "w": 0.255,
-        "h": 0.47
+        "x": 0.1573,
+        "y": 0.3357,
+        "w": 0.2824,
+        "h": 0.5
       },
       "right": {
         "side": "right",
-        "x": 0.575,
-        "y": 0.305,
-        "w": 0.255,
-        "h": 0.47
+        "x": 0.562,
+        "y": 0.3357,
+        "w": 0.2824,
+        "h": 0.5
       }
     },
     "ambientReactions": [
@@ -279,8 +327,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#d8f8ff",
     "outline": "#dce8f2",
     "accent": "#102438",
-    "irisSize": 40,
-    "pupilSize": 28,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/atlas/eyes/left-base.png",
@@ -324,8 +380,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f4ffe8",
     "outline": "#f0f5e9",
     "accent": "#1c2018",
-    "irisSize": 38,
-    "pupilSize": 17,
+    "irisSize": 42,
+    "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/panda/eyes/left-base.png",
@@ -336,17 +400,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.14,
-        "y": 0.36,
-        "w": 0.29,
-        "h": 0.33
+        "x": 0.1229,
+        "y": 0.3213,
+        "w": 0.3247,
+        "h": 0.4092
       },
       "right": {
         "side": "right",
-        "x": 0.57,
-        "y": 0.36,
-        "w": 0.29,
-        "h": 0.33
+        "x": 0.553,
+        "y": 0.3213,
+        "w": 0.3247,
+        "h": 0.4092
       }
     },
     "ambientReactions": [
@@ -369,8 +433,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f2dec0",
     "outline": "#7b4f2b",
     "accent": "#2b170f",
-    "irisSize": 32,
-    "pupilSize": 28,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/d20-rpg/eyes/left-base.png",
@@ -381,17 +453,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.155,
-        "y": 0.326,
-        "w": 0.279,
-        "h": 0.29
+        "x": 0.1381,
+        "y": 0.2909,
+        "w": 0.3129,
+        "h": 0.3596
       },
       "right": {
         "side": "right",
-        "x": 0.569,
-        "y": 0.326,
-        "w": 0.278,
-        "h": 0.29
+        "x": 0.5519,
+        "y": 0.2909,
+        "w": 0.3123,
+        "h": 0.3596
       }
     },
     "ambientReactions": [
@@ -414,8 +486,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#eaf7ff",
     "outline": "#d4e6ef",
     "accent": "#0d2032",
-    "irisSize": 34,
-    "pupilSize": 28,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/space-helmet/eyes/left-base.png",
@@ -426,17 +506,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.166,
-        "y": 0.302,
-        "w": 0.263,
-        "h": 0.353
+        "x": 0.1533,
+        "y": 0.2627,
+        "w": 0.288,
+        "h": 0.4307
       },
       "right": {
         "side": "right",
-        "x": 0.572,
-        "y": 0.302,
-        "w": 0.263,
-        "h": 0.353
+        "x": 0.5592,
+        "y": 0.2627,
+        "w": 0.288,
+        "h": 0.4307
       }
     },
     "ambientReactions": [
@@ -458,8 +538,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#fffaf0",
     "outline": "#f2f2f2",
     "accent": "#d13b2f",
-    "irisSize": 30,
-    "pupilSize": 42,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/classic-googly/eyes/left-base.png",
@@ -470,17 +558,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.127,
-        "y": 0.24,
-        "w": 0.316,
-        "h": 0.5
+        "x": 0.1764,
+        "y": 0.2503,
+        "w": 0.2176,
+        "h": 0.4803
       },
       "right": {
         "side": "right",
-        "x": 0.557,
-        "y": 0.24,
-        "w": 0.316,
-        "h": 0.5
+        "x": 0.6065,
+        "y": 0.2503,
+        "w": 0.2176,
+        "h": 0.4803
       }
     },
     "ambientReactions": [
@@ -503,8 +591,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f1dfbd",
     "outline": "#2d2118",
     "accent": "#0a0705",
-    "irisSize": 38,
-    "pupilSize": 18,
+    "irisSize": 40,
+    "pupilSize": 17,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/detective-noir/eyes/left-base.png",
@@ -515,17 +611,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.183,
-        "y": 0.39,
-        "w": 0.295,
-        "h": 0.211
+        "x": 0.1719,
+        "y": 0.3743,
+        "w": 0.3168,
+        "h": 0.2424
       },
       "right": {
         "side": "right",
-        "x": 0.523,
-        "y": 0.39,
-        "w": 0.295,
-        "h": 0.211
+        "x": 0.5118,
+        "y": 0.3743,
+        "w": 0.3168,
+        "h": 0.2424
       }
     },
     "ambientReactions": [
@@ -549,6 +645,14 @@ export const GENERATED_SKINS = [
     "accent": "#33185d",
     "irisSize": 44,
     "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/one-eye/eyes/left-base.png",
@@ -559,17 +663,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.238,
-        "y": 0.251,
-        "w": 0.524,
-        "h": 0.398
+        "x": 0.2035,
+        "y": 0.2131,
+        "w": 0.5936,
+        "h": 0.4746
       },
       "right": {
         "side": "right",
-        "x": 0.238,
-        "y": 0.251,
-        "w": 0.524,
-        "h": 0.398
+        "x": 0.2035,
+        "y": 0.2131,
+        "w": 0.5936,
+        "h": 0.4746
       }
     },
     "ambientReactions": [
@@ -594,6 +698,14 @@ export const GENERATED_SKINS = [
     "accent": "#3d2018",
     "irisSize": 38,
     "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/tibetan-monk/eyes/left-base.png",
@@ -604,17 +716,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.211,
-        "y": 0.315,
-        "w": 0.258,
-        "h": 0.212
+        "x": 0.2029,
+        "y": 0.2988,
+        "w": 0.2745,
+        "h": 0.2435
       },
       "right": {
         "side": "right",
-        "x": 0.532,
-        "y": 0.315,
-        "w": 0.258,
-        "h": 0.212
+        "x": 0.5231,
+        "y": 0.2988,
+        "w": 0.2745,
+        "h": 0.2435
       }
     },
     "ambientReactions": [
@@ -636,8 +748,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#dfe8e5",
     "outline": "#627f77",
     "accent": "#142427",
-    "irisSize": 36,
-    "pupilSize": 20,
+    "irisSize": 40,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/alien/eyes/left-base.png",
@@ -648,17 +768,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.055,
-        "y": 0.335,
-        "w": 0.35,
-        "h": 0.3
+        "x": 0.0344,
+        "y": 0.3641,
+        "w": 0.3918,
+        "h": 0.2424
       },
       "right": {
         "side": "right",
-        "x": 0.595,
-        "y": 0.335,
-        "w": 0.35,
-        "h": 0.3
+        "x": 0.5744,
+        "y": 0.3641,
+        "w": 0.3918,
+        "h": 0.2424
       }
     },
     "ambientReactions": [
@@ -681,8 +801,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#e5e1d8",
     "outline": "#2a2f2b",
     "accent": "#070a09",
-    "irisSize": 39,
-    "pupilSize": 17,
+    "irisSize": 42,
+    "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/hacker/eyes/left-base.png",
@@ -693,17 +821,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.105,
-        "y": 0.34,
-        "w": 0.34,
-        "h": 0.3
+        "x": 0.0857,
+        "y": 0.3698,
+        "w": 0.3794,
+        "h": 0.2424
       },
       "right": {
         "side": "right",
-        "x": 0.555,
-        "y": 0.34,
-        "w": 0.34,
-        "h": 0.3
+        "x": 0.5355,
+        "y": 0.3698,
+        "w": 0.3794,
+        "h": 0.2424
       }
     },
     "ambientReactions": [
@@ -726,8 +854,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#eee7d7",
     "outline": "#e1ddd1",
     "accent": "#1a1516",
-    "irisSize": 36,
+    "irisSize": 34,
     "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/anonymous/eyes/left-base.png",
@@ -738,17 +874,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.16,
-        "y": 0.383,
-        "w": 0.322,
-        "h": 0.194
+        "x": 0.1471,
+        "y": 0.3698,
+        "w": 0.3467,
+        "h": 0.221
       },
       "right": {
         "side": "right",
-        "x": 0.519,
-        "y": 0.383,
-        "w": 0.322,
-        "h": 0.194
+        "x": 0.5068,
+        "y": 0.3698,
+        "w": 0.3467,
+        "h": 0.221
       }
     },
     "ambientReactions": [
@@ -770,8 +906,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#dcecf4",
     "outline": "#ccd7dd",
     "accent": "#101820",
-    "irisSize": 30,
-    "pupilSize": 30,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/ice-hockey/eyes/left-base.png",
@@ -782,17 +926,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.188,
-        "y": 0.348,
-        "w": 0.239,
-        "h": 0.224
+        "x": 0.1759,
+        "y": 0.3224,
+        "w": 0.2638,
+        "h": 0.2762
       },
       "right": {
         "side": "right",
-        "x": 0.573,
-        "y": 0.348,
-        "w": 0.239,
-        "h": 0.224
+        "x": 0.5609,
+        "y": 0.3224,
+        "w": 0.2638,
+        "h": 0.2762
       }
     },
     "ambientReactions": [
@@ -814,8 +958,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#fff5df",
     "outline": "#ff9aa6",
     "accent": "#590913",
-    "irisSize": 31,
-    "pupilSize": 32,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/clown/eyes/left-base.png",
@@ -826,17 +978,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.165,
-        "y": 0.31,
-        "w": 0.235,
-        "h": 0.235
+        "x": 0.1528,
+        "y": 0.283,
+        "w": 0.2599,
+        "h": 0.2886
       },
       "right": {
         "side": "right",
-        "x": 0.6,
-        "y": 0.31,
-        "w": 0.235,
-        "h": 0.235
+        "x": 0.5874,
+        "y": 0.283,
+        "w": 0.2599,
+        "h": 0.2886
       }
     },
     "ambientReactions": [
@@ -859,8 +1011,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f6f0df",
     "outline": "#d8c7a9",
     "accent": "#4a3c2e",
-    "irisSize": 30,
-    "pupilSize": 30,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/spy/eyes/left-base.png",
@@ -871,17 +1031,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.164,
-        "y": 0.237,
-        "w": 0.269,
-        "h": 0.219
+        "x": 0.1477,
+        "y": 0.2108,
+        "w": 0.3021,
+        "h": 0.2706
       },
       "right": {
         "side": "right",
-        "x": 0.565,
-        "y": 0.237,
-        "w": 0.272,
-        "h": 0.219
+        "x": 0.5485,
+        "y": 0.2108,
+        "w": 0.3044,
+        "h": 0.2706
       }
     },
     "ambientReactions": [
@@ -904,8 +1064,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f8f0dc",
     "outline": "#e8dcc2",
     "accent": "#5d5549",
-    "irisSize": 32,
-    "pupilSize": 30,
+    "irisSize": 38,
+    "pupilSize": 18,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/skeleton/eyes/left-base.png",
@@ -916,17 +1084,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.161,
-        "y": 0.209,
-        "w": 0.294,
-        "h": 0.433
+        "x": 0.1432,
+        "y": 0.175,
+        "w": 0.3286,
+        "h": 0.5
       },
       "right": {
         "side": "right",
-        "x": 0.544,
-        "y": 0.209,
-        "w": 0.285,
-        "h": 0.43
+        "x": 0.5271,
+        "y": 0.1733,
+        "w": 0.3191,
+        "h": 0.5
       }
     },
     "ambientReactions": [
@@ -948,8 +1116,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#f2e3c5",
     "outline": "#7d5b46",
     "accent": "#2f1b16",
-    "irisSize": 38,
-    "pupilSize": 17,
+    "irisSize": 42,
+    "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/wizard/eyes/left-base.png",
@@ -960,17 +1136,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.245,
-        "y": 0.325,
-        "w": 0.25,
-        "h": 0.32
+        "x": 0.23,
+        "y": 0.2875,
+        "w": 0.2807,
+        "h": 0.3968
       },
       "right": {
         "side": "right",
-        "x": 0.505,
-        "y": 0.325,
-        "w": 0.25,
-        "h": 0.32
+        "x": 0.4899,
+        "y": 0.2875,
+        "w": 0.2807,
+        "h": 0.3968
       }
     },
     "ambientReactions": [
@@ -993,8 +1169,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#fff4df",
     "outline": "#7a421d",
     "accent": "#2f1507",
-    "irisSize": 38,
-    "pupilSize": 18,
+    "irisSize": 42,
+    "pupilSize": 17,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/cowboy/eyes/left-base.png",
@@ -1005,17 +1189,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.23,
-        "y": 0.35,
-        "w": 0.25,
-        "h": 0.28
+        "x": 0.2153,
+        "y": 0.3168,
+        "w": 0.2802,
+        "h": 0.3472
       },
       "right": {
         "side": "right",
-        "x": 0.535,
-        "y": 0.35,
-        "w": 0.25,
-        "h": 0.28
+        "x": 0.5203,
+        "y": 0.3168,
+        "w": 0.2802,
+        "h": 0.3472
       }
     },
     "ambientReactions": [
@@ -1037,8 +1221,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#fff0bf",
     "outline": "#ff8a12",
     "accent": "#4d1104",
-    "irisSize": 39,
-    "pupilSize": 18,
+    "irisSize": 42,
+    "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/pumpkin-halloween/eyes/left-base.png",
@@ -1049,17 +1241,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.168,
-        "y": 0.305,
-        "w": 0.255,
-        "h": 0.345
+        "x": 0.1533,
+        "y": 0.2638,
+        "w": 0.2852,
+        "h": 0.4284
       },
       "right": {
         "side": "right",
-        "x": 0.577,
-        "y": 0.305,
-        "w": 0.255,
-        "h": 0.345
+        "x": 0.562,
+        "y": 0.2638,
+        "w": 0.2852,
+        "h": 0.4284
       }
     },
     "ambientReactions": [
@@ -1081,8 +1273,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#efe7b8",
     "outline": "#527314",
     "accent": "#192606",
-    "irisSize": 39,
-    "pupilSize": 17,
+    "irisSize": 42,
+    "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/goblin/eyes/left-base.png",
@@ -1093,17 +1293,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.214,
-        "y": 0.425,
-        "w": 0.272,
-        "h": 0.231
+        "x": 0.2046,
+        "y": 0.407,
+        "w": 0.2909,
+        "h": 0.2672
       },
       "right": {
         "side": "right",
-        "x": 0.582,
-        "y": 0.425,
-        "w": 0.272,
-        "h": 0.231
+        "x": 0.5727,
+        "y": 0.407,
+        "w": 0.2909,
+        "h": 0.2672
       }
     },
     "ambientReactions": [
@@ -1125,8 +1325,16 @@ export const GENERATED_SKINS = [
     "eyeWhite": "#e6eef2",
     "outline": "#4a5b60",
     "accent": "#151d20",
-    "irisSize": 38,
-    "pupilSize": 17,
+    "irisSize": 40,
+    "pupilSize": 16,
+    "eyeStyle": {
+      "slotRadius": "0px",
+      "lidLeft": "-34%",
+      "lidWidth": "168%",
+      "lidHeight": "122%",
+      "lidUpperRadius": "0 0 46% 46%",
+      "lidLowerRadius": "46% 46% 0 0"
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/troll/eyes/left-base.png",
@@ -1137,17 +1345,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.135,
-        "y": 0.338,
-        "w": 0.31,
-        "h": 0.234
+        "x": 0.1234,
+        "y": 0.3202,
+        "w": 0.3337,
+        "h": 0.2706
       },
       "right": {
         "side": "right",
-        "x": 0.555,
-        "y": 0.338,
-        "w": 0.31,
-        "h": 0.234
+        "x": 0.5434,
+        "y": 0.3202,
+        "w": 0.3337,
+        "h": 0.2706
       }
     },
     "ambientReactions": [

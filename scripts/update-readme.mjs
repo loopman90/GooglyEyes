@@ -204,6 +204,8 @@ Mask rule:
 
 Eye scale rule:
 
+- Eye holes in \`masks/tab-panel.png\` are the source of truth for eye position, eye shape, eyelids, and visual style.
+- Run \`npm run rebuild-mask-eyes\` after changing a problem mask so \`skin.json\` and the per-skin base-eye PNGs are rebuilt from the actual transparent openings.
 - Every layered skin defines \`defaults.irisSize\` and \`defaults.pupilSize\` in \`skin.json\`.
 - \`irisSize\` must stay between 26 and 44 percent of the eye-window width.
 - \`pupilSize\` must stay between 16 and 46 percent of the iris width.
