@@ -580,7 +580,7 @@ export const GENERATED_SKINS = [
     "id": "space-helmet",
     "name": "SpaceHelmet",
     "eyeLayout": "dual",
-    "flavor": "Astronaut visor with bright teal focus.",
+    "flavor": "Matte teal astronaut visor with deep transparent eye ports.",
     "iris": "#71d7d1",
     "pupil": "#020916",
     "eyeWhite": "#eaf7ff",
@@ -596,7 +596,51 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
-    "reactionTuning": {},
+    "reactionTuning": {
+      "all": {
+        "gazeMultiplier": 0.8,
+        "eyeBaseScaleMultiplier": 1.14,
+        "irisScaleMultiplier": 1.04,
+        "pupilScaleMultiplier": 1.02,
+        "durationMultiplier": 1.04
+      },
+      "wide-stare": {
+        "eyeBaseScaleMultiplier": 1.14,
+        "irisScaleMultiplier": 1.08,
+        "pupilScaleMultiplier": 0.92
+      },
+      "dramatic-shock": {
+        "eyeBaseScaleMultiplier": 1.14,
+        "irisScaleMultiplier": 1.08,
+        "pupilScaleMultiplier": 0.9
+      },
+      "starstruck": {
+        "eyeBaseScaleMultiplier": 1.14,
+        "irisScaleMultiplier": 1.1,
+        "pupilScaleMultiplier": 1.04
+      },
+      "look-up": {
+        "gazeMultiplier": 0.68,
+        "eyeBaseScaleMultiplier": 1.16
+      },
+      "look-left": {
+        "gazeMultiplier": 0.68,
+        "eyeBaseScaleMultiplier": 1.16
+      },
+      "look-right": {
+        "gazeMultiplier": 0.68,
+        "eyeBaseScaleMultiplier": 1.16
+      },
+      "spacing-out": {
+        "gazeMultiplier": 0.64,
+        "eyeBaseScaleMultiplier": 1.16
+      },
+      "dreamy": {
+        "gazeMultiplier": 0.66,
+        "eyeBaseScaleMultiplier": 1.16,
+        "irisScaleMultiplier": 1.08
+      }
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/space-helmet/eyes/left-base.png",
@@ -607,17 +651,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1099,
-        "y": 0.1811,
-        "w": 0.3427,
-        "h": 0.49
+        "x": 0.0998,
+        "y": 0.228,
+        "w": 0.3416,
+        "h": 0.499
       },
       "right": {
         "side": "right",
-        "x": 0.5474,
-        "y": 0.1811,
-        "w": 0.3427,
-        "h": 0.49
+        "x": 0.5586,
+        "y": 0.228,
+        "w": 0.3416,
+        "h": 0.499
       }
     },
     "ambientReactions": [

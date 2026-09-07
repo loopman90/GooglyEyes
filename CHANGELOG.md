@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.22
+
+- Replaced the SpaceHelmet mask with a teal rectangular helmet panel using true transparent alpha eye holes.
+- Retuned SpaceHelmet eye placement so the runtime eyes sit behind the new mask openings.
+- Refreshed generated skin metadata, build output, and the SpaceHelmet thumbnail.
+
 ## 1.0.21
 
 - Added per-skin reaction tuning from skin metadata so animal, robot, single-eye, and character skins can express emotions differently.
