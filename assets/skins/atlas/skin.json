@@ -1,0 +1,48 @@
+{
+  "id": "atlas",
+  "name": "Atlas",
+  "renderer": "layered",
+  "eyeLayout": "single",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "White robot faceplate with one cool blue lamp eye.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.345,
+      "y": 0.19,
+      "w": 0.31,
+      "h": 0.62
+    },
+    {
+      "side": "right",
+      "x": 0.345,
+      "y": 0.19,
+      "w": 0.31,
+      "h": 0.62
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "wide-stare",
+    "look-up",
+    "confused",
+    "dreamy",
+    "starstruck",
+    "spacing-out",
+    "slow-blink"
+  ],
+  "defaults": {
+    "irisColor": "#1ecbff",
+    "pupilColor": "#020817",
+    "eyeWhiteColor": "#d8f8ff",
+    "eyelidColor": "#dce8f2",
+    "eyelidShadowColor": "#102438",
+    "irisGlow": 0.95,
+    "irisSize": 40,
+    "pupilSize": 28
+  }
+}

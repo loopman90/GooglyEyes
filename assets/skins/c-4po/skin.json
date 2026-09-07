@@ -1,0 +1,47 @@
+{
+  "id": "c-4po",
+  "name": "C-4PO",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Golden robot faceplate with warm lamp eyes.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.17,
+      "y": 0.305,
+      "w": 0.255,
+      "h": 0.47
+    },
+    {
+      "side": "right",
+      "x": 0.575,
+      "y": 0.305,
+      "w": 0.255,
+      "h": 0.47
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "wide-stare",
+    "confused",
+    "nervous",
+    "rapid-typing-focus",
+    "starstruck",
+    "panic",
+    "slow-blink"
+  ],
+  "defaults": {
+    "irisColor": "#ffb21a",
+    "pupilColor": "#120900",
+    "eyeWhiteColor": "#fff0ba",
+    "eyelidColor": "#c9962a",
+    "eyelidShadowColor": "#362000",
+    "irisGlow": 0.9,
+    "irisSize": 38,
+    "pupilSize": 30
+  }
+}

@@ -20,6 +20,7 @@ const MIN_PUPIL_SIZE = 16;
 const MAX_PUPIL_SIZE = 46;
 const MIN_EYE_WINDOW_SIZE = 0.12;
 const MAX_EYE_WINDOW_SIZE = 0.5;
+const MAX_SINGLE_EYE_WINDOW_SIZE = 0.75;
 const VALID_REACTIONS = new Set(manifest.reactions ?? []);
 
 function isPng(path) {
@@ -186,20 +187,21 @@ for (const skin of manifest.skins) {
             invalidJson.push(`${path}\n  - eyeWindows must define exactly one left and one right eye window`);
           } else {
             const sides = new Set();
-            for (const window of skinMeta.eyeWindows) {
-              sides.add(window.side);
-              const validSide = window.side === "left" || window.side === "right";
-              const values = [window.x, window.y, window.w, window.h];
+            const maxEyeWindowSize = skinMeta.eyeLayout === "single" ? MAX_SINGLE_EYE_WINDOW_SIZE : MAX_EYE_WINDOW_SIZE;
+            for (const eyeWindow of skinMeta.eyeWindows) {
+              sides.add(eyeWindow.side);
+              const validSide = eyeWindow.side === "left" || eyeWindow.side === "right";
+              const values = [eyeWindow.x, eyeWindow.y, eyeWindow.w, eyeWindow.h];
               const numeric = values.every((value) => typeof value === "number" && Number.isFinite(value));
               const inBounds = numeric
-                && window.x >= 0
-                && window.y >= 0
-                && window.w >= MIN_EYE_WINDOW_SIZE
-                && window.w <= MAX_EYE_WINDOW_SIZE
-                && window.h >= MIN_EYE_WINDOW_SIZE
-                && window.h <= MAX_EYE_WINDOW_SIZE
-                && window.x + window.w <= 1
-                && window.y + window.h <= 1;
+                && eyeWindow.x >= 0
+                && eyeWindow.y >= 0
+                && eyeWindow.w >= MIN_EYE_WINDOW_SIZE
+                && eyeWindow.w <= maxEyeWindowSize
+                && eyeWindow.h >= MIN_EYE_WINDOW_SIZE
+                && eyeWindow.h <= maxEyeWindowSize
+                && eyeWindow.x + eyeWindow.w <= 1
+                && eyeWindow.y + eyeWindow.h <= 1;
               if (!validSide || !inBounds) {
                 invalidJson.push(`${path}\n  - each eye window must have side left/right and normalized x/y/w/h within the rectangular mask`);
                 break;

@@ -1,0 +1,47 @@
+{
+  "id": "panda",
+  "name": "Panda",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "flavor": "Soft panda mask with calm bamboo-green eyes.",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.2,
+      "y": 0.485,
+      "w": 0.24,
+      "h": 0.34
+    },
+    {
+      "side": "right",
+      "x": 0.56,
+      "y": 0.485,
+      "w": 0.24,
+      "h": 0.34
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "ambientReactions": [
+    "slow-blink",
+    "sleepy",
+    "happy",
+    "dreamy",
+    "look-left",
+    "look-right",
+    "in-love"
+  ],
+  "defaults": {
+    "irisColor": "#67b84f",
+    "pupilColor": "#101509",
+    "eyeWhiteColor": "#f4ffe8",
+    "eyelidColor": "#f0f5e9",
+    "eyelidShadowColor": "#1c2018",
+    "irisGlow": 0.35,
+    "irisSize": 34,
+    "pupilSize": 30
+  }
+}

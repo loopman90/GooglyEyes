@@ -19,7 +19,14 @@ type Reaction =
   | "undo" | "redo" | "idle-long" | "wake" | "hover-suspicious" | "fast-movement" | "peek"
   | "sleepy-idle" | "chaotic-stare" | "dramatic-shock" | "rapid-typing-focus" | "drag-tracking"
   | "furious" | "restless" | "in-love" | "dreamy" | "drunk" | "stoned" | "spacing-out"
-  | "crying" | "laughing" | "wink-left" | "wink-right" | "panic" | "starstruck";
+  | "crying" | "laughing" | "wink-left" | "wink-right" | "panic" | "starstruck"
+  | "disgust" | "guilt" | "shame" | "sympathy" | "curiosity" | "jealousy" | "pride"
+  | "bored" | "apathy" | "acceptance" | "calm" | "inspiration" | "passion" | "hope"
+  | "frustration" | "relief" | "embarrassment" | "surprise-delight" | "distrust"
+  | "determination" | "confusion-spiral" | "mischief" | "annoyance" | "fear-freeze"
+  | "excitement" | "satisfaction" | "skepticism" | "overwhelmed" | "loneliness"
+  | "gratitude" | "trust" | "doubt" | "concentration" | "playfulness" | "impatience"
+  | "surprise-fear" | "awe" | "tired-but-awake" | "contentment" | "alertness" | "suspense";
 
 type ActionTuple = [string, TriggerType, Reaction[], number, number];
 
@@ -157,7 +164,14 @@ const REACTIONS: Reaction[] = [
   "eye-roll", "nervous", "typing", "cut", "copy", "paste", "delete", "undo", "redo", "idle-long",
   "wake", "hover-suspicious", "fast-movement", "peek", "sleepy-idle", "chaotic-stare", "dramatic-shock",
   "rapid-typing-focus", "drag-tracking", "furious", "restless", "in-love", "dreamy", "drunk", "stoned",
-  "spacing-out", "crying", "laughing", "wink-left", "wink-right", "panic", "starstruck"
+  "spacing-out", "crying", "laughing", "wink-left", "wink-right", "panic", "starstruck",
+  "disgust", "guilt", "shame", "sympathy", "curiosity", "jealousy", "pride", "bored",
+  "apathy", "acceptance", "calm", "inspiration", "passion", "hope",
+  "frustration", "relief", "embarrassment", "surprise-delight", "distrust",
+  "determination", "confusion-spiral", "mischief", "annoyance", "fear-freeze",
+  "excitement", "satisfaction", "skepticism", "overwhelmed", "loneliness",
+  "gratitude", "trust", "doubt", "concentration", "playfulness", "impatience",
+  "surprise-fear", "awe", "tired-but-awake", "contentment", "alertness", "suspense"
 ];
 
 const REACTION_IDS = new Set<string>(REACTIONS);
@@ -167,6 +181,8 @@ const SKINS: SkinDefinition[] = GENERATED_SKINS.map((skin) => ({
   assets: { ...skin.assets },
   supportsColorOverrides: true
 }));
+
+const SKINS_BY_NAME: SkinDefinition[] = [...SKINS].sort((a, b) => a.name.localeCompare(b.name));
 
 const DEFAULT_EYE_WINDOWS: Record<"left" | "right", EyeWindow> = SKINS[0].eyeWindows;
 
@@ -433,10 +449,51 @@ const REACTION_LABELS = labels<Reaction>({
   "wink-left": "Wink left",
   "wink-right": "Wink right",
   panic: "Panic",
-  starstruck: "Starstruck"
+  starstruck: "Starstruck",
+  disgust: "Disgust",
+  guilt: "Guilt",
+  shame: "Shame",
+  sympathy: "Sympathy",
+  curiosity: "Curiosity",
+  jealousy: "Jealousy",
+  pride: "Pride",
+  bored: "Bored",
+  apathy: "Apathy",
+  acceptance: "Acceptance",
+  calm: "Calm",
+  inspiration: "Inspiration",
+  passion: "Passion",
+  hope: "Hope",
+  frustration: "Frustration",
+  relief: "Relief",
+  embarrassment: "Embarrassment",
+  "surprise-delight": "Surprise delight",
+  distrust: "Distrust",
+  determination: "Determination",
+  "confusion-spiral": "Confusion spiral",
+  mischief: "Mischief",
+  annoyance: "Annoyance",
+  "fear-freeze": "Fear freeze",
+  excitement: "Excitement",
+  satisfaction: "Satisfaction",
+  skepticism: "Skepticism",
+  overwhelmed: "Overwhelmed",
+  loneliness: "Loneliness",
+  gratitude: "Gratitude",
+  trust: "Trust",
+  doubt: "Doubt",
+  concentration: "Concentration",
+  playfulness: "Playfulness",
+  impatience: "Impatience",
+  "surprise-fear": "Surprise fear",
+  awe: "Awe",
+  "tired-but-awake": "Tired but awake",
+  contentment: "Contentment",
+  alertness: "Alertness",
+  suspense: "Suspense"
 });
 
-const QUICK_REACTIONS: readonly Reaction[] = ["happy", "suspicious", "furious", "in-love", "dizzy", "crying", "laughing", "wink-right"];
+const QUICK_REACTIONS: readonly Reaction[] = ["gratitude", "doubt", "concentration", "playfulness", "impatience", "awe", "alertness", "suspense"];
 
 const BEHAVIOR_PRESETS: Record<string, Partial<GooglyEyesSettings>> = {
   subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85, ambientEmotionIntervalSec: 50, ambientEmotionJitter: 0.45 },
@@ -464,6 +521,8 @@ class EyeController {
   private typingHits: number[] = [];
   private reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   private workspaceEventsRegistered = false;
+  private resizeObserver: ResizeObserver | null = null;
+  private observedParent: HTMLElement | null = null;
 
   constructor(private plugin: GooglyEyesPlugin) {}
 
@@ -476,6 +535,7 @@ class EyeController {
       this.buildPairs();
     }
     if (this.root.parentElement !== parent) parent.appendChild(this.root);
+    this.observeParent(parent);
     this.applySettings();
     if (!this.cleanups.length) this.registerListeners();
     if (!this.frame) this.loop();
@@ -489,11 +549,14 @@ class EyeController {
     if (this.blinkTimer) window.clearTimeout(this.blinkTimer);
     if (this.ambientTimer) window.clearTimeout(this.ambientTimer);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
+    this.resizeObserver?.disconnect();
     this.frame = 0;
     this.idleTimer = 0;
     this.blinkTimer = 0;
     this.ambientTimer = 0;
     this.ambientReturnTimer = 0;
+    this.resizeObserver = null;
+    this.observedParent = null;
     this.root?.remove();
     this.root = null;
     this.pairs = [];
@@ -530,8 +593,48 @@ class EyeController {
       "--lid-transition-scale": `${1 / Math.max(0.2, s.blinkSpeed)}`
     });
     this.root.parentElement?.setCssProps({ "--googly-eyes-size": `${s.size}px` });
+    this.syncPanelBounds();
     this.positionRoot();
     this.updateAssets();
+  }
+
+  private observeParent(parent: HTMLElement): void {
+    if (this.observedParent === parent) return;
+    this.resizeObserver?.disconnect();
+    this.observedParent = parent;
+    this.resizeObserver = new ResizeObserver(() => this.syncPanelBounds());
+    this.resizeObserver.observe(parent);
+    this.syncPanelBounds();
+  }
+
+  private syncPanelBounds(): void {
+    if (!this.root) return;
+    if (!this.root.closest(".googly-eyes-stage")) {
+      this.root.setCssProps({
+        "--panel-left": "0px",
+        "--panel-top": "0px",
+        "--panel-width": "100%",
+        "--panel-height": "100%"
+      });
+      return;
+    }
+    const parent = this.root.parentElement;
+    if (!parent) return;
+    const rect = parent.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    const aspect = 1774 / 887;
+    let width = rect.width;
+    let height = width / aspect;
+    if (height > rect.height) {
+      height = rect.height;
+      width = height * aspect;
+    }
+    this.root.setCssProps({
+      "--panel-left": `${(rect.width - width) / 2}px`,
+      "--panel-top": `${(rect.height - height) / 2}px`,
+      "--panel-width": `${width}px`,
+      "--panel-height": `${height}px`
+    });
   }
 
   react(actionName: string, forced?: Reaction): void {
@@ -800,7 +903,7 @@ class EyeController {
     if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.dragging) return;
     if (this.root?.hasClass("is-hidden")) return;
     const skinId = this.plugin.settings.skinId;
-    const pool: readonly Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy"];
+    const pool: readonly Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy", "curiosity", "bored", "calm", "hope", "pride", "relief", "mischief", "skepticism", "excitement", "loneliness", "gratitude", "trust", "doubt", "playfulness", "impatience", "awe", "tired-but-awake", "contentment", "alertness", "suspense"];
     const reaction = this.resolveReaction(pick(pool, Math.max(0.45, this.randomness())));
     this.setReaction(reaction);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
@@ -1097,31 +1200,771 @@ class EyeController {
       set("--iris-scale", "0.78");
       set("--pupil-scale", "0.92");
       set("--iris-filter", "hue-rotate(185deg) saturate(0.82) brightness(0.92)");
-    } else if (reaction === "dreamy" || reaction === "stoned" || reaction === "spacing-out") {
-      const isStoned = reaction === "stoned";
-      const isSpacing = reaction === "spacing-out";
-      set("--lid-upper-left", isSpacing ? "-82%" : "-3%");
-      set("--lid-lower-left", isSpacing ? "80%" : "30%");
-      set("--lid-upper-right", isSpacing ? "-82%" : "-3%");
-      set("--lid-lower-right", isSpacing ? "80%" : "30%");
-      set("--lid-tilt-left", isStoned ? "-1deg" : "-6deg");
-      set("--lid-tilt-right", isStoned ? "1deg" : "6deg");
-      set("--reaction-iris-x-left", pct(isSpacing ? -8 : 8));
-      set("--reaction-iris-x-right", pct(isSpacing ? 8 : 8));
-      set("--reaction-pupil-x-left", pct(isSpacing ? -12 : 11));
-      set("--reaction-pupil-x-right", pct(isSpacing ? 12 : 11));
-      set("--reaction-iris-y-left", pct(isSpacing ? -2 : isStoned ? 13 : -12));
-      set("--reaction-iris-y-right", pct(isSpacing ? -2 : isStoned ? 13 : -12));
-      set("--reaction-pupil-y-left", pct(isSpacing ? -3 : isStoned ? 18 : -16));
-      set("--reaction-pupil-y-right", pct(isSpacing ? -3 : isStoned ? 18 : -16));
-      set("--eye-base-y-left", pct(isSpacing ? -1 : isStoned ? 6 : -4));
-      set("--eye-base-y-right", pct(isSpacing ? -1 : isStoned ? 6 : -4));
-      set("--eye-base-scale-left", isSpacing ? "1.08" : "0.98");
-      set("--eye-base-scale-right", isSpacing ? "1.08" : "0.98");
-      set("--iris-opacity", isSpacing ? "0.42" : isStoned ? "0.66" : "0.72");
-      set("--iris-scale", isSpacing ? "0.72" : isStoned ? "1.08" : "1.05");
-      set("--pupil-scale", isSpacing ? "0.55" : isStoned ? "1.45" : "1.18");
-      set("--iris-filter", isSpacing ? "saturate(0.45) brightness(1.2)" : isStoned ? "hue-rotate(70deg) saturate(0.9) brightness(0.84)" : "hue-rotate(285deg) saturate(1.05) brightness(1.16)");
+    } else if (reaction === "frustration") {
+      set("--lid-upper-left", "-6%");
+      set("--lid-lower-left", "38%");
+      set("--lid-upper-right", "-6%");
+      set("--lid-lower-right", "38%");
+      set("--lid-tilt-left", "15deg");
+      set("--lid-tilt-right", "-15deg");
+      set("--reaction-iris-x-left", pct(-6));
+      set("--reaction-iris-x-right", pct(6));
+      set("--reaction-pupil-x-left", pct(-9));
+      set("--reaction-pupil-x-right", pct(9));
+      set("--reaction-iris-y-left", pct(-3));
+      set("--reaction-iris-y-right", pct(-3));
+      set("--reaction-pupil-y-left", pct(-5));
+      set("--reaction-pupil-y-right", pct(-5));
+      set("--eye-base-rotate-left", "3deg");
+      set("--eye-base-rotate-right", "-3deg");
+      set("--iris-scale", "0.82");
+      set("--pupil-scale", "0.62");
+      set("--iris-filter", "contrast(1.28) saturate(1.28) brightness(0.92)");
+    } else if (reaction === "relief") {
+      set("--lid-upper-left", "-30%");
+      set("--lid-lower-left", "42%");
+      set("--lid-upper-right", "-30%");
+      set("--lid-lower-right", "42%");
+      set("--lid-tilt-left", "-4deg");
+      set("--lid-tilt-right", "4deg");
+      set("--reaction-iris-y-left", pct(8));
+      set("--reaction-iris-y-right", pct(8));
+      set("--reaction-pupil-y-left", pct(12));
+      set("--reaction-pupil-y-right", pct(12));
+      set("--eye-base-y-left", pct(3));
+      set("--eye-base-y-right", pct(3));
+      set("--eye-base-scale-left", "0.98");
+      set("--eye-base-scale-right", "0.98");
+      set("--iris-opacity", "0.76");
+      set("--iris-scale", "0.9");
+      set("--pupil-scale", "0.88");
+      set("--iris-filter", "saturate(0.72) brightness(1.08)");
+    } else if (reaction === "embarrassment") {
+      set("--lid-upper-left", "-20%");
+      set("--lid-lower-left", "42%");
+      set("--lid-upper-right", "-35%");
+      set("--lid-lower-right", "50%");
+      set("--lid-tilt-left", "-10deg");
+      set("--lid-tilt-right", "8deg");
+      set("--reaction-iris-x-left", pct(-10));
+      set("--reaction-iris-x-right", pct(-10));
+      set("--reaction-pupil-x-left", pct(-15));
+      set("--reaction-pupil-x-right", pct(-15));
+      set("--reaction-iris-y-left", pct(13));
+      set("--reaction-iris-y-right", pct(9));
+      set("--reaction-pupil-y-left", pct(19));
+      set("--reaction-pupil-y-right", pct(13));
+      set("--eye-base-y-left", pct(4));
+      set("--eye-base-y-right", pct(3));
+      set("--iris-opacity", "0.72");
+      set("--iris-scale", "0.86");
+      set("--pupil-scale", "0.92");
+      set("--iris-filter", "hue-rotate(325deg) saturate(1.18) brightness(1.02)");
+    } else if (reaction === "surprise-delight") {
+      set("--lid-upper-left", "-94%");
+      set("--lid-lower-left", "90%");
+      set("--lid-upper-right", "-94%");
+      set("--lid-lower-right", "90%");
+      set("--reaction-iris-y-left", pct(-6));
+      set("--reaction-iris-y-right", pct(-6));
+      set("--reaction-pupil-y-left", pct(-8));
+      set("--reaction-pupil-y-right", pct(-8));
+      set("--eye-base-scale-left", "1.18");
+      set("--eye-base-scale-right", "1.18");
+      set("--iris-scale", "1.28");
+      set("--pupil-scale", "0.64");
+      set("--iris-filter", "brightness(1.26) saturate(1.38)");
+    } else if (reaction === "distrust") {
+      set("--lid-upper-left", "-10%");
+      set("--lid-lower-left", "41%");
+      set("--lid-upper-right", "-28%");
+      set("--lid-lower-right", "53%");
+      set("--lid-tilt-left", "-20deg");
+      set("--lid-tilt-right", "18deg");
+      set("--reaction-iris-x-left", pct(16));
+      set("--reaction-iris-x-right", pct(-16));
+      set("--reaction-pupil-x-left", pct(23));
+      set("--reaction-pupil-x-right", pct(-23));
+      set("--reaction-iris-y-left", pct(-2));
+      set("--reaction-iris-y-right", pct(-2));
+      set("--reaction-pupil-y-left", pct(-3));
+      set("--reaction-pupil-y-right", pct(-3));
+      set("--eye-base-rotate-left", "-5deg");
+      set("--eye-base-rotate-right", "5deg");
+      set("--iris-scale", "0.72");
+      set("--pupil-scale", "0.58");
+      set("--iris-filter", "saturate(0.45) brightness(0.72) contrast(1.35)");
+    } else if (reaction === "determination") {
+      set("--lid-upper-left", "-24%");
+      set("--lid-lower-left", "54%");
+      set("--lid-upper-right", "-24%");
+      set("--lid-lower-right", "54%");
+      set("--lid-tilt-left", "12deg");
+      set("--lid-tilt-right", "-12deg");
+      set("--reaction-iris-y-left", pct(-2));
+      set("--reaction-iris-y-right", pct(-2));
+      set("--reaction-pupil-y-left", pct(-3));
+      set("--reaction-pupil-y-right", pct(-3));
+      set("--eye-base-scale-left", "1.04");
+      set("--eye-base-scale-right", "1.04");
+      set("--iris-scale", "0.76");
+      set("--pupil-scale", "0.46");
+      set("--iris-filter", "contrast(1.42) saturate(0.9) brightness(1.05)");
+    } else if (reaction === "confusion-spiral") {
+      set("--lid-upper-left", "-64%");
+      set("--lid-lower-left", "68%");
+      set("--lid-upper-right", "-36%");
+      set("--lid-lower-right", "55%");
+      set("--lid-tilt-left", "10deg");
+      set("--lid-tilt-right", "-12deg");
+      set("--reaction-iris-x-left", pct(13));
+      set("--reaction-iris-x-right", pct(-11));
+      set("--reaction-pupil-x-left", pct(19));
+      set("--reaction-pupil-x-right", pct(-16));
+      set("--reaction-iris-y-left", pct(-11));
+      set("--reaction-iris-y-right", pct(12));
+      set("--reaction-pupil-y-left", pct(-16));
+      set("--reaction-pupil-y-right", pct(18));
+      set("--eye-base-rotate-left", "-8deg");
+      set("--eye-base-rotate-right", "8deg");
+      set("--eye-vibe", "5deg");
+      set("--iris-scale", "0.82");
+      set("--pupil-scale", "0.62");
+      set("--iris-filter", "hue-rotate(60deg) saturate(1.55) contrast(1.1)");
+    } else if (reaction === "mischief") {
+      set("--lid-upper-left", "-22%");
+      set("--lid-lower-left", "48%");
+      set("--lid-upper-right", "-56%");
+      set("--lid-lower-right", "64%");
+      set("--lid-tilt-left", "14deg");
+      set("--lid-tilt-right", "-9deg");
+      set("--reaction-iris-x-left", pct(15));
+      set("--reaction-iris-x-right", pct(15));
+      set("--reaction-pupil-x-left", pct(22));
+      set("--reaction-pupil-x-right", pct(22));
+      set("--reaction-iris-y-left", pct(-4));
+      set("--reaction-iris-y-right", pct(-7));
+      set("--reaction-pupil-y-left", pct(-6));
+      set("--reaction-pupil-y-right", pct(-10));
+      set("--eye-base-rotate-left", "5deg");
+      set("--eye-base-rotate-right", "-3deg");
+      set("--iris-scale", "0.98");
+      set("--pupil-scale", "0.82");
+      set("--iris-filter", "brightness(1.12) saturate(1.25)");
+    } else if (reaction === "annoyance") {
+      set("--lid-upper-left", "-18%");
+      set("--lid-lower-left", "44%");
+      set("--lid-upper-right", "-18%");
+      set("--lid-lower-right", "44%");
+      set("--lid-tilt-left", "-8deg");
+      set("--lid-tilt-right", "8deg");
+      set("--reaction-iris-x-left", pct(-8));
+      set("--reaction-iris-x-right", pct(-8));
+      set("--reaction-pupil-x-left", pct(-12));
+      set("--reaction-pupil-x-right", pct(-12));
+      set("--reaction-iris-y-left", pct(2));
+      set("--reaction-iris-y-right", pct(2));
+      set("--reaction-pupil-y-left", pct(3));
+      set("--reaction-pupil-y-right", pct(3));
+      set("--iris-scale", "0.78");
+      set("--pupil-scale", "0.62");
+      set("--iris-filter", "saturate(0.8) brightness(0.9) contrast(1.18)");
+    } else if (reaction === "fear-freeze") {
+      set("--lid-upper-left", "-86%");
+      set("--lid-lower-left", "82%");
+      set("--lid-upper-right", "-86%");
+      set("--lid-lower-right", "82%");
+      set("--reaction-iris-x-left", pct(-4));
+      set("--reaction-iris-x-right", pct(-4));
+      set("--reaction-pupil-x-left", pct(-6));
+      set("--reaction-pupil-x-right", pct(-6));
+      set("--reaction-iris-y-left", pct(-10));
+      set("--reaction-iris-y-right", pct(-10));
+      set("--reaction-pupil-y-left", pct(-15));
+      set("--reaction-pupil-y-right", pct(-15));
+      set("--eye-base-scale-left", "1.12");
+      set("--eye-base-scale-right", "1.12");
+      set("--iris-scale", "0.9");
+      set("--pupil-scale", "0.38");
+      set("--iris-filter", "saturate(0.55) brightness(1.18) contrast(1.2)");
+    } else if (reaction === "excitement") {
+      set("--lid-upper-left", "-88%");
+      set("--lid-lower-left", "84%");
+      set("--lid-upper-right", "-88%");
+      set("--lid-lower-right", "84%");
+      set("--reaction-iris-x-left", pct(8));
+      set("--reaction-iris-x-right", pct(8));
+      set("--reaction-pupil-x-left", pct(12));
+      set("--reaction-pupil-x-right", pct(12));
+      set("--reaction-iris-y-left", pct(-12));
+      set("--reaction-iris-y-right", pct(-12));
+      set("--reaction-pupil-y-left", pct(-18));
+      set("--reaction-pupil-y-right", pct(-18));
+      set("--eye-base-scale-left", "1.16");
+      set("--eye-base-scale-right", "1.16");
+      set("--iris-scale", "1.18");
+      set("--pupil-scale", "0.72");
+      set("--iris-filter", "brightness(1.24) saturate(1.55)");
+    } else if (reaction === "satisfaction") {
+      set("--lid-upper-left", "-36%");
+      set("--lid-lower-left", "34%");
+      set("--lid-upper-right", "-36%");
+      set("--lid-lower-right", "34%");
+      set("--lid-tilt-left", "-7deg");
+      set("--lid-tilt-right", "7deg");
+      set("--reaction-iris-y-left", pct(-3));
+      set("--reaction-iris-y-right", pct(-3));
+      set("--reaction-pupil-y-left", pct(-4));
+      set("--reaction-pupil-y-right", pct(-4));
+      set("--eye-base-scale-left", "1.02");
+      set("--eye-base-scale-right", "1.02");
+      set("--iris-opacity", "0.82");
+      set("--iris-scale", "0.9");
+      set("--pupil-scale", "0.82");
+      set("--iris-filter", "brightness(1.1) saturate(0.92)");
+    } else if (reaction === "skepticism") {
+      set("--lid-upper-left", "-8%");
+      set("--lid-lower-left", "35%");
+      set("--lid-upper-right", "-66%");
+      set("--lid-lower-right", "70%");
+      set("--lid-tilt-left", "-16deg");
+      set("--lid-tilt-right", "5deg");
+      set("--reaction-iris-x-left", pct(10));
+      set("--reaction-iris-x-right", pct(10));
+      set("--reaction-pupil-x-left", pct(15));
+      set("--reaction-pupil-x-right", pct(15));
+      set("--reaction-iris-y-left", pct(-2));
+      set("--reaction-iris-y-right", pct(-5));
+      set("--reaction-pupil-y-left", pct(-3));
+      set("--reaction-pupil-y-right", pct(-8));
+      set("--eye-base-rotate-left", "-5deg");
+      set("--eye-base-rotate-right", "2deg");
+      set("--iris-scale", "0.84");
+      set("--pupil-scale", "0.66");
+      set("--iris-filter", "contrast(1.2) saturate(0.75)");
+    } else if (reaction === "overwhelmed") {
+      set("--lid-upper-left", "-72%");
+      set("--lid-lower-left", "62%");
+      set("--lid-upper-right", "-18%");
+      set("--lid-lower-right", "35%");
+      set("--lid-tilt-left", "12deg");
+      set("--lid-tilt-right", "-10deg");
+      set("--reaction-iris-x-left", pct(-18));
+      set("--reaction-iris-x-right", pct(16));
+      set("--reaction-pupil-x-left", pct(-25));
+      set("--reaction-pupil-x-right", pct(23));
+      set("--reaction-iris-y-left", pct(-12));
+      set("--reaction-iris-y-right", pct(18));
+      set("--reaction-pupil-y-left", pct(-18));
+      set("--reaction-pupil-y-right", pct(26));
+      set("--eye-base-rotate-left", "-8deg");
+      set("--eye-base-rotate-right", "7deg");
+      set("--eye-base-scale-left", "1.1");
+      set("--eye-base-scale-right", "0.96");
+      set("--eye-vibe", "6deg");
+      set("--iris-scale", "0.92");
+      set("--pupil-scale", "0.54");
+      set("--iris-filter", "saturate(0.75) brightness(1.02) contrast(1.28)");
+    } else if (reaction === "loneliness") {
+      set("--lid-upper-left", "-16%");
+      set("--lid-lower-left", "36%");
+      set("--lid-upper-right", "-16%");
+      set("--lid-lower-right", "36%");
+      set("--lid-tilt-left", "-5deg");
+      set("--lid-tilt-right", "5deg");
+      set("--reaction-iris-x-left", pct(3));
+      set("--reaction-iris-x-right", pct(-3));
+      set("--reaction-pupil-x-left", pct(5));
+      set("--reaction-pupil-x-right", pct(-5));
+      set("--reaction-iris-y-left", pct(22));
+      set("--reaction-iris-y-right", pct(22));
+      set("--reaction-pupil-y-left", pct(30));
+      set("--reaction-pupil-y-right", pct(30));
+      set("--eye-base-y-left", pct(8));
+      set("--eye-base-y-right", pct(8));
+      set("--eye-base-scale-left", "0.94");
+      set("--eye-base-scale-right", "0.94");
+      set("--iris-opacity", "0.44");
+      set("--iris-scale", "0.66");
+      set("--pupil-scale", "0.74");
+      set("--iris-filter", "hue-rotate(195deg) saturate(0.42) brightness(0.78)");
+    } else if (reaction === "gratitude") {
+      set("--lid-upper-left", "-38%");
+      set("--lid-lower-left", "44%");
+      set("--lid-upper-right", "-38%");
+      set("--lid-lower-right", "44%");
+      set("--lid-tilt-left", "-6deg");
+      set("--lid-tilt-right", "6deg");
+      set("--reaction-iris-y-left", pct(5));
+      set("--reaction-iris-y-right", pct(5));
+      set("--reaction-pupil-y-left", pct(7));
+      set("--reaction-pupil-y-right", pct(7));
+      set("--eye-base-y-left", pct(2));
+      set("--eye-base-y-right", pct(2));
+      set("--iris-scale", "1.08");
+      set("--pupil-scale", "1.02");
+      set("--iris-filter", "hue-rotate(18deg) brightness(1.12) saturate(1.1)");
+    } else if (reaction === "trust") {
+      set("--lid-upper-left", "-66%");
+      set("--lid-lower-left", "66%");
+      set("--lid-upper-right", "-66%");
+      set("--lid-lower-right", "66%");
+      set("--reaction-iris-y-left", pct(0));
+      set("--reaction-iris-y-right", pct(0));
+      set("--reaction-pupil-y-left", pct(0));
+      set("--reaction-pupil-y-right", pct(0));
+      set("--eye-base-scale-left", "1.02");
+      set("--eye-base-scale-right", "1.02");
+      set("--iris-scale", "1");
+      set("--pupil-scale", "0.92");
+      set("--iris-filter", "saturate(0.9) brightness(1.08)");
+    } else if (reaction === "doubt") {
+      set("--lid-upper-left", "-25%");
+      set("--lid-lower-left", "48%");
+      set("--lid-upper-right", "-58%");
+      set("--lid-lower-right", "65%");
+      set("--lid-tilt-left", "-12deg");
+      set("--lid-tilt-right", "9deg");
+      set("--reaction-iris-x-left", pct(-6));
+      set("--reaction-iris-x-right", pct(8));
+      set("--reaction-pupil-x-left", pct(-9));
+      set("--reaction-pupil-x-right", pct(12));
+      set("--reaction-iris-y-left", pct(8));
+      set("--reaction-iris-y-right", pct(-2));
+      set("--reaction-pupil-y-left", pct(12));
+      set("--reaction-pupil-y-right", pct(-3));
+      set("--eye-base-rotate-left", "-3deg");
+      set("--eye-base-rotate-right", "4deg");
+      set("--iris-scale", "0.84");
+      set("--pupil-scale", "0.72");
+      set("--iris-filter", "saturate(0.72) brightness(0.96)");
+    } else if (reaction === "concentration") {
+      set("--lid-upper-left", "-30%");
+      set("--lid-lower-left", "58%");
+      set("--lid-upper-right", "-30%");
+      set("--lid-lower-right", "58%");
+      set("--lid-tilt-left", "5deg");
+      set("--lid-tilt-right", "-5deg");
+      set("--reaction-iris-y-left", pct(3));
+      set("--reaction-iris-y-right", pct(3));
+      set("--reaction-pupil-y-left", pct(4));
+      set("--reaction-pupil-y-right", pct(4));
+      set("--eye-base-scale-left", "1.01");
+      set("--eye-base-scale-right", "1.01");
+      set("--iris-scale", "0.78");
+      set("--pupil-scale", "0.5");
+      set("--iris-filter", "contrast(1.28) saturate(0.82)");
+    } else if (reaction === "playfulness") {
+      set("--lid-upper-left", "-72%");
+      set("--lid-lower-left", "70%");
+      set("--lid-upper-right", "-42%");
+      set("--lid-lower-right", "48%");
+      set("--lid-tilt-left", "-8deg");
+      set("--lid-tilt-right", "13deg");
+      set("--reaction-iris-x-left", pct(12));
+      set("--reaction-iris-x-right", pct(12));
+      set("--reaction-pupil-x-left", pct(18));
+      set("--reaction-pupil-x-right", pct(18));
+      set("--reaction-iris-y-left", pct(-6));
+      set("--reaction-iris-y-right", pct(6));
+      set("--reaction-pupil-y-left", pct(-9));
+      set("--reaction-pupil-y-right", pct(9));
+      set("--eye-base-rotate-left", "-5deg");
+      set("--eye-base-rotate-right", "5deg");
+      set("--iris-scale", "1.08");
+      set("--pupil-scale", "0.94");
+      set("--iris-filter", "brightness(1.16) saturate(1.32)");
+    } else if (reaction === "impatience") {
+      set("--lid-upper-left", "-14%");
+      set("--lid-lower-left", "43%");
+      set("--lid-upper-right", "-14%");
+      set("--lid-lower-right", "43%");
+      set("--lid-tilt-left", "-10deg");
+      set("--lid-tilt-right", "10deg");
+      set("--reaction-iris-x-left", pct(15));
+      set("--reaction-iris-x-right", pct(15));
+      set("--reaction-pupil-x-left", pct(22));
+      set("--reaction-pupil-x-right", pct(22));
+      set("--reaction-iris-y-left", pct(1));
+      set("--reaction-iris-y-right", pct(1));
+      set("--reaction-pupil-y-left", pct(2));
+      set("--reaction-pupil-y-right", pct(2));
+      set("--eye-base-x-left", pct(3));
+      set("--eye-base-x-right", pct(3));
+      set("--iris-scale", "0.72");
+      set("--pupil-scale", "0.56");
+      set("--iris-filter", "saturate(0.8) brightness(0.88) contrast(1.22)");
+    } else if (reaction === "surprise-fear") {
+      set("--lid-upper-left", "-94%");
+      set("--lid-lower-left", "88%");
+      set("--lid-upper-right", "-94%");
+      set("--lid-lower-right", "88%");
+      set("--reaction-iris-x-left", pct(-8));
+      set("--reaction-iris-x-right", pct(8));
+      set("--reaction-pupil-x-left", pct(-12));
+      set("--reaction-pupil-x-right", pct(12));
+      set("--reaction-iris-y-left", pct(-12));
+      set("--reaction-iris-y-right", pct(-12));
+      set("--reaction-pupil-y-left", pct(-18));
+      set("--reaction-pupil-y-right", pct(-18));
+      set("--eye-base-scale-left", "1.16");
+      set("--eye-base-scale-right", "1.16");
+      set("--iris-scale", "0.86");
+      set("--pupil-scale", "0.34");
+      set("--iris-filter", "saturate(0.52) brightness(1.18) contrast(1.3)");
+    } else if (reaction === "awe") {
+      set("--lid-upper-left", "-96%");
+      set("--lid-lower-left", "88%");
+      set("--lid-upper-right", "-96%");
+      set("--lid-lower-right", "88%");
+      set("--reaction-iris-y-left", pct(-18));
+      set("--reaction-iris-y-right", pct(-18));
+      set("--reaction-pupil-y-left", pct(-24));
+      set("--reaction-pupil-y-right", pct(-24));
+      set("--eye-base-y-left", pct(-5));
+      set("--eye-base-y-right", pct(-5));
+      set("--eye-base-scale-left", "1.2");
+      set("--eye-base-scale-right", "1.2");
+      set("--iris-scale", "1.2");
+      set("--pupil-scale", "0.68");
+      set("--iris-filter", "brightness(1.28) saturate(1.18)");
+    } else if (reaction === "tired-but-awake") {
+      set("--lid-upper-left", "-7%");
+      set("--lid-lower-left", "31%");
+      set("--lid-upper-right", "-7%");
+      set("--lid-lower-right", "31%");
+      set("--lid-tilt-left", "2deg");
+      set("--lid-tilt-right", "-2deg");
+      set("--reaction-iris-y-left", pct(12));
+      set("--reaction-iris-y-right", pct(12));
+      set("--reaction-pupil-y-left", pct(18));
+      set("--reaction-pupil-y-right", pct(18));
+      set("--eye-base-y-left", pct(5));
+      set("--eye-base-y-right", pct(5));
+      set("--eye-base-scale-left", "0.98");
+      set("--eye-base-scale-right", "0.98");
+      set("--iris-opacity", "0.62");
+      set("--iris-scale", "0.76");
+      set("--pupil-scale", "0.82");
+      set("--iris-filter", "saturate(0.6) brightness(0.9)");
+    } else if (reaction === "contentment") {
+      set("--lid-upper-left", "-42%");
+      set("--lid-lower-left", "39%");
+      set("--lid-upper-right", "-42%");
+      set("--lid-lower-right", "39%");
+      set("--lid-tilt-left", "-5deg");
+      set("--lid-tilt-right", "5deg");
+      set("--reaction-iris-y-left", pct(-1));
+      set("--reaction-iris-y-right", pct(-1));
+      set("--reaction-pupil-y-left", pct(-1));
+      set("--reaction-pupil-y-right", pct(-1));
+      set("--eye-base-scale-left", "1.01");
+      set("--eye-base-scale-right", "1.01");
+      set("--iris-opacity", "0.78");
+      set("--iris-scale", "0.86");
+      set("--pupil-scale", "0.78");
+      set("--iris-filter", "saturate(0.72) brightness(1.02)");
+    } else if (reaction === "alertness") {
+      set("--lid-upper-left", "-78%");
+      set("--lid-lower-left", "78%");
+      set("--lid-upper-right", "-78%");
+      set("--lid-lower-right", "78%");
+      set("--reaction-iris-x-left", pct(-4));
+      set("--reaction-iris-x-right", pct(-4));
+      set("--reaction-pupil-x-left", pct(-6));
+      set("--reaction-pupil-x-right", pct(-6));
+      set("--reaction-iris-y-left", pct(-6));
+      set("--reaction-iris-y-right", pct(-6));
+      set("--reaction-pupil-y-left", pct(-9));
+      set("--reaction-pupil-y-right", pct(-9));
+      set("--eye-base-scale-left", "1.08");
+      set("--eye-base-scale-right", "1.08");
+      set("--iris-scale", "0.92");
+      set("--pupil-scale", "0.44");
+      set("--iris-filter", "contrast(1.36) saturate(1.08) brightness(1.08)");
+    } else if (reaction === "suspense") {
+      set("--lid-upper-left", "-46%");
+      set("--lid-lower-left", "61%");
+      set("--lid-upper-right", "-46%");
+      set("--lid-lower-right", "61%");
+      set("--lid-tilt-left", "6deg");
+      set("--lid-tilt-right", "-6deg");
+      set("--reaction-iris-x-left", pct(-18));
+      set("--reaction-iris-x-right", pct(-18));
+      set("--reaction-pupil-x-left", pct(-25));
+      set("--reaction-pupil-x-right", pct(-25));
+      set("--reaction-iris-y-left", pct(-4));
+      set("--reaction-iris-y-right", pct(-4));
+      set("--reaction-pupil-y-left", pct(-6));
+      set("--reaction-pupil-y-right", pct(-6));
+      set("--eye-base-x-left", pct(-5));
+      set("--eye-base-x-right", pct(-5));
+      set("--eye-base-scale-left", "1.04");
+      set("--eye-base-scale-right", "1.04");
+      set("--iris-scale", "0.88");
+      set("--pupil-scale", "0.5");
+      set("--iris-filter", "saturate(0.65) brightness(0.86) contrast(1.25)");
+    } else if (reaction === "disgust") {
+      set("--lid-upper-left", "-18%");
+      set("--lid-lower-left", "47%");
+      set("--lid-upper-right", "-42%");
+      set("--lid-lower-right", "58%");
+      set("--lid-tilt-left", "-18deg");
+      set("--lid-tilt-right", "-10deg");
+      set("--lid-lower-tilt-left", "8deg");
+      set("--lid-lower-tilt-right", "2deg");
+      set("--reaction-iris-x-left", pct(-14));
+      set("--reaction-iris-x-right", pct(-10));
+      set("--reaction-pupil-x-left", pct(-20));
+      set("--reaction-pupil-x-right", pct(-15));
+      set("--reaction-iris-y-left", pct(7));
+      set("--reaction-iris-y-right", pct(4));
+      set("--reaction-pupil-y-left", pct(10));
+      set("--reaction-pupil-y-right", pct(6));
+      set("--eye-base-rotate-left", "-5deg");
+      set("--eye-base-rotate-right", "-2deg");
+      set("--iris-scale", "0.76");
+      set("--pupil-scale", "0.66");
+      set("--iris-filter", "hue-rotate(88deg) saturate(0.7) brightness(0.82) contrast(1.2)");
+    } else if (reaction === "guilt" || reaction === "shame") {
+      const isShame = reaction === "shame";
+      set("--lid-upper-left", isShame ? "-4%" : "-14%");
+      set("--lid-lower-left", isShame ? "30%" : "39%");
+      set("--lid-upper-right", isShame ? "-4%" : "-14%");
+      set("--lid-lower-right", isShame ? "30%" : "39%");
+      set("--lid-tilt-left", "-8deg");
+      set("--lid-tilt-right", "8deg");
+      set("--reaction-iris-x-left", pct(isShame ? -5 : 6));
+      set("--reaction-iris-x-right", pct(isShame ? -5 : 6));
+      set("--reaction-pupil-x-left", pct(isShame ? -8 : 9));
+      set("--reaction-pupil-x-right", pct(isShame ? -8 : 9));
+      set("--reaction-iris-y-left", pct(isShame ? 22 : 17));
+      set("--reaction-iris-y-right", pct(isShame ? 22 : 17));
+      set("--reaction-pupil-y-left", pct(isShame ? 30 : 24));
+      set("--reaction-pupil-y-right", pct(isShame ? 30 : 24));
+      set("--eye-base-y-left", pct(isShame ? 8 : 6));
+      set("--eye-base-y-right", pct(isShame ? 8 : 6));
+      set("--eye-base-scale-left", isShame ? "0.92" : "0.96");
+      set("--eye-base-scale-right", isShame ? "0.92" : "0.96");
+      set("--iris-opacity", isShame ? "0.46" : "0.6");
+      set("--iris-scale", isShame ? "0.68" : "0.78");
+      set("--pupil-scale", isShame ? "0.72" : "0.84");
+      set("--iris-filter", "saturate(0.58) brightness(0.78)");
+    } else if (reaction === "sympathy") {
+      set("--lid-upper-left", "-33%");
+      set("--lid-lower-left", "46%");
+      set("--lid-upper-right", "-33%");
+      set("--lid-lower-right", "46%");
+      set("--lid-tilt-left", "-7deg");
+      set("--lid-tilt-right", "7deg");
+      set("--reaction-iris-y-left", pct(6));
+      set("--reaction-iris-y-right", pct(6));
+      set("--reaction-pupil-y-left", pct(8));
+      set("--reaction-pupil-y-right", pct(8));
+      set("--eye-base-y-left", pct(2));
+      set("--eye-base-y-right", pct(2));
+      set("--eye-base-scale-left", "1.03");
+      set("--eye-base-scale-right", "1.03");
+      set("--iris-scale", "1.08");
+      set("--pupil-scale", "1.1");
+      set("--iris-filter", "brightness(1.06) saturate(0.92)");
+    } else if (reaction === "curiosity") {
+      set("--lid-upper-left", "-76%");
+      set("--lid-lower-left", "76%");
+      set("--lid-upper-right", "-34%");
+      set("--lid-lower-right", "52%");
+      set("--lid-tilt-left", "-4deg");
+      set("--lid-tilt-right", "11deg");
+      set("--reaction-iris-x-left", pct(13));
+      set("--reaction-iris-x-right", pct(13));
+      set("--reaction-pupil-x-left", pct(19));
+      set("--reaction-pupil-x-right", pct(19));
+      set("--reaction-iris-y-left", pct(-8));
+      set("--reaction-iris-y-right", pct(-3));
+      set("--reaction-pupil-y-left", pct(-12));
+      set("--reaction-pupil-y-right", pct(-5));
+      set("--eye-base-rotate-left", "-3deg");
+      set("--eye-base-rotate-right", "7deg");
+      set("--eye-base-scale-left", "1.08");
+      set("--eye-base-scale-right", "1.02");
+      set("--iris-scale", "1.04");
+      set("--pupil-scale", "0.86");
+      set("--iris-filter", "brightness(1.12) saturate(1.2)");
+    } else if (reaction === "jealousy") {
+      set("--lid-upper-left", "-16%");
+      set("--lid-lower-left", "46%");
+      set("--lid-upper-right", "-30%");
+      set("--lid-lower-right", "55%");
+      set("--lid-tilt-left", "-16deg");
+      set("--lid-tilt-right", "16deg");
+      set("--reaction-iris-x-left", pct(-16));
+      set("--reaction-iris-x-right", pct(-16));
+      set("--reaction-pupil-x-left", pct(-23));
+      set("--reaction-pupil-x-right", pct(-23));
+      set("--reaction-iris-y-left", pct(-4));
+      set("--reaction-iris-y-right", pct(-4));
+      set("--reaction-pupil-y-left", pct(-6));
+      set("--reaction-pupil-y-right", pct(-6));
+      set("--eye-base-x-left", pct(-4));
+      set("--eye-base-x-right", pct(-4));
+      set("--eye-base-rotate-left", "-4deg");
+      set("--eye-base-rotate-right", "-4deg");
+      set("--iris-scale", "0.9");
+      set("--pupil-scale", "0.68");
+      set("--iris-filter", "hue-rotate(105deg) saturate(1.55) brightness(0.9)");
+    } else if (reaction === "pride") {
+      set("--lid-upper-left", "-50%");
+      set("--lid-lower-left", "54%");
+      set("--lid-upper-right", "-50%");
+      set("--lid-lower-right", "54%");
+      set("--lid-tilt-left", "7deg");
+      set("--lid-tilt-right", "-7deg");
+      set("--reaction-iris-y-left", pct(-16));
+      set("--reaction-iris-y-right", pct(-16));
+      set("--reaction-pupil-y-left", pct(-22));
+      set("--reaction-pupil-y-right", pct(-22));
+      set("--eye-base-y-left", pct(-5));
+      set("--eye-base-y-right", pct(-5));
+      set("--eye-base-scale-left", "1.05");
+      set("--eye-base-scale-right", "1.05");
+      set("--iris-scale", "1.06");
+      set("--pupil-scale", "0.84");
+      set("--iris-filter", "brightness(1.18) saturate(1.22) contrast(1.08)");
+    } else if (reaction === "bored" || reaction === "apathy" || reaction === "acceptance" || reaction === "calm") {
+      const isApathy = reaction === "apathy";
+      const isAcceptance = reaction === "acceptance";
+      const isCalm = reaction === "calm";
+      set("--lid-upper-left", isCalm ? "-40%" : isAcceptance ? "-25%" : isApathy ? "-2%" : "-12%");
+      set("--lid-lower-left", isCalm ? "57%" : isAcceptance ? "44%" : isApathy ? "22%" : "34%");
+      set("--lid-upper-right", isCalm ? "-40%" : isAcceptance ? "-25%" : isApathy ? "-2%" : "-12%");
+      set("--lid-lower-right", isCalm ? "57%" : isAcceptance ? "44%" : isApathy ? "22%" : "34%");
+      set("--lid-tilt-left", isCalm ? "0deg" : isAcceptance ? "-3deg" : "1deg");
+      set("--lid-tilt-right", isCalm ? "0deg" : isAcceptance ? "3deg" : "-1deg");
+      set("--reaction-iris-y-left", pct(isCalm ? 1 : isAcceptance ? 9 : isApathy ? 3 : 16));
+      set("--reaction-iris-y-right", pct(isCalm ? 1 : isAcceptance ? 9 : isApathy ? 3 : 16));
+      set("--reaction-pupil-y-left", pct(isCalm ? 1 : isAcceptance ? 13 : isApathy ? 4 : 22));
+      set("--reaction-pupil-y-right", pct(isCalm ? 1 : isAcceptance ? 13 : isApathy ? 4 : 22));
+      set("--eye-base-y-left", pct(isCalm ? 0 : isAcceptance ? 3 : isApathy ? 1 : 6));
+      set("--eye-base-y-right", pct(isCalm ? 0 : isAcceptance ? 3 : isApathy ? 1 : 6));
+      set("--eye-base-scale-left", isCalm ? "1" : isApathy ? "0.9" : "0.96");
+      set("--eye-base-scale-right", isCalm ? "1" : isApathy ? "0.9" : "0.96");
+      set("--iris-opacity", isCalm ? "0.82" : isAcceptance ? "0.7" : isApathy ? "0.28" : "0.5");
+      set("--iris-scale", isCalm ? "0.96" : isAcceptance ? "0.86" : isApathy ? "0.54" : "0.7");
+      set("--pupil-scale", isCalm ? "0.9" : isAcceptance ? "0.8" : isApathy ? "0.48" : "0.62");
+      set("--iris-filter", isCalm ? "saturate(0.78) brightness(1.04)" : isAcceptance ? "saturate(0.62) brightness(0.96)" : isApathy ? "grayscale(1) opacity(0.6)" : "saturate(0.45) brightness(0.86)");
+    } else if (reaction === "inspiration" || reaction === "passion" || reaction === "hope") {
+      const isPassion = reaction === "passion";
+      const isHope = reaction === "hope";
+      set("--lid-upper-left", isPassion ? "-74%" : isHope ? "-60%" : "-82%");
+      set("--lid-lower-left", isPassion ? "69%" : isHope ? "66%" : "76%");
+      set("--lid-upper-right", isPassion ? "-74%" : isHope ? "-60%" : "-82%");
+      set("--lid-lower-right", isPassion ? "69%" : isHope ? "66%" : "76%");
+      set("--lid-tilt-left", isPassion ? "10deg" : "-4deg");
+      set("--lid-tilt-right", isPassion ? "-10deg" : "4deg");
+      set("--reaction-iris-y-left", pct(isPassion ? -10 : isHope ? -7 : -18));
+      set("--reaction-iris-y-right", pct(isPassion ? -10 : isHope ? -7 : -18));
+      set("--reaction-pupil-y-left", pct(isPassion ? -15 : isHope ? -10 : -25));
+      set("--reaction-pupil-y-right", pct(isPassion ? -15 : isHope ? -10 : -25));
+      set("--eye-base-y-left", pct(isPassion ? -3 : -5));
+      set("--eye-base-y-right", pct(isPassion ? -3 : -5));
+      set("--eye-base-scale-left", isPassion ? "1.14" : isHope ? "1.06" : "1.12");
+      set("--eye-base-scale-right", isPassion ? "1.14" : isHope ? "1.06" : "1.12");
+      set("--iris-scale", isPassion ? "1.26" : isHope ? "1.08" : "1.18");
+      set("--pupil-scale", isPassion ? "0.86" : isHope ? "0.78" : "0.7");
+      set("--iris-filter", isPassion ? "hue-rotate(335deg) saturate(1.9) brightness(1.08)" : isHope ? "hue-rotate(55deg) saturate(1.18) brightness(1.18)" : "hue-rotate(25deg) saturate(1.55) brightness(1.24)");
+    } else if (reaction === "dreamy") {
+      set("--lid-upper-left", "-24%");
+      set("--lid-lower-left", "43%");
+      set("--lid-upper-right", "-24%");
+      set("--lid-lower-right", "43%");
+      set("--lid-tilt-left", "-7deg");
+      set("--lid-tilt-right", "7deg");
+      set("--reaction-iris-x-left", pct(7));
+      set("--reaction-iris-x-right", pct(7));
+      set("--reaction-pupil-x-left", pct(10));
+      set("--reaction-pupil-x-right", pct(10));
+      set("--reaction-iris-y-left", pct(-12));
+      set("--reaction-iris-y-right", pct(-12));
+      set("--reaction-pupil-y-left", pct(-16));
+      set("--reaction-pupil-y-right", pct(-16));
+      set("--eye-base-y-left", pct(-4));
+      set("--eye-base-y-right", pct(-4));
+      set("--eye-base-scale-left", "0.98");
+      set("--eye-base-scale-right", "0.98");
+      set("--iris-opacity", "0.72");
+      set("--iris-scale", "1.05");
+      set("--pupil-scale", "1.18");
+      set("--iris-filter", "hue-rotate(285deg) saturate(1.05) brightness(1.16)");
+    } else if (reaction === "stoned") {
+      set("--lid-upper-left", "2%");
+      set("--lid-lower-left", "23%");
+      set("--lid-upper-right", "-1%");
+      set("--lid-lower-right", "25%");
+      set("--lid-tilt-left", "-1deg");
+      set("--lid-tilt-right", "1deg");
+      set("--reaction-iris-x-left", pct(4));
+      set("--reaction-iris-x-right", pct(4));
+      set("--reaction-pupil-x-left", pct(6));
+      set("--reaction-pupil-x-right", pct(6));
+      set("--reaction-iris-y-left", pct(15));
+      set("--reaction-iris-y-right", pct(15));
+      set("--reaction-pupil-y-left", pct(22));
+      set("--reaction-pupil-y-right", pct(22));
+      set("--eye-base-y-left", pct(7));
+      set("--eye-base-y-right", pct(7));
+      set("--eye-base-scale-left", "0.96");
+      set("--eye-base-scale-right", "0.96");
+      set("--eye-base-rotate-left", "-2deg");
+      set("--eye-base-rotate-right", "2deg");
+      set("--iris-opacity", "0.58");
+      set("--iris-scale", "1.18");
+      set("--pupil-scale", "1.65");
+      set("--iris-filter", "hue-rotate(78deg) saturate(0.78) brightness(0.78) blur(0.45px)");
+    } else if (reaction === "spacing-out") {
+      set("--lid-upper-left", "-88%");
+      set("--lid-lower-left", "83%");
+      set("--lid-upper-right", "-88%");
+      set("--lid-lower-right", "83%");
+      set("--reaction-iris-x-left", pct(-17));
+      set("--reaction-iris-x-right", pct(17));
+      set("--reaction-pupil-x-left", pct(-24));
+      set("--reaction-pupil-x-right", pct(24));
+      set("--reaction-iris-y-left", pct(-1));
+      set("--reaction-iris-y-right", pct(-1));
+      set("--reaction-pupil-y-left", pct(-2));
+      set("--reaction-pupil-y-right", pct(-2));
+      set("--eye-base-scale-left", "1.08");
+      set("--eye-base-scale-right", "1.08");
+      set("--iris-opacity", "0.38");
+      set("--iris-scale", "0.62");
+      set("--pupil-scale", "0.42");
+      set("--iris-filter", "saturate(0.32) brightness(1.25) contrast(0.8)");
+    } else if (reaction === "nervous") {
+      set("--lid-upper-left", "-34%");
+      set("--lid-lower-left", "53%");
+      set("--lid-upper-right", "-26%");
+      set("--lid-lower-right", "49%");
+      set("--lid-tilt-left", "9deg");
+      set("--lid-tilt-right", "-7deg");
+      set("--lid-lower-tilt-left", "-4deg");
+      set("--lid-lower-tilt-right", "5deg");
+      set("--reaction-iris-x-left", pct(-11));
+      set("--reaction-iris-x-right", pct(-8));
+      set("--reaction-pupil-x-left", pct(-16));
+      set("--reaction-pupil-x-right", pct(-12));
+      set("--reaction-iris-y-left", pct(-8));
+      set("--reaction-iris-y-right", pct(5));
+      set("--reaction-pupil-y-left", pct(-12));
+      set("--reaction-pupil-y-right", pct(8));
+      set("--eye-base-x-left", pct(-3));
+      set("--eye-base-x-right", pct(-2));
+      set("--eye-base-rotate-left", "-3deg");
+      set("--eye-base-rotate-right", "2deg");
+      set("--eye-base-scale-left", "1.06");
+      set("--eye-base-scale-right", "1.02");
+      set("--iris-scale", "0.78");
+      set("--pupil-scale", "0.58");
+      set("--iris-filter", "contrast(1.16) saturate(1.18) brightness(1.05)");
     } else if (reaction === "restless" || reaction === "panic") {
       const isPanic = reaction === "panic";
       set("--lid-upper-left", isPanic ? "-78%" : "-28%");
@@ -1269,7 +2112,36 @@ class EyeController {
       set("--reaction-pupil-x-right", pct(15));
       set("--eye-base-x-left", pct(3));
       set("--eye-base-x-right", pct(3));
-    } else if (reaction === "look-up" || reaction === "chaotic-stare") {
+    } else if (reaction === "chaotic-stare") {
+      set("--lid-upper-left", "-90%");
+      set("--lid-lower-left", "82%");
+      set("--lid-upper-right", "-24%");
+      set("--lid-lower-right", "48%");
+      set("--lid-tilt-left", "12deg");
+      set("--lid-tilt-right", "-15deg");
+      set("--lid-lower-tilt-left", "-8deg");
+      set("--lid-lower-tilt-right", "7deg");
+      set("--reaction-iris-x-left", pct(-18));
+      set("--reaction-iris-x-right", pct(15));
+      set("--reaction-pupil-x-left", pct(-26));
+      set("--reaction-pupil-x-right", pct(22));
+      set("--reaction-iris-y-left", pct(-15));
+      set("--reaction-iris-y-right", pct(14));
+      set("--reaction-pupil-y-left", pct(-22));
+      set("--reaction-pupil-y-right", pct(20));
+      set("--eye-base-x-left", pct(-5));
+      set("--eye-base-x-right", pct(4));
+      set("--eye-base-y-left", pct(-4));
+      set("--eye-base-y-right", pct(4));
+      set("--eye-base-rotate-left", "-10deg");
+      set("--eye-base-rotate-right", "8deg");
+      set("--eye-base-scale-left", "1.16");
+      set("--eye-base-scale-right", "0.98");
+      set("--eye-vibe", "8deg");
+      set("--iris-scale", "1.16");
+      set("--pupil-scale", "0.5");
+      set("--iris-filter", "saturate(1.65) contrast(1.18)");
+    } else if (reaction === "look-up") {
       set("--reaction-iris-y-left", pct(-10));
       set("--reaction-iris-y-right", pct(-10));
       set("--reaction-pupil-y-left", pct(-15));
@@ -1383,8 +2255,8 @@ class EyeController {
 
   private ambientReactionDuration(reaction: Reaction): number {
     if (this.reduceMotion.matches) return 900;
-    const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love"];
-    const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck"];
+    const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love", "relief", "loneliness", "apathy", "acceptance", "calm", "hope", "satisfaction", "gratitude", "trust", "tired-but-awake", "contentment", "awe"];
+    const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck", "frustration", "surprise-delight", "confusion-spiral", "fear-freeze", "excitement", "overwhelmed", "impatience", "surprise-fear", "alertness", "suspense"];
     const base = longRead.includes(reaction) ? 3600 : punchy.includes(reaction) ? 3000 : 2800;
     return base + Math.random() * 850 + this.plugin.settings.reactionHoldMs;
   }
@@ -1420,7 +2292,7 @@ class QuickUiModal extends Modal {
     if (!this.plugin.settings.quickUiExpanded) return;
 
     const skinStrip = contentEl.createDiv({ cls: "googly-eyes-quick-skins" });
-    SKINS.forEach((skin) => {
+    SKINS_BY_NAME.forEach((skin) => {
       const button = skinStrip.createEl("button", { cls: `googly-eyes-quick-skin ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
       button.setAttr("aria-label", `Use ${skin.name} skin`);
       button.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin)}`), alt: "" } });
@@ -1516,7 +2388,7 @@ class OnboardingModal extends Modal {
     contentEl.addClass("googly-eyes-modal");
     contentEl.createDiv({ text: this.steps[this.step], cls: "googly-eyes-modal-title" });
     if (this.step === 1) {
-      this.select(contentEl, SKINS.map((s) => [s.id, s.name]), this.plugin.settings.skinId, (value) => this.plugin.settings.skinId = value);
+      this.select(contentEl, SKINS_BY_NAME.map((s) => [s.id, s.name]), this.plugin.settings.skinId, (value) => this.plugin.settings.skinId = value);
     } else if (this.step === 2) {
       this.select(contentEl, Object.entries(PERSONALITY_OPTIONS).map(([id, p]) => [id, p.label]), this.plugin.settings.personality, (value) => this.plugin.settings.personality = value as Personality);
       this.select(contentEl, Object.entries(FOLLOW_LABELS), this.plugin.settings.followTarget, (value) => this.plugin.settings.followTarget = value as FollowTarget);
@@ -1765,7 +2637,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     setting.settingEl.addClass("googly-eyes-setting-wide");
     setting.controlEl.empty();
     const skinGrid = setting.controlEl.createDiv({ cls: "googly-eyes-skin-grid googly-eyes-skin-grid-compact" });
-    SKINS.forEach((skin) => {
+    SKINS_BY_NAME.forEach((skin) => {
       const selected = skin.id === this.plugin.settings.skinId;
       const card = skinGrid.createDiv({ cls: `googly-eyes-skin-card ${selected ? "is-selected" : ""}` });
       card.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin)}`), alt: "" } });

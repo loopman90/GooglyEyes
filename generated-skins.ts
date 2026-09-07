@@ -67,17 +67,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.129,
-        "y": 0.329,
-        "w": 0.267,
-        "h": 0.342
+        "x": 0.1565,
+        "y": 0.3665,
+        "w": 0.218,
+        "h": 0.243
       },
       "right": {
         "side": "right",
-        "x": 0.604,
-        "y": 0.329,
-        "w": 0.267,
-        "h": 0.342
+        "x": 0.6265,
+        "y": 0.3665,
+        "w": 0.218,
+        "h": 0.243
       }
     },
     "ambientReactions": [
@@ -201,17 +201,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.162,
-        "y": 0.348,
-        "w": 0.3,
-        "h": 0.24
+        "x": 0.19,
+        "y": 0.358,
+        "w": 0.254,
+        "h": 0.209
       },
       "right": {
         "side": "right",
-        "x": 0.538,
-        "y": 0.348,
-        "w": 0.3,
-        "h": 0.24
+        "x": 0.56,
+        "y": 0.358,
+        "w": 0.254,
+        "h": 0.209
       }
     },
     "ambientReactions": [
@@ -222,6 +222,141 @@ export const GENERATED_SKINS = [
       "wink-right",
       "dreamy",
       "panic"
+    ]
+  },
+  {
+    "id": "c-4po",
+    "name": "C-4PO",
+    "eyeLayout": "dual",
+    "flavor": "Golden robot faceplate with warm lamp eyes.",
+    "iris": "#ffb21a",
+    "pupil": "#120900",
+    "eyeWhite": "#fff0ba",
+    "outline": "#c9962a",
+    "accent": "#362000",
+    "irisSize": 38,
+    "pupilSize": 30,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/c-4po/eyes/left-base.png",
+      "rightBase": "assets/skins/c-4po/eyes/right-base.png",
+      "thumbnail": "assets/skins/c-4po/thumbnail.png",
+      "mask": "assets/skins/c-4po/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.17,
+        "y": 0.305,
+        "w": 0.255,
+        "h": 0.47
+      },
+      "right": {
+        "side": "right",
+        "x": 0.575,
+        "y": 0.305,
+        "w": 0.255,
+        "h": 0.47
+      }
+    },
+    "ambientReactions": [
+      "wide-stare",
+      "confused",
+      "nervous",
+      "rapid-typing-focus",
+      "starstruck",
+      "panic",
+      "slow-blink"
+    ]
+  },
+  {
+    "id": "atlas",
+    "name": "Atlas",
+    "eyeLayout": "single",
+    "flavor": "White robot faceplate with one cool blue lamp eye.",
+    "iris": "#1ecbff",
+    "pupil": "#020817",
+    "eyeWhite": "#d8f8ff",
+    "outline": "#dce8f2",
+    "accent": "#102438",
+    "irisSize": 40,
+    "pupilSize": 28,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/atlas/eyes/left-base.png",
+      "rightBase": "assets/skins/atlas/eyes/right-base.png",
+      "thumbnail": "assets/skins/atlas/thumbnail.png",
+      "mask": "assets/skins/atlas/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.345,
+        "y": 0.19,
+        "w": 0.31,
+        "h": 0.62
+      },
+      "right": {
+        "side": "right",
+        "x": 0.345,
+        "y": 0.19,
+        "w": 0.31,
+        "h": 0.62
+      }
+    },
+    "ambientReactions": [
+      "wide-stare",
+      "look-up",
+      "confused",
+      "dreamy",
+      "starstruck",
+      "spacing-out",
+      "slow-blink"
+    ]
+  },
+  {
+    "id": "panda",
+    "name": "Panda",
+    "eyeLayout": "dual",
+    "flavor": "Soft panda mask with calm bamboo-green eyes.",
+    "iris": "#67b84f",
+    "pupil": "#101509",
+    "eyeWhite": "#f4ffe8",
+    "outline": "#f0f5e9",
+    "accent": "#1c2018",
+    "irisSize": 34,
+    "pupilSize": 30,
+    "supportsColorOverrides": true,
+    "assets": {
+      "leftBase": "assets/skins/panda/eyes/left-base.png",
+      "rightBase": "assets/skins/panda/eyes/right-base.png",
+      "thumbnail": "assets/skins/panda/thumbnail.png",
+      "mask": "assets/skins/panda/masks/tab-panel.png"
+    },
+    "eyeWindows": {
+      "left": {
+        "side": "left",
+        "x": 0.2,
+        "y": 0.485,
+        "w": 0.24,
+        "h": 0.34
+      },
+      "right": {
+        "side": "right",
+        "x": 0.56,
+        "y": 0.485,
+        "w": 0.24,
+        "h": 0.34
+      }
+    },
+    "ambientReactions": [
+      "slow-blink",
+      "sleepy",
+      "happy",
+      "dreamy",
+      "look-left",
+      "look-right",
+      "in-love"
     ]
   },
   {
@@ -335,16 +470,16 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.122,
-        "y": 0.222,
-        "w": 0.309,
+        "x": 0.118,
+        "y": 0.221,
+        "w": 0.316,
         "h": 0.5
       },
       "right": {
         "side": "right",
-        "x": 0.574,
-        "y": 0.222,
-        "w": 0.309,
+        "x": 0.571,
+        "y": 0.221,
+        "w": 0.316,
         "h": 0.5
       }
     },
@@ -424,17 +559,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.282,
-        "y": 0.286,
-        "w": 0.436,
-        "h": 0.384
+        "x": 0.18,
+        "y": 0.225,
+        "w": 0.64,
+        "h": 0.56
       },
       "right": {
         "side": "right",
-        "x": 0.282,
-        "y": 0.286,
-        "w": 0.436,
-        "h": 0.384
+        "x": 0.18,
+        "y": 0.225,
+        "w": 0.64,
+        "h": 0.56
       }
     },
     "ambientReactions": [
@@ -469,17 +604,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.167,
-        "y": 0.353,
-        "w": 0.304,
-        "h": 0.16
+        "x": 0.178,
+        "y": 0.35,
+        "w": 0.284,
+        "h": 0.189
       },
       "right": {
         "side": "right",
-        "x": 0.529,
-        "y": 0.353,
-        "w": 0.304,
-        "h": 0.16
+        "x": 0.538,
+        "y": 0.35,
+        "w": 0.284,
+        "h": 0.189
       }
     },
     "ambientReactions": [
@@ -647,17 +782,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.153,
-        "y": 0.285,
-        "w": 0.304,
-        "h": 0.354
+        "x": 0.188,
+        "y": 0.348,
+        "w": 0.239,
+        "h": 0.224
       },
       "right": {
         "side": "right",
-        "x": 0.543,
-        "y": 0.285,
-        "w": 0.304,
-        "h": 0.354
+        "x": 0.573,
+        "y": 0.348,
+        "w": 0.239,
+        "h": 0.224
       }
     },
     "ambientReactions": [
@@ -691,17 +826,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.155,
-        "y": 0.293,
-        "w": 0.254,
-        "h": 0.276
+        "x": 0.165,
+        "y": 0.31,
+        "w": 0.235,
+        "h": 0.235
       },
       "right": {
         "side": "right",
-        "x": 0.587,
-        "y": 0.295,
-        "w": 0.254,
-        "h": 0.276
+        "x": 0.6,
+        "y": 0.31,
+        "w": 0.235,
+        "h": 0.235
       }
     },
     "ambientReactions": [
@@ -825,17 +960,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.197,
-        "y": 0.404,
-        "w": 0.29,
-        "h": 0.335
+        "x": 0.215,
+        "y": 0.43,
+        "w": 0.24,
+        "h": 0.235
       },
       "right": {
         "side": "right",
-        "x": 0.551,
-        "y": 0.404,
-        "w": 0.29,
-        "h": 0.336
+        "x": 0.575,
+        "y": 0.43,
+        "w": 0.24,
+        "h": 0.235
       }
     },
     "ambientReactions": [
@@ -1026,7 +1161,7 @@ export const GENERATED_SKINS = [
   }
 ] as const;
 
-export const GENERATED_LAYERED_SKINS = new Set(["robot","cat","manga-female","dragon","cyberpunk-female","d20-rpg","space-helmet","classic-googly","detective-noir","one-eye","tibetan-monk","alien","hacker","anonymous","ice-hockey","clown","spy","skeleton","wizard","cowboy","pumpkin-halloween","goblin","troll"]);
+export const GENERATED_LAYERED_SKINS = new Set(["robot","cat","manga-female","dragon","cyberpunk-female","c-4po","atlas","panda","d20-rpg","space-helmet","classic-googly","detective-noir","one-eye","tibetan-monk","alien","hacker","anonymous","ice-hockey","clown","spy","skeleton","wizard","cowboy","pumpkin-halloween","goblin","troll"]);
 
 export const GENERATED_SKIN_EYE_WINDOWS = Object.fromEntries(
   GENERATED_SKINS.map((skin) => [skin.id, skin.eyeWindows])

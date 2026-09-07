@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.12
+
+- Added C-4PO, Atlas, and Panda layered skins.
+- Improved rectangular mask scaling, Quick UI anchoring, eyelid coverage, and retuned several existing mask eye windows.
+- Rebuilt clean base-eye PNGs without fixed pupils, irises, lashes, or eyelids for active layered skins.
+- Expanded the emotion engine with more distinct expressive, social, calm, focused, and ambient reactions.
+- Sorted skin pickers alphabetically in settings, onboarding, and the Quick UI.
+
 ## 1.0.11
 
 - Reduced remaining community review warnings around settings key typing, cross-window DOM checks, and UI helper usage.
