@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.8
+
+- Reduced automated review warnings around DOM type checks, settings key typing, and UI callbacks.
+- Switched HTMLElement checks to Obsidian's cross-window safe helper for popout compatibility.
+- Kept release assets aligned with Obsidian's expected `main.js`, `manifest.json`, and `styles.css` package.
+
 ## 1.0.7
 
 - Added SpaceHelmet, Classic Googly, Detective Noir, and One Eye layered skins.

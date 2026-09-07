@@ -231,4 +231,4 @@ The eyes look too large or too small:
 
 ## Version
 
-Current package version: `1.0.7`.
+Current package version: `1.0.8`.

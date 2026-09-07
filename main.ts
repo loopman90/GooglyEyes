@@ -99,6 +99,8 @@ interface GooglyEyesSettings {
   disabledActions: string[];
 }
 
+type GooglyEyesSettingKey = keyof GooglyEyesSettings & string;
+
 interface SkinDefinition {
   id: string;
   name: string;
@@ -329,6 +331,10 @@ function labels<T extends string>(record: Record<T, string>): Record<T, string> 
   return record;
 }
 
+function isHtmlElement(value: unknown): value is HTMLElement {
+  return typeof value === "object" && value !== null && "instanceOf" in value && typeof value.instanceOf === "function" && value.instanceOf(HTMLElement);
+}
+
 const VISIBILITY_LABELS = labels<VisibilityMode>({
   active: "Only when Obsidian window is active",
   always: "Always visible",
@@ -366,7 +372,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = GENERATED_LAYERED_SKINS as Set<string>;
+const LAYERED_SKINS = GENERATED_LAYERED_SKINS;
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",
@@ -617,7 +623,7 @@ class EyeController {
 
   private hoverHandler = (event: MouseEvent): void => {
     const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
+    if (!isHtmlElement(target)) return;
     if (target.closest(".nav-action-button.is-trash, .mod-trash, [aria-label*='trash' i], [aria-label*='delete' i]")) this.react("hover trash");
     else if (target.closest(".suggestion-container, .prompt, .modal.mod-command-palette")) this.react("hover command palette");
     else if (target.closest("a, .cm-link, .internal-link, .external-link")) this.react("hover link");
@@ -693,7 +699,7 @@ class EyeController {
     const rect = this.root.getBoundingClientRect();
     this.dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
     this.react("drag");
-    if (event.target instanceof HTMLElement) event.target.setPointerCapture?.(event.pointerId);
+    if (isHtmlElement(event.target)) event.target.setPointerCapture?.(event.pointerId);
   }
 
   private drag(event: MouseEvent): void {
@@ -1572,14 +1578,16 @@ class PlaygroundView extends ItemView {
 
   render(): void {
     const el = this.containerEl.children[1];
-    if (!(el instanceof HTMLElement)) return;
+    if (!el.instanceOf(HTMLElement)) return;
     el.empty();
     el.addClass("googly-eyes-playground");
     const stage = el.createDiv({ cls: "googly-eyes-stage" });
     this.plugin.controller.mount(stage);
     const quickButton = stage.createEl("button", { text: "Quick UI", cls: "googly-eyes-tab-quick-button mod-cta" });
     quickButton.setAttr("aria-label", "Open Quick UI");
-    quickButton.addEventListener("click", () => new QuickUiModal(this.app, this.plugin).open());
+    quickButton.addEventListener("click", () => {
+      new QuickUiModal(this.app, this.plugin).open();
+    });
   }
 }
 
@@ -1588,7 +1596,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     super(app, plugin);
   }
 
-  getSettingDefinitions(): SettingDefinitionItem[] {
+  getSettingDefinitions(): SettingDefinitionItem<GooglyEyesSettingKey>[] {
     const advanced = () => this.plugin.settings.settingsMode === "advanced";
     return [
       {
@@ -1673,13 +1681,12 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     ];
   }
 
-  getControlValue(key: string): unknown {
-    return this.plugin.settings[key as keyof GooglyEyesSettings];
+  getControlValue(key: GooglyEyesSettingKey): unknown {
+    return this.plugin.settings[key];
   }
 
-  async setControlValue(key: string, value: unknown): Promise<void> {
-    const typedKey = key as keyof GooglyEyesSettings;
-    (this.plugin.settings[typedKey] as unknown) = value;
+  async setControlValue(key: GooglyEyesSettingKey, value: unknown): Promise<void> {
+    (this.plugin.settings[key] as unknown) = value;
     if (key === "irisColor" || key === "pupilColor") this.plugin.settings.useSkinDefaultColors = false;
     await this.plugin.saveSettings();
     this.plugin.controller.refresh();
@@ -1687,27 +1694,27 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     this.update();
   }
 
-  private toggleDef(name: string, key: keyof GooglyEyesSettings & string, desc?: string, visible?: boolean | (() => boolean)): SettingGroupItem {
+  private toggleDef(name: string, key: GooglyEyesSettingKey, desc?: string, visible?: boolean | (() => boolean)): SettingGroupItem<GooglyEyesSettingKey> {
     return { name, desc, visible, control: { type: "toggle", key } };
   }
 
-  private dropdownDef(name: string, desc: string | undefined, key: keyof GooglyEyesSettings & string, options: Record<string, string>, visible?: boolean | (() => boolean)): SettingGroupItem {
+  private dropdownDef(name: string, desc: string | undefined, key: GooglyEyesSettingKey, options: Record<string, string>, visible?: boolean | (() => boolean)): SettingGroupItem<GooglyEyesSettingKey> {
     return { name, desc, visible, control: { type: "dropdown", key, options } };
   }
 
-  private sliderDef(name: string, key: keyof GooglyEyesSettings & string, min: number, max: number, step: number, visible?: boolean | (() => boolean)): SettingGroupItem {
+  private sliderDef(name: string, key: GooglyEyesSettingKey, min: number, max: number, step: number, visible?: boolean | (() => boolean)): SettingGroupItem<GooglyEyesSettingKey> {
     return { name, visible, control: { type: "slider", key, min, max, step } };
   }
 
-  private colorDef(name: string, key: keyof GooglyEyesSettings & string, visible?: boolean | (() => boolean)): SettingGroupItem {
+  private colorDef(name: string, key: GooglyEyesSettingKey, visible?: boolean | (() => boolean)): SettingGroupItem<GooglyEyesSettingKey> {
     return { name, visible, control: { type: "color", key } };
   }
 
-  private numberDef(name: string, key: keyof GooglyEyesSettings & string, min: number, max: number, step: number): SettingGroupItem {
+  private numberDef(name: string, key: GooglyEyesSettingKey, min: number, max: number, step: number): SettingGroupItem<GooglyEyesSettingKey> {
     return { name, control: { type: "number", key, min, max, step } };
   }
 
-  private renderDef(name: string, desc: string | undefined, render: (setting: Setting) => void, visible?: boolean | (() => boolean)): SettingGroupItem {
+  private renderDef(name: string, desc: string | undefined, render: (setting: Setting) => void, visible?: boolean | (() => boolean)): SettingGroupItem<GooglyEyesSettingKey> {
     return { name, desc, visible, render };
   }
 
@@ -1715,17 +1722,27 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     setting.controlEl.empty();
     const row = setting.controlEl.createDiv({ cls: "googly-eyes-button-row" });
     Object.keys(BEHAVIOR_PRESETS).forEach((id) => {
-      row.createEl("button", { text: id[0].toUpperCase() + id.slice(1), cls: "mod-cta" }).addEventListener("click", () => void this.applyPreset(id));
+      row.createEl("button", { text: id[0].toUpperCase() + id.slice(1), cls: "mod-cta" }).addEventListener("click", () => {
+        void this.applyPreset(id);
+      });
     });
   }
 
   private renderPreviewButtons(setting: Setting): void {
     setting.controlEl.empty();
     const row = setting.controlEl.createDiv({ cls: "googly-eyes-button-row" });
-    row.createEl("button", { text: "Quick UI" }).addEventListener("click", () => new QuickUiModal(this.app, this.plugin).open());
-    row.createEl("button", { text: "Open tab" }).addEventListener("click", () => void this.plugin.openPlayground());
-    row.createEl("button", { text: "Fullscreen" }).addEventListener("click", () => void this.plugin.enterFullscreen());
-    row.createEl("button", { text: "Reset view" }).addEventListener("click", () => void this.plugin.resetQuickView().then(() => this.update()));
+    row.createEl("button", { text: "Quick UI" }).addEventListener("click", () => {
+      new QuickUiModal(this.app, this.plugin).open();
+    });
+    row.createEl("button", { text: "Open tab" }).addEventListener("click", () => {
+      void this.plugin.openPlayground();
+    });
+    row.createEl("button", { text: "Fullscreen" }).addEventListener("click", () => {
+      void this.plugin.enterFullscreen();
+    });
+    row.createEl("button", { text: "Reset view" }).addEventListener("click", () => {
+      void this.plugin.resetQuickView().then(() => this.update());
+    });
   }
 
   private renderSkinGrid(setting: Setting): void {
@@ -1738,7 +1755,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
       card.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin)}`), alt: "" } });
       card.createEl("strong", { text: skin.name });
       card.createEl("span", { text: skin.flavor });
-      card.addEventListener("click", () => this.save("skinId", skin.id));
+      card.addEventListener("click", () => {
+        this.save("skinId", skin.id);
+      });
     });
   }
 
@@ -1748,7 +1767,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     new Setting(setting.controlEl)
       .setName("Reset reactions")
       .setDesc("Restores the default reactions for typing, clicks, hover, idle, and common actions.")
-      .addButton((button) => button.setButtonText("Reset").onClick(() => void this.resetActions()));
+      .addButton((button) => button.setButtonText("Reset").onClick(() => {
+        void this.resetActions();
+      }));
     this.plugin.settings.actionMappings.forEach((mapping, index) => {
       const row = new Setting(setting.controlEl).setName(mapping.name).setDesc(mapping.triggerType);
       row.addToggle((toggle) => toggle.setValue(mapping.enabled).onChange((value) => {
@@ -1831,7 +1852,9 @@ export default class GooglyEyesPlugin extends Plugin {
     this.statusEl = this.addStatusBarItem();
     this.statusEl.addClass("googly-eyes-statusbar");
     this.statusEl.setText("GooglyEyes");
-    this.statusEl.addEventListener("click", () => new QuickUiModal(this.app, this).open());
+    this.statusEl.addEventListener("click", () => {
+      new QuickUiModal(this.app, this).open();
+    });
     this.addCommands();
     this.registerDomEvent(document, "keydown", (event: KeyboardEvent) => {
       if (event.key !== "Escape" || !this.fullscreenEl) return;
@@ -1941,7 +1964,7 @@ export default class GooglyEyesPlugin extends Plugin {
     const leaf = await this.openPlayground();
     const view = leaf.view as ItemView;
     const el = view.containerEl.children[1];
-    if (!(el instanceof HTMLElement)) return;
+    if (!el.instanceOf(HTMLElement)) return;
     this.exitFullscreen();
     this.fullscreenEl = el;
     this.fullscreenEl.addClass("googly-eyes-fullscreen");
