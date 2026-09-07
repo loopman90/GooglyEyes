@@ -1,4 +1,5 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf, ItemView, debounce } from "obsidian";
+import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf, ItemView, debounce, type SettingDefinitionItem, type SettingGroupItem } from "obsidian";
+import { GENERATED_LAYERED_SKINS, GENERATED_SKIN_AMBIENT_REACTIONS, GENERATED_SKIN_EYE_WINDOWS, GENERATED_SKINS } from "./generated-skins";
 
 const VIEW_TYPE_PLAYGROUND = "googly-eyes-playground";
 
@@ -7,6 +8,7 @@ type FollowTarget = "mouse" | "text-cursor" | "smart" | "both";
 type Personality = "calm" | "curious" | "dramatic" | "goofy" | "suspicious" | "sleepy" | "chaotic" | "shy" | "focused" | "mischievous";
 type Intensity = "subtle" | "normal" | "expressive" | "chaotic" | "custom";
 type Randomness = "low" | "medium" | "high" | "custom";
+type SettingsMode = "simple" | "advanced";
 type PositionPreset = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "sidebar" | "statusbar" | "floating" | "custom";
 type FocusModeSetting = "manual" | "writing" | "fullscreen" | "off";
 type TriggerType = "event" | "hover" | "idle" | "command" | "keyboard";
@@ -18,6 +20,8 @@ type Reaction =
   | "sleepy-idle" | "chaotic-stare" | "dramatic-shock" | "rapid-typing-focus" | "drag-tracking"
   | "furious" | "restless" | "in-love" | "dreamy" | "drunk" | "stoned" | "spacing-out"
   | "crying" | "laughing" | "wink-left" | "wink-right" | "panic" | "starstruck";
+
+type ActionTuple = [string, TriggerType, Reaction[], number, number];
 
 interface ActionMapping {
   name: string;
@@ -53,6 +57,7 @@ interface GooglyEyesSettings {
   reactionIntensity: Intensity;
   customIntensity: number;
   randomness: Randomness;
+  settingsMode: SettingsMode;
   customRandomness: number;
   personality: Personality;
   skinId: string;
@@ -106,9 +111,22 @@ interface SkinDefinition {
   accent: string;
   irisSize: number;
   pupilSize: number;
+  eyeWindows: Record<"left" | "right", EyeWindow>;
+  assets: {
+    leftBase: string;
+    rightBase: string;
+    thumbnail: string;
+    mask: string;
+  };
 }
 
-type SkinTuple = [string, string, string, string, string, string, string, string, number, number];
+interface AppWithSettings extends App {
+  setting?: {
+    open: () => void;
+    openTabById: (id: string) => void;
+  };
+}
+
 interface PersonalityPose {
   upperLeft: string;
   lowerLeft: string;
@@ -139,65 +157,19 @@ const REACTIONS: Reaction[] = [
   "spacing-out", "crying", "laughing", "wink-left", "wink-right", "panic", "starstruck"
 ];
 
-const SKIN_TUPLES: SkinTuple[] = [
-  ["robot", "Robot", "Mechanical lenses with tiny LED attitude.", "#42d9ff", "#09121c", "#eef8ff", "#6a7685", "#ffcc33", 34, 38],
-  ["cat", "Cat", "Soft fur, sharp focus, vertical pupils.", "#58d34f", "#050806", "#f4ead2", "#5a514d", "#f3b08b", 37, 22],
-  ["manga-female", "Manga Female", "Big anime eyes with soft lashes.", "#9b68ee", "#140d2d", "#f8f4ef", "#6a3c43", "#f4a7c4", 43, 32],
-  ["dragon", "Dragon", "Ancient scales with a fiery slit gaze.", "#ff9f21", "#090403", "#e8dcc2", "#31443a", "#ff6b22", 36, 19],
-  ["d20-rpg", "D20 RPG", "Tabletop dice, parchment maps, and dungeon master focus.", "#3fcf7f", "#100806", "#f2dec0", "#7b4f2b", "#c59a43", 32, 28],
-  ["tibetan-monk", "Tibetan Monk", "Warm robes with a calm meditative gaze.", "#7f5634", "#0b0806", "#f4eadc", "#9b5535", "#d69b3b", 30, 32],
-  ["alien", "Alien", "Bioluminescent skin with an uncanny teal stare.", "#48eed8", "#020809", "#dfe8e5", "#627f77", "#20e5d7", 36, 30],
-  ["hacker", "Hacker", "Dark hood, terminal glow, and sharp focus.", "#58ff37", "#010502", "#e5e1d8", "#2a2f2b", "#5fff43", 31, 30],
-  ["anonymous", "Anonymous", "White mask, dark hood, and a quiet red stare.", "#ac1220", "#050203", "#eee7d7", "#e1ddd1", "#b01622", 31, 34],
-  ["ice-hockey", "Jason", "Frozen hockey mask with a blood-spattered stare.", "#b82022", "#05090d", "#dcecf4", "#ccd7dd", "#b01622", 34, 32],
-  ["mona-lisa", "Mona Lisa", "Renaissance calm with a mysterious painted gaze.", "#7d6a32", "#171006", "#efe3c5", "#a87943", "#c9a34a", 32, 34],
-  ["clown", "Clown", "Cartoon circus face with a bright playful stare.", "#ffcc2e", "#100711", "#fff5df", "#231c25", "#ff3845", 31, 32],
-  ["spy", "Spy", "Cartoon eyes peeking through newspaper cutouts.", "#4d6f8f", "#080706", "#f6f0df", "#2f2b25", "#c9b06c", 30, 30],
-  ["skeleton", "Skeleton", "Playful bone mask with deep skull sockets.", "#f0d36b", "#07090c", "#f8f0dc", "#343036", "#d8caa9", 32, 30]
-];
+const REACTION_IDS = new Set<string>(REACTIONS);
 
-const SKINS: SkinDefinition[] = SKIN_TUPLES.map(([id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize]) => ({
-  id, name, flavor, iris, pupil, eyeWhite, outline, accent, irisSize, pupilSize, supportsColorOverrides: true
+const SKINS: SkinDefinition[] = GENERATED_SKINS.map((skin) => ({
+  ...skin,
+  assets: { ...skin.assets },
+  supportsColorOverrides: true
 }));
 
-const DEFAULT_EYE_WINDOWS: Record<"left" | "right", EyeWindow> = {
-  left: { x: 0.08, y: 0.263, w: 0.365, h: 0.473 },
-  right: { x: 0.555, y: 0.263, w: 0.365, h: 0.473 }
-};
+const DEFAULT_EYE_WINDOWS: Record<"left" | "right", EyeWindow> = SKINS[0].eyeWindows;
 
-const SKIN_EYE_WINDOWS: Record<string, Record<"left" | "right", EyeWindow>> = {
-  robot: DEFAULT_EYE_WINDOWS,
-  cat: DEFAULT_EYE_WINDOWS,
-  "manga-female": { left: { x: 0.14, y: 0.268, w: 0.32, h: 0.34 }, right: { x: 0.541, y: 0.268, w: 0.32, h: 0.34 } },
-  dragon: DEFAULT_EYE_WINDOWS,
-  "d20-rpg": { left: { x: 0.153, y: 0.325, w: 0.303, h: 0.29 }, right: { x: 0.544, y: 0.325, w: 0.303, h: 0.29 } },
-  "tibetan-monk": { left: { x: 0.184, y: 0.286, w: 0.248, h: 0.248 }, right: { x: 0.57, y: 0.286, w: 0.248, h: 0.248 } },
-  alien: DEFAULT_EYE_WINDOWS,
-  hacker: DEFAULT_EYE_WINDOWS,
-  anonymous: { left: { x: 0.132, y: 0.322, w: 0.346, h: 0.304 }, right: { x: 0.522, y: 0.322, w: 0.346, h: 0.304 } },
-  "ice-hockey": { left: { x: 0.152, y: 0.275, w: 0.306, h: 0.32 }, right: { x: 0.542, y: 0.275, w: 0.306, h: 0.32 } },
-  "mona-lisa": { left: { x: 0.235, y: 0.394, w: 0.232, h: 0.214 }, right: { x: 0.533, y: 0.394, w: 0.232, h: 0.214 } },
-  clown: { left: { x: 0.128, y: 0.246, w: 0.345, h: 0.345 }, right: { x: 0.529, y: 0.246, w: 0.345, h: 0.345 } },
-  spy: { left: { x: 0.159, y: 0.237, w: 0.276, h: 0.22 }, right: { x: 0.564, y: 0.237, w: 0.272, h: 0.229 } },
-  skeleton: { left: { x: 0.161, y: 0.209, w: 0.294, h: 0.441 }, right: { x: 0.544, y: 0.209, w: 0.295, h: 0.441 } }
-};
+const SKIN_EYE_WINDOWS = GENERATED_SKIN_EYE_WINDOWS as Record<string, Record<"left" | "right", EyeWindow>>;
 
-const SKIN_AMBIENT_REACTIONS: Record<string, Reaction[]> = {
-  robot: ["wide-stare", "confused", "eye-roll", "rapid-typing-focus", "suspicious", "restless", "spacing-out"],
-  cat: ["suspicious", "look-left", "look-right", "sleepy-idle", "happy", "dreamy", "wink-left"],
-  "manga-female": ["happy", "shocked", "crying", "in-love", "dreamy", "laughing", "wink-right"],
-  dragon: ["angry", "furious", "suspicious", "dramatic-shock", "chaotic-stare", "look-down"],
-  "d20-rpg": ["dramatic-shock", "wide-stare", "happy", "confused", "chaotic-stare", "panic", "starstruck"],
-  "tibetan-monk": ["slow-blink", "sleepy-idle", "look-down", "dreamy", "idle-long", "spacing-out"],
-  alien: ["wide-stare", "confused", "dizzy", "cross-eyed", "peek", "stoned", "spacing-out"],
-  hacker: ["suspicious", "rapid-typing-focus", "look-left", "look-right", "nervous", "restless", "panic"],
-  anonymous: ["suspicious", "peek", "look-left", "look-right", "idle-long", "restless"],
-  "ice-hockey": ["suspicious", "angry", "furious", "wide-stare", "shocked", "look-left"],
-  "mona-lisa": ["idle-long", "slow-blink", "happy", "suspicious", "look-right", "dreamy"],
-  clown: ["happy", "laughing", "cross-eyed", "dizzy", "chaotic-stare", "shocked", "drunk"],
-  spy: ["peek", "suspicious", "look-left", "look-right", "wide-stare", "wink-left", "restless"],
-  skeleton: ["suspicious", "sleepy-idle", "shocked", "confused", "idle-long", "spacing-out"]
-};
+const SKIN_AMBIENT_REACTIONS = GENERATED_SKIN_AMBIENT_REACTIONS as unknown as Record<string, readonly Reaction[]>;
 
 const AVAILABLE_SKIN_IDS = new Set(SKINS.map((skin) => skin.id));
 
@@ -227,7 +199,7 @@ const PERSONALITY_POSES: Record<Personality, PersonalityPose> = {
   mischievous: { upperLeft: "-38%", lowerLeft: "58%", upperRight: "-62%", lowerRight: "64%", irisScale: "1", pupilScale: "0.95", irisY: -1, pupilY: -2, irisXLeft: 5, irisXRight: 5, pupilXLeft: 8, pupilXRight: 8, tiltLeft: "8deg", tiltRight: "-4deg", lowerTiltLeft: "-3deg", lowerTiltRight: "2deg" }
 };
 
-const DEFAULT_ACTIONS: ActionMapping[] = [
+const DEFAULT_ACTION_TUPLES: ActionTuple[] = [
   ["mouse move", "event", ["idle-neutral"], 0.3, 150],
   ["click", "event", ["blink", "wide-stare"], 0.8, 500],
   ["double click", "event", ["shocked", "happy"], 1, 800],
@@ -254,13 +226,15 @@ const DEFAULT_ACTIONS: ActionMapping[] = [
   ["hover link", "hover", ["peek", "happy", "look-down"], 0.7, 600],
   ["scroll fast", "event", ["dizzy", "confused", "drunk"], 1, 850],
   ["quick mouse movement", "event", ["dizzy", "chaotic-stare", "fast-movement", "panic"], 1.2, 800]
-].map(([name, triggerType, reactionPool, intensity, cooldownMs]) => ({
-  name: name as string,
-  triggerType: triggerType as TriggerType,
+];
+
+const DEFAULT_ACTIONS: ActionMapping[] = DEFAULT_ACTION_TUPLES.map(([name, triggerType, reactionPool, intensity, cooldownMs]) => ({
+  name,
+  triggerType,
   enabled: true,
-  reactionPool: reactionPool as Reaction[],
-  intensity: intensity as number,
-  cooldownMs: cooldownMs as number
+  reactionPool,
+  intensity,
+  cooldownMs
 }));
 
 const DEFAULT_SETTINGS: GooglyEyesSettings = {
@@ -274,6 +248,7 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   reactionIntensity: "normal",
   customIntensity: 1,
   randomness: "medium",
+  settingsMode: "simple",
   customRandomness: 0.55,
   personality: "curious",
   skinId: "robot",
@@ -315,16 +290,16 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   actionMappings: DEFAULT_ACTIONS
 };
 
-function baseEyeAsset(skinId: string, side: "left" | "right"): string {
-  return `assets/skins/${skinId}/eyes/${side}-base.png`;
+function baseEyeAsset(skin: SkinDefinition, side: "left" | "right"): string {
+  return side === "left" ? skin.assets.leftBase : skin.assets.rightBase;
 }
 
-function thumbnailAsset(skinId: string): string {
-  return `assets/skins/${skinId}/thumbnail.png`;
+function thumbnailAsset(skin: SkinDefinition): string {
+  return skin.assets.thumbnail;
 }
 
-function maskAsset(skinId: string, mask: "tab-panel"): string {
-  return `assets/skins/${skinId}/masks/${mask}.png`;
+function maskAsset(skin: SkinDefinition): string {
+  return skin.assets.mask;
 }
 
 function effectiveIrisColor(settings: GooglyEyesSettings, skin: SkinDefinition): string {
@@ -339,10 +314,14 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
-function pick<T>(items: T[], randomness: number): T {
+function pick<T>(items: readonly T[], randomness: number): T {
   if (!items.length) throw new Error("Cannot pick from an empty list.");
   if (randomness <= 0.1) return items[0];
   return items[Math.floor(Math.random() * items.length)];
+}
+
+function isReaction(value: string): value is Reaction {
+  return REACTION_IDS.has(value);
 }
 
 function labels<T extends string>(record: Record<T, string>): Record<T, string> {
@@ -386,7 +365,7 @@ const FOCUS_LABELS = labels<FocusModeSetting>({
   off: "Off"
 });
 
-const LAYERED_SKINS = new Set(["robot", "cat", "manga-female", "dragon", "d20-rpg", "tibetan-monk", "alien", "hacker", "anonymous", "ice-hockey", "mona-lisa", "clown", "spy", "skeleton"]);
+const LAYERED_SKINS = GENERATED_LAYERED_SKINS as Set<string>;
 
 const REACTION_LABELS = labels<Reaction>({
   "idle-neutral": "Neutral",
@@ -439,6 +418,8 @@ const REACTION_LABELS = labels<Reaction>({
   panic: "Panic",
   starstruck: "Starstruck"
 });
+
+const QUICK_REACTIONS: readonly Reaction[] = ["happy", "suspicious", "furious", "in-love", "dizzy", "crying", "laughing", "wink-right"];
 
 const BEHAVIOR_PRESETS: Record<string, Partial<GooglyEyesSettings>> = {
   subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85, ambientEmotionIntervalSec: 50, ambientEmotionJitter: 0.45 },
@@ -634,8 +615,8 @@ class EyeController {
   }
 
   private hoverHandler = (event: MouseEvent): void => {
-    const target = event.target as HTMLElement | null;
-    if (!target) return;
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
     if (target.closest(".nav-action-button.is-trash, .mod-trash, [aria-label*='trash' i], [aria-label*='delete' i]")) this.react("hover trash");
     else if (target.closest(".suggestion-container, .prompt, .modal.mod-command-palette")) this.react("hover command palette");
     else if (target.closest("a, .cm-link, .internal-link, .external-link")) this.react("hover link");
@@ -802,7 +783,7 @@ class EyeController {
     if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.dragging) return;
     if (this.root?.hasClass("is-hidden")) return;
     const skinId = this.plugin.settings.skinId;
-    const pool: Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy"];
+    const pool: readonly Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy"];
     const reaction = this.resolveReaction(pick(pool, Math.max(0.45, this.randomness())));
     this.setReaction(reaction);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
@@ -1321,9 +1302,9 @@ class EyeController {
       const left = pair.querySelector<HTMLImageElement>(".googly-eyes-eye-left");
       const right = pair.querySelector<HTMLImageElement>(".googly-eyes-eye-right");
       const mask = pair.querySelector<HTMLImageElement>(".googly-eyes-peek-mask");
-      if (left) left.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "left")}`) : "");
-      if (right) right.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef.id, "right")}`) : "");
-      if (mask) mask.setAttr("src", hasPeekMask ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${maskAsset(skinDef.id, "tab-panel")}`) : "");
+      if (left) left.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef, "left")}`) : "");
+      if (right) right.setAttr("src", hasLayeredAssets ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${baseEyeAsset(skinDef, "right")}`) : "");
+      if (mask) mask.setAttr("src", hasPeekMask ? this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${maskAsset(skinDef)}`) : "");
       pair.setCssStyles({ transform: `translate(${index * 10}px, ${index * 8}px)` });
     }
   }
@@ -1420,18 +1401,22 @@ class QuickUiModal extends Modal {
 
     if (!this.plugin.settings.quickUiExpanded) return;
 
-    const selectors = contentEl.createDiv({ cls: "googly-eyes-quick-selectors" });
-    new Setting(selectors).setName("Skin").addDropdown((dropdown) => {
-      SKINS.forEach((skin) => dropdown.addOption(skin.id, skin.name));
-      dropdown.setValue(this.plugin.settings.skinId);
-      dropdown.onChange((value) => {
-        this.plugin.settings.skinId = value;
+    const skinStrip = contentEl.createDiv({ cls: "googly-eyes-quick-skins" });
+    SKINS.forEach((skin) => {
+      const button = skinStrip.createEl("button", { cls: `googly-eyes-quick-skin ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
+      button.setAttr("aria-label", `Use ${skin.name} skin`);
+      button.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin)}`), alt: "" } });
+      button.createEl("span", { text: skin.name });
+      button.addEventListener("click", () => {
+        this.plugin.settings.skinId = skin.id;
         void this.plugin.saveSettings().then(() => {
           this.plugin.controller.refresh();
           this.render();
         });
       });
     });
+
+    const selectors = contentEl.createDiv({ cls: "googly-eyes-quick-selectors" });
     new Setting(selectors).setName("Personality").addDropdown((dropdown) => {
       Object.entries(PERSONALITY_OPTIONS).forEach(([id, option]) => dropdown.addOption(id, option.label));
       dropdown.setValue(this.plugin.settings.personality);
@@ -1448,10 +1433,8 @@ class QuickUiModal extends Modal {
     this.button(grid, this.plugin.settings.visible ? "Hide eyes" : "Show eyes", () => this.plugin.controller.setVisible(!this.plugin.settings.visible));
     this.button(grid, "Next skin", () => void this.plugin.nextStyle());
     this.button(grid, "Next personality", () => void this.plugin.nextPersonality());
-    this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", () => void this.plugin.toggleFocusMode());
     this.button(grid, this.plugin.settings.pausedReactions ? "Resume reactions" : "Pause reactions", () => void this.plugin.togglePauseReactions());
     this.button(grid, "Reset view", () => void this.plugin.resetQuickView());
-    this.button(grid, "Blink preview", () => this.plugin.controller.react("quick ui", "blink"));
     this.button(grid, "GooglyEyes tab", () => {
       this.close();
       void this.plugin.openPlayground();
@@ -1462,11 +1445,18 @@ class QuickUiModal extends Modal {
       void this.plugin.enterFullscreen();
       return false;
     });
+    this.button(grid, this.plugin.settings.focusModeActive ? "Focus off" : "Focus mode", () => void this.plugin.toggleFocusMode());
     this.button(grid, "Full settings", () => {
       this.close();
-      (this.app as App & { setting?: { open: () => void; openTabById: (id: string) => void } }).setting?.open();
-      (this.app as App & { setting?: { openTabById: (id: string) => void } }).setting?.openTabById(this.plugin.manifest.id);
+      const settings = (this.app as AppWithSettings).setting;
+      settings?.open();
+      settings?.openTabById(this.plugin.manifest.id);
       return false;
+    });
+
+    const emotionGrid = contentEl.createDiv({ cls: "googly-eyes-quick-emotions" });
+    QUICK_REACTIONS.forEach((reaction) => {
+      this.button(emotionGrid, REACTION_LABELS[reaction], () => this.plugin.controller.react("quick ui", reaction));
     });
   }
 
@@ -1579,7 +1569,8 @@ class PlaygroundView extends ItemView {
   }
 
   render(): void {
-    const el = this.containerEl.children[1] as HTMLElement;
+    const el = this.containerEl.children[1];
+    if (!(el instanceof HTMLElement)) return;
     el.empty();
     el.addClass("googly-eyes-playground");
     const stage = el.createDiv({ cls: "googly-eyes-stage" });
@@ -1595,124 +1586,198 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     super(app, plugin);
   }
 
-  display(): void {
-    const { containerEl } = this;
-    containerEl.empty();
-    containerEl.addClass("googly-eyes-settings");
-    new Setting(containerEl).setName("Visibility and tracking").setHeading();
-    containerEl.createEl("p", { text: "GooglyEyes reacts to local events only. It does not read note contents or clipboard contents." });
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    const advanced = () => this.plugin.settings.settingsMode === "advanced";
+    return [
+      {
+        type: "group",
+        heading: "Start",
+        items: [
+          this.dropdownDef("Settings mode", "Simple keeps the page short. Advanced shows every tuning control.", "settingsMode", { simple: "Simple", advanced: "Advanced" }),
+          this.toggleDef("Enable plugin", "enabled"),
+          this.renderDef("Skin", "Choose the face used in the embedded tab.", (setting) => this.renderSkinGrid(setting)),
+          this.dropdownDef("Personality", undefined, "personality", Object.fromEntries(Object.entries(PERSONALITY_OPTIONS).map(([id, p]) => [id, p.label]))),
+          this.renderDef("Quick behavior", "Start here, then fine-tune in Advanced.", (setting) => this.renderPresetButtons(setting)),
+          this.renderDef("Quick actions", undefined, (setting) => this.renderPreviewButtons(setting))
+        ]
+      },
+      {
+        type: "group",
+        heading: "Look",
+        items: [
+          this.sliderDef("Size", "size", 36, 220, 2),
+          this.toggleDef("Use skin default eye colors", "useSkinDefaultColors", "Each skin gets a matching iris and pupil color. Turn this off to use one custom color set."),
+          this.colorDef("Iris color", "irisColor"),
+          this.colorDef("Pupil color", "pupilColor", advanced),
+          this.colorDef("Eyelid color", "eyelidColor"),
+          this.colorDef("Eyelid shadow", "eyelidShadowColor", advanced),
+          this.sliderDef("Iris glow", "irisGlow", 0, 1.5, 0.05, advanced)
+        ]
+      },
+      {
+        type: "group",
+        heading: "Reactions",
+        items: [
+          this.toggleDef("Enable reactions", "reactionsEnabled"),
+          this.dropdownDef("Reaction intensity", undefined, "reactionIntensity", INTENSITY_LABELS),
+          this.sliderDef("Emotion strength", "emotionStrength", 0.25, 1.8, 0.05),
+          this.toggleDef("Ambient emotions", "ambientEmotionsEnabled", "Occasionally shows a natural random expression, then returns to mouse tracking."),
+          this.sliderDef("Ambient interval", "ambientEmotionIntervalSec", 5, 120, 1, advanced),
+          this.sliderDef("Ambient variation", "ambientEmotionJitter", 0, 1.5, 0.05, advanced),
+          this.toggleDef("Pause reactions", "pausedReactions", undefined, advanced),
+          this.dropdownDef("Randomness", undefined, "randomness", RANDOMNESS_LABELS, advanced),
+          this.sliderDef("Reaction hold", "reactionHoldMs", 0, 1200, 50, advanced),
+          this.sliderDef("Blink speed", "blinkSpeed", 0.35, 1.8, 0.05, advanced)
+        ]
+      },
+      {
+        type: "group",
+        heading: "Tracking and tab",
+        visible: advanced,
+        items: [
+          this.dropdownDef("Visibility mode", undefined, "visibilityMode", VISIBILITY_LABELS),
+          this.dropdownDef("Follow target", undefined, "followTarget", FOLLOW_LABELS),
+          this.sliderDef("Follow sensitivity", "followSensitivity", 0.1, 1.5, 0.05),
+          this.sliderDef("Smoothing", "smoothing", 0.04, 0.8, 0.02),
+          this.toggleDef("Peek mode", "peekMode"),
+          this.toggleDef("Embedded panel mask", "peekFaceMask", "Adds the full-width tab panel overlay."),
+          this.toggleDef("Debug eye windows", "debugOverlay", "Shows the eye-window boxes and centers while tuning a skin."),
+          this.sliderDef("Opacity", "opacity", 0.2, 1, 0.05),
+          this.numberDef("Layering / z-index", "zIndex", 1, 999999, 1),
+          this.sliderDef("Animation smoothness", "animationSmoothness", 8, 60, 1),
+          this.sliderDef("Number of eye pairs", "eyePairCount", 1, 6, 1),
+          this.toggleDef("Per-pair variation", "perPairVariation")
+        ]
+      },
+      {
+        type: "group",
+        heading: "Focus and accessibility",
+        visible: advanced,
+        items: [
+          this.dropdownDef("Focus mode", undefined, "focusMode", FOCUS_LABELS),
+          this.toggleDef("DND mode", "dndMode"),
+          this.toggleDef("Subtle mode", "subtleMode"),
+          this.toggleDef("Sound effects", "soundEffects", "Off by default. V1 focuses on visual feedback.")
+        ]
+      },
+      {
+        type: "group",
+        heading: "Action reactions",
+        visible: advanced,
+        items: [
+          this.renderDef("Mappings", "Tune what expression each local event triggers.", (setting) => this.renderActionMappings(setting))
+        ]
+      }
+    ];
+  }
 
-    new Setting(containerEl).setName("Enable plugin").addToggle((toggle) => toggle.setValue(this.plugin.settings.enabled).onChange((value) => this.save("enabled", value)));
-    new Setting(containerEl).setName("Visibility mode").addDropdown((d) => this.dropdown(d, VISIBILITY_LABELS, this.plugin.settings.visibilityMode, (v) => this.save("visibilityMode", v as VisibilityMode)));
-    new Setting(containerEl).setName("Follow target").addDropdown((d) => this.dropdown(d, FOLLOW_LABELS, this.plugin.settings.followTarget, (v) => this.save("followTarget", v as FollowTarget)));
-    new Setting(containerEl).setName("Follow sensitivity").addSlider((s) => s.setLimits(0.1, 1.5, 0.05).setValue(this.plugin.settings.followSensitivity).onChange((v) => this.save("followSensitivity", v)));
-    new Setting(containerEl).setName("Smoothing").addSlider((s) => s.setLimits(0.04, 0.8, 0.02).setValue(this.plugin.settings.smoothing).onChange((v) => this.save("smoothing", v)));
+  getControlValue(key: string): unknown {
+    return this.plugin.settings[key as keyof GooglyEyesSettings];
+  }
 
-    new Setting(containerEl).setName("Behavior presets").setHeading();
-    new Setting(containerEl)
-      .setName("Quick behavior")
-      .setDesc("Start here, then fine-tune below.")
-      .addButton((b) => b.setButtonText("Subtle").onClick(() => void this.applyPreset("subtle")))
-      .addButton((b) => b.setButtonText("Lively").onClick(() => void this.applyPreset("lively")))
-      .addButton((b) => b.setButtonText("Dramatic").onClick(() => void this.applyPreset("dramatic")))
-      .addButton((b) => b.setButtonText("Sleepy").onClick(() => void this.applyPreset("sleepy")));
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    const typedKey = key as keyof GooglyEyesSettings;
+    (this.plugin.settings[typedKey] as unknown) = value;
+    if (key === "irisColor" || key === "pupilColor") this.plugin.settings.useSkinDefaultColors = false;
+    await this.plugin.saveSettings();
+    this.plugin.controller.refresh();
+    if (key.startsWith("ambientEmotion")) this.plugin.controller.refreshAmbientEmotions();
+    this.update();
+  }
 
-    new Setting(containerEl).setName("Reactions").setHeading();
-    new Setting(containerEl).setName("Enable reactions").addToggle((t) => t.setValue(this.plugin.settings.reactionsEnabled).onChange((v) => this.save("reactionsEnabled", v)));
-    new Setting(containerEl).setName("Reaction intensity").addDropdown((d) => this.dropdown(d, INTENSITY_LABELS, this.plugin.settings.reactionIntensity, (v) => this.save("reactionIntensity", v as Intensity)));
-    new Setting(containerEl).setName("Randomness").addDropdown((d) => this.dropdown(d, RANDOMNESS_LABELS, this.plugin.settings.randomness, (v) => this.save("randomness", v as Randomness)));
-    new Setting(containerEl).setName("Emotion strength").setDesc("How far the eyes and lids push each expression.").addSlider((s) => s.setLimits(0.25, 1.8, 0.05).setValue(this.plugin.settings.emotionStrength).onChange((v) => this.save("emotionStrength", v)));
-    new Setting(containerEl).setName("Blink speed").setDesc("Higher is snappier, lower is softer.").addSlider((s) => s.setLimits(0.35, 1.8, 0.05).setValue(this.plugin.settings.blinkSpeed).onChange((v) => this.save("blinkSpeed", v)));
-    new Setting(containerEl).setName("Reaction hold").setDesc("Adds a little extra time before an expression returns to neutral.").addSlider((s) => s.setLimits(0, 1200, 50).setValue(this.plugin.settings.reactionHoldMs).onChange((v) => this.save("reactionHoldMs", v)));
-    new Setting(containerEl).setName("Ambient emotions").setDesc("Occasionally shows a natural random expression, then returns to mouse tracking.").addToggle((t) => t.setValue(this.plugin.settings.ambientEmotionsEnabled).onChange((v) => this.save("ambientEmotionsEnabled", v)));
-    new Setting(containerEl).setName("Ambient interval").setDesc("Average seconds between spontaneous expressions.").addSlider((s) => s.setLimits(5, 120, 1).setValue(this.plugin.settings.ambientEmotionIntervalSec).onChange((v) => this.save("ambientEmotionIntervalSec", v)));
-    new Setting(containerEl).setName("Ambient variation").setDesc("Adds random extra time so expressions feel less predictable.").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.ambientEmotionJitter).onChange((v) => this.save("ambientEmotionJitter", v)));
-    new Setting(containerEl).setName("Pause reactions").addToggle((t) => t.setValue(this.plugin.settings.pausedReactions).onChange((v) => this.save("pausedReactions", v)));
+  private toggleDef(name: string, key: keyof GooglyEyesSettings & string, desc?: string, visible?: boolean | (() => boolean)): SettingGroupItem {
+    return { name, desc, visible, control: { type: "toggle", key } };
+  }
 
-    new Setting(containerEl).setName("Personality and skin").setHeading();
-    new Setting(containerEl).setName("Personality").addDropdown((d) => {
-      Object.entries(PERSONALITY_OPTIONS).forEach(([id, p]) => d.addOption(id, p.label));
-      d.setValue(this.plugin.settings.personality).onChange((v) => this.save("personality", v as Personality));
+  private dropdownDef(name: string, desc: string | undefined, key: keyof GooglyEyesSettings & string, options: Record<string, string>, visible?: boolean | (() => boolean)): SettingGroupItem {
+    return { name, desc, visible, control: { type: "dropdown", key, options } };
+  }
+
+  private sliderDef(name: string, key: keyof GooglyEyesSettings & string, min: number, max: number, step: number, visible?: boolean | (() => boolean)): SettingGroupItem {
+    return { name, visible, control: { type: "slider", key, min, max, step } };
+  }
+
+  private colorDef(name: string, key: keyof GooglyEyesSettings & string, visible?: boolean | (() => boolean)): SettingGroupItem {
+    return { name, visible, control: { type: "color", key } };
+  }
+
+  private numberDef(name: string, key: keyof GooglyEyesSettings & string, min: number, max: number, step: number): SettingGroupItem {
+    return { name, control: { type: "number", key, min, max, step } };
+  }
+
+  private renderDef(name: string, desc: string | undefined, render: (setting: Setting) => void, visible?: boolean | (() => boolean)): SettingGroupItem {
+    return { name, desc, visible, render };
+  }
+
+  private renderPresetButtons(setting: Setting): void {
+    setting.controlEl.empty();
+    const row = setting.controlEl.createDiv({ cls: "googly-eyes-button-row" });
+    Object.keys(BEHAVIOR_PRESETS).forEach((id) => {
+      row.createEl("button", { text: id[0].toUpperCase() + id.slice(1), cls: "mod-cta" }).addEventListener("click", () => void this.applyPreset(id));
     });
-    const skinGrid = containerEl.createDiv({ cls: "googly-eyes-skin-grid" });
+  }
+
+  private renderPreviewButtons(setting: Setting): void {
+    setting.controlEl.empty();
+    const row = setting.controlEl.createDiv({ cls: "googly-eyes-button-row" });
+    row.createEl("button", { text: "Quick UI" }).addEventListener("click", () => new QuickUiModal(this.app, this.plugin).open());
+    row.createEl("button", { text: "Open tab" }).addEventListener("click", () => void this.plugin.openPlayground());
+    row.createEl("button", { text: "Fullscreen" }).addEventListener("click", () => void this.plugin.enterFullscreen());
+    row.createEl("button", { text: "Reset view" }).addEventListener("click", () => void this.plugin.resetQuickView().then(() => this.update()));
+  }
+
+  private renderSkinGrid(setting: Setting): void {
+    setting.settingEl.addClass("googly-eyes-setting-wide");
+    setting.controlEl.empty();
+    const skinGrid = setting.controlEl.createDiv({ cls: "googly-eyes-skin-grid googly-eyes-skin-grid-compact" });
     SKINS.forEach((skin) => {
-      const card = skinGrid.createDiv({ cls: `googly-eyes-skin-card ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
-      card.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin.id)}`), alt: "" } });
+      const selected = skin.id === this.plugin.settings.skinId;
+      const card = skinGrid.createDiv({ cls: `googly-eyes-skin-card ${selected ? "is-selected" : ""}` });
+      card.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin)}`), alt: "" } });
       card.createEl("strong", { text: skin.name });
       card.createEl("span", { text: skin.flavor });
       card.addEventListener("click", () => this.save("skinId", skin.id));
     });
-    new Setting(containerEl).setName("Number of eye pairs").addSlider((s) => s.setLimits(1, 6, 1).setValue(this.plugin.settings.eyePairCount).onChange((v) => this.save("eyePairCount", v)));
-    new Setting(containerEl).setName("Per-pair variation").addToggle((t) => t.setValue(this.plugin.settings.perPairVariation).onChange((v) => this.save("perPairVariation", v)));
+  }
 
-    new Setting(containerEl).setName("Look").setHeading();
-    new Setting(containerEl).setName("Use skin default eye colors").setDesc("Each skin gets a matching iris and pupil color. Turn this off to use one custom color set for every skin.").addToggle((toggle) => toggle.setValue(this.plugin.settings.useSkinDefaultColors).onChange((v) => this.save("useSkinDefaultColors", v)));
-    new Setting(containerEl).setName("Iris color").addColorPicker((picker) => picker.setValue(this.plugin.settings.irisColor).onChange((v) => this.saveCustomEyeColor("irisColor", v)));
-    new Setting(containerEl).setName("Pupil color").addColorPicker((picker) => picker.setValue(this.plugin.settings.pupilColor).onChange((v) => this.saveCustomEyeColor("pupilColor", v)));
-    new Setting(containerEl).setName("Eyelid color").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidColor).onChange((v) => this.save("eyelidColor", v)));
-    new Setting(containerEl).setName("Eyelid shadow").addColorPicker((picker) => picker.setValue(this.plugin.settings.eyelidShadowColor).onChange((v) => this.save("eyelidShadowColor", v)));
-    new Setting(containerEl).setName("Iris glow").addSlider((s) => s.setLimits(0, 1.5, 0.05).setValue(this.plugin.settings.irisGlow).onChange((v) => this.save("irisGlow", v)));
-
-    new Setting(containerEl).setName("Embedded tab").setHeading();
-    new Setting(containerEl).setName("Peek mode").addToggle((t) => t.setValue(this.plugin.settings.peekMode).onChange((v) => this.save("peekMode", v)));
-    new Setting(containerEl).setName("Embedded panel mask").setDesc("Adds a full-width tab panel overlay so the eyes sit inside Obsidian instead of looking like a floating mask. Supported by layered skins such as Robot.").addToggle((t) => t.setValue(this.plugin.settings.peekFaceMask).onChange((v) => this.save("peekFaceMask", v)));
-    new Setting(containerEl).setName("Debug eye windows").setDesc("Shows the eye-window boxes and centers while tuning a skin.").addToggle((t) => t.setValue(this.plugin.settings.debugOverlay).onChange((v) => this.save("debugOverlay", v)));
-    new Setting(containerEl).setName("Size").addSlider((s) => s.setLimits(36, 220, 2).setValue(this.plugin.settings.size).onChange((v) => this.save("size", v)));
-    new Setting(containerEl).setName("Opacity").addSlider((s) => s.setLimits(0.2, 1, 0.05).setValue(this.plugin.settings.opacity).onChange((v) => this.save("opacity", v)));
-    new Setting(containerEl).setName("Layering / z-index").addText((t) => t.setValue(String(this.plugin.settings.zIndex)).onChange((v) => this.save("zIndex", Number(v) || 1000)));
-    new Setting(containerEl).setName("Animation frame count / smoothness").addSlider((s) => s.setLimits(8, 60, 1).setValue(this.plugin.settings.animationSmoothness).onChange((v) => this.save("animationSmoothness", v)));
-
-    new Setting(containerEl).setName("Focus and accessibility").setHeading();
-    new Setting(containerEl).setName("Focus mode").addDropdown((d) => this.dropdown(d, FOCUS_LABELS, this.plugin.settings.focusMode, (v) => this.save("focusMode", v as FocusModeSetting)));
-    new Setting(containerEl).setName("DND mode").addToggle((t) => t.setValue(this.plugin.settings.dndMode).onChange((v) => this.save("dndMode", v)));
-    new Setting(containerEl).setName("Subtle mode").addToggle((t) => t.setValue(this.plugin.settings.subtleMode).onChange((v) => this.save("subtleMode", v)));
-    new Setting(containerEl).setName("Sound effects").setDesc("Off by default. V1 focuses on visual feedback.").addToggle((t) => t.setValue(this.plugin.settings.soundEffects).onChange((v) => this.save("soundEffects", v)));
-
-    new Setting(containerEl).setName("Action reactions").setHeading();
-    new Setting(containerEl)
+  private renderActionMappings(setting: Setting): void {
+    setting.settingEl.addClass("googly-eyes-setting-wide");
+    setting.controlEl.empty();
+    new Setting(setting.controlEl)
       .setName("Reset reactions")
-      .setDesc("Restores the default reactions for typing, clicks, copy, paste, hover, and idle.")
+      .setDesc("Restores the default reactions for typing, clicks, hover, idle, and common actions.")
       .addButton((button) => button.setButtonText("Reset").onClick(() => void this.resetActions()));
     this.plugin.settings.actionMappings.forEach((mapping, index) => {
-      const setting = new Setting(containerEl).setName(mapping.name).setDesc(mapping.triggerType);
-      setting.addToggle((t) => t.setValue(mapping.enabled).onChange((v) => {
-        this.plugin.settings.actionMappings[index].enabled = v;
+      const row = new Setting(setting.controlEl).setName(mapping.name).setDesc(mapping.triggerType);
+      row.addToggle((toggle) => toggle.setValue(mapping.enabled).onChange((value) => {
+        this.plugin.settings.actionMappings[index].enabled = value;
         void this.plugin.saveSettings();
       }));
-      setting.addDropdown((dropdown) => {
+      row.addDropdown((dropdown) => {
         Object.entries(REACTION_LABELS).forEach(([id, label]) => dropdown.addOption(id, label));
         dropdown.setValue(mapping.reactionPool[0] ?? "blink");
         dropdown.onChange((value) => {
-          this.plugin.settings.actionMappings[index].reactionPool = [value as Reaction];
+          const reaction = isReaction(value) ? value : "blink";
+          this.plugin.settings.actionMappings[index].reactionPool = [reaction];
           void this.plugin.saveSettings();
-          this.plugin.controller.react("settings-preview", value as Reaction);
+          this.plugin.controller.react("settings-preview", reaction);
         });
       });
-      setting.addSlider((slider) => slider.setLimits(0.2, 1.8, 0.1).setValue(mapping.intensity).onChange((value) => {
+      row.addSlider((slider) => slider.setLimits(0.2, 1.8, 0.1).setValue(mapping.intensity).onChange((value) => {
         this.plugin.settings.actionMappings[index].intensity = value;
         void this.plugin.saveSettings();
       }));
-      setting.addText((t) => t.setPlaceholder("cooldown ms").setValue(String(mapping.cooldownMs)).onChange((v) => {
-        this.plugin.settings.actionMappings[index].cooldownMs = Number(v) || mapping.cooldownMs;
+      row.addText((text) => text.setPlaceholder("cooldown ms").setValue(String(mapping.cooldownMs)).onChange((value) => {
+        this.plugin.settings.actionMappings[index].cooldownMs = Number(value) || mapping.cooldownMs;
         void this.plugin.saveSettings();
       }));
     });
-    new Setting(containerEl).setName("Add custom action").setDesc("Creates a local event mapping you can trigger from commands or future extensions.").addButton((button) => {
+    new Setting(setting.controlEl).setName("Add custom action").setDesc("Creates a local event mapping you can trigger from commands or future extensions.").addButton((button) => {
       button.setButtonText("Add").onClick(() => {
         this.plugin.settings.actionMappings.push({ name: `custom action ${this.plugin.settings.actionMappings.length + 1}`, triggerType: "command", enabled: true, reactionPool: ["happy", "blink"], intensity: 1, cooldownMs: 1000 });
-        void this.plugin.saveSettings().then(() => this.display());
+        void this.plugin.saveSettings().then(() => this.update());
       });
     });
-
-    new Setting(containerEl).setName("Preview tools").setHeading();
-    new Setting(containerEl).setName("Quick UI").addButton((b) => b.setButtonText("Open").onClick(() => new QuickUiModal(this.app, this.plugin).open()));
-    new Setting(containerEl).setName("GooglyEyes tab").addButton((b) => b.setButtonText("Open").onClick(() => void this.plugin.openPlayground()));
-    new Setting(containerEl).setName("Onboarding").addButton((b) => b.setButtonText("Restart").onClick(() => new OnboardingModal(this.app, this.plugin).open()));
-  }
-
-  private dropdown<T extends string>(dropdown: { addOption: (value: string, display: string) => unknown; setValue: (value: string) => { onChange: (cb: (value: string) => unknown) => unknown } }, options: Record<T, string>, value: T, onChange: (value: string) => void): void {
-    Object.entries(options).forEach(([id, label]) => dropdown.addOption(id, label as string));
-    dropdown.setValue(value).onChange(onChange);
   }
 
   private async applyPreset(id: string): Promise<void> {
@@ -1720,14 +1785,14 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     await this.plugin.saveSettings();
     this.plugin.controller.refresh();
     this.plugin.controller.refreshAmbientEmotions();
-    this.display();
+    this.update();
   }
 
   private async resetActions(): Promise<void> {
     this.plugin.settings.actionMappings = DEFAULT_ACTIONS.map((action) => ({ ...action, reactionPool: [...action.reactionPool] }));
     await this.plugin.saveSettings();
     this.plugin.controller.refresh();
-    this.display();
+    this.update();
   }
 
   private save<K extends keyof GooglyEyesSettings>(key: K, value: GooglyEyesSettings[K]): void {
@@ -1735,7 +1800,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     void this.plugin.saveSettings().then(() => {
       this.plugin.controller.refresh();
       if (String(key).startsWith("ambientEmotion")) this.plugin.controller.refreshAmbientEmotions();
-      this.display();
+      this.update();
     });
   }
 
@@ -1744,7 +1809,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     this.plugin.settings.useSkinDefaultColors = false;
     void this.plugin.saveSettings().then(() => {
       this.plugin.controller.refresh();
-      this.display();
+      this.update();
     });
   }
 }
@@ -1873,8 +1938,8 @@ export default class GooglyEyesPlugin extends Plugin {
   async enterFullscreen(): Promise<void> {
     const leaf = await this.openPlayground();
     const view = leaf.view as ItemView;
-    const el = view.containerEl.children[1] as HTMLElement | undefined;
-    if (!el) return;
+    const el = view.containerEl.children[1];
+    if (!(el instanceof HTMLElement)) return;
     this.exitFullscreen();
     this.fullscreenEl = el;
     this.fullscreenEl.addClass("googly-eyes-fullscreen");

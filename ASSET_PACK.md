@@ -1,6 +1,6 @@
 # GooglyEyes Asset Pack
 
-GooglyEyes exposes only completed skins in the UI. The current active skins are Robot, Cat, Manga Female, Dragon, Tibetan Monk, Alien, Hacker, Anonymous, Ice Hockey Horror, Mona Lisa, and Clown.
+GooglyEyes exposes only completed skins in the UI.
 
 All active skins use the layered renderer. That means PNGs provide only the fixed art that should not move: a tab-panel mask, a thumbnail, and clean left/right base eyes. Iris, pupil, glow, eyelids, blinking, mouse tracking, and reaction poses are drawn at runtime with DOM/CSS.
 
@@ -81,14 +81,6 @@ assets/
       masks/
         tab-panel.png
       thumbnail.png
-    mona-lisa/
-      skin.json
-      eyes/
-        left-base.png
-        right-base.png
-      masks/
-        tab-panel.png
-      thumbnail.png
     clown/
       skin.json
       eyes/
@@ -118,7 +110,7 @@ Runtime eye scale rule:
 
 Current V1 count:
 
-- 10 active skins
+- 15 active skins
 - 2 base eye PNGs per skin
 - 1 mask PNG per skin
 - 1 thumbnail PNG per skin

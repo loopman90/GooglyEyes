@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.159,
+      "x": 0.164,
       "y": 0.237,
-      "w": 0.276,
-      "h": 0.22
+      "w": 0.269,
+      "h": 0.219
     },
     {
       "side": "right",
-      "x": 0.564,
+      "x": 0.565,
       "y": 0.237,
       "w": 0.272,
-      "h": 0.229
+      "h": 0.219
     }
   ],
   "assets": {
@@ -33,5 +33,15 @@
     "irisGlow": 0.16,
     "irisSize": 30,
     "pupilSize": 30
-  }
+  },
+  "flavor": "Cartoon eyes peeking through newspaper cutouts.",
+  "ambientReactions": [
+    "peek",
+    "suspicious",
+    "look-left",
+    "look-right",
+    "wide-stare",
+    "wink-left",
+    "restless"
+  ]
 }

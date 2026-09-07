@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.6
+
+- Removed the Mona Lisa skin from the active plugin and packaged assets.
+- Added Cyberpunk Female and Wizard as completed layered skins.
+- Rebuilt skin metadata from per-skin JSON via `generated-skins.ts`.
+- Added Simple / Advanced settings mode and declarative settings definitions for Obsidian settings search.
+- Improved the Quick UI with thumbnail skin switching, compact controls, and direct emotion previews.
+- Cleaned base-eye transparency and retuned eye windows so active skins scale and center more reliably.
+- Raised the minimum app version to 1.13.0 for the declarative settings API.
+
 ## 1.0.5
 
 - Added stronger expressive reactions including Furious, Restless, In love, Dreamy, Drunk, Stoned, Spacing out, Crying, Laughing, Wink, Panic, and Starstruck.

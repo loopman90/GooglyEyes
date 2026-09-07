@@ -5,8 +5,20 @@
   "mask": "masks/tab-panel.png",
   "thumbnail": "thumbnail.png",
   "eyeWindows": [
-    { "side": "left", "x": 0.08, "y": 0.263, "w": 0.365, "h": 0.473 },
-    { "side": "right", "x": 0.555, "y": 0.263, "w": 0.365, "h": 0.473 }
+    {
+      "side": "left",
+      "x": 0.129,
+      "y": 0.329,
+      "w": 0.267,
+      "h": 0.342
+    },
+    {
+      "side": "right",
+      "x": 0.604,
+      "y": 0.329,
+      "w": 0.267,
+      "h": 0.342
+    }
   ],
   "assets": {
     "leftBase": "eyes/left-base.png",
@@ -20,5 +32,14 @@
     "irisGlow": 0.85,
     "irisSize": 36,
     "pupilSize": 19
-  }
+  },
+  "flavor": "Ancient scales with a fiery slit gaze.",
+  "ambientReactions": [
+    "angry",
+    "furious",
+    "suspicious",
+    "dramatic-shock",
+    "chaotic-stare",
+    "look-down"
+  ]
 }

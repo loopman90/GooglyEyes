@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.128,
-      "y": 0.246,
-      "w": 0.345,
-      "h": 0.345
+      "x": 0.155,
+      "y": 0.293,
+      "w": 0.254,
+      "h": 0.276
     },
     {
       "side": "right",
-      "x": 0.529,
-      "y": 0.246,
-      "w": 0.345,
-      "h": 0.345
+      "x": 0.587,
+      "y": 0.295,
+      "w": 0.254,
+      "h": 0.276
     }
   ],
   "assets": {
@@ -33,5 +33,15 @@
     "irisGlow": 0.35,
     "irisSize": 31,
     "pupilSize": 32
-  }
+  },
+  "flavor": "Cartoon circus face with a bright playful stare.",
+  "ambientReactions": [
+    "happy",
+    "laughing",
+    "cross-eyed",
+    "dizzy",
+    "chaotic-stare",
+    "shocked",
+    "drunk"
+  ]
 }

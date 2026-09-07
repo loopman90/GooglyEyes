@@ -10,14 +10,14 @@
       "x": 0.161,
       "y": 0.209,
       "w": 0.294,
-      "h": 0.441
+      "h": 0.433
     },
     {
       "side": "right",
       "x": 0.544,
       "y": 0.209,
-      "w": 0.295,
-      "h": 0.441
+      "w": 0.285,
+      "h": 0.43
     }
   ],
   "assets": {
@@ -33,5 +33,14 @@
     "irisGlow": 0.24,
     "irisSize": 32,
     "pupilSize": 30
-  }
+  },
+  "flavor": "Playful bone mask with deep skull sockets.",
+  "ambientReactions": [
+    "suspicious",
+    "sleepy-idle",
+    "shocked",
+    "confused",
+    "idle-long",
+    "spacing-out"
+  ]
 }

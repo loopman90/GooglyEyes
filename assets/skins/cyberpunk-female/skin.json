@@ -1,0 +1,47 @@
+{
+  "id": "cyberpunk-female",
+  "name": "Cyberpunk Female",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.162,
+      "y": 0.348,
+      "w": 0.3,
+      "h": 0.24
+    },
+    {
+      "side": "right",
+      "x": 0.538,
+      "y": 0.348,
+      "w": 0.3,
+      "h": 0.24
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#ff4fd8",
+    "pupilColor": "#080510",
+    "eyeWhiteColor": "#f4eef6",
+    "eyelidColor": "#292033",
+    "eyelidShadowColor": "#07040d",
+    "irisGlow": 0.7,
+    "irisSize": 34,
+    "pupilSize": 30
+  },
+  "flavor": "Neon makeup, chrome accents, and a sharp magenta gaze.",
+  "ambientReactions": [
+    "in-love",
+    "starstruck",
+    "suspicious",
+    "restless",
+    "wink-right",
+    "dreamy",
+    "panic"
+  ]
+}

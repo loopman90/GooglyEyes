@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.184,
-      "y": 0.286,
-      "w": 0.248,
-      "h": 0.248
+      "x": 0.167,
+      "y": 0.353,
+      "w": 0.304,
+      "h": 0.16
     },
     {
       "side": "right",
-      "x": 0.57,
-      "y": 0.286,
-      "w": 0.248,
-      "h": 0.248
+      "x": 0.529,
+      "y": 0.353,
+      "w": 0.304,
+      "h": 0.16
     }
   ],
   "assets": {
@@ -33,5 +33,14 @@
     "irisGlow": 0.18,
     "irisSize": 31,
     "pupilSize": 31
-  }
+  },
+  "flavor": "Warm robes with a calm meditative gaze.",
+  "ambientReactions": [
+    "slow-blink",
+    "sleepy-idle",
+    "look-down",
+    "dreamy",
+    "idle-long",
+    "spacing-out"
+  ]
 }

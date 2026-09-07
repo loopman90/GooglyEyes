@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.152,
-      "y": 0.275,
-      "w": 0.306,
-      "h": 0.32
+      "x": 0.153,
+      "y": 0.285,
+      "w": 0.304,
+      "h": 0.354
     },
     {
       "side": "right",
-      "x": 0.542,
-      "y": 0.275,
-      "w": 0.306,
-      "h": 0.32
+      "x": 0.543,
+      "y": 0.285,
+      "w": 0.304,
+      "h": 0.354
     }
   ],
   "assets": {
@@ -33,5 +33,14 @@
     "irisGlow": 0.45,
     "irisSize": 30,
     "pupilSize": 30
-  }
+  },
+  "flavor": "Frozen hockey mask with a blood-spattered stare.",
+  "ambientReactions": [
+    "suspicious",
+    "angry",
+    "furious",
+    "wide-stare",
+    "shocked",
+    "look-left"
+  ]
 }

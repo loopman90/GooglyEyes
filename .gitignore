@@ -28,7 +28,11 @@ assets/skins/*
 !assets/skins/mona-lisa/**
 !assets/skins/clown/
 !assets/skins/clown/**
+!assets/skins/cyberpunk-female/
+!assets/skins/cyberpunk-female/**
 !assets/skins/spy/
 !assets/skins/spy/**
 !assets/skins/skeleton/
 !assets/skins/skeleton/**
+!assets/skins/wizard/
+!assets/skins/wizard/**

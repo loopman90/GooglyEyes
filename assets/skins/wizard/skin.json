@@ -1,0 +1,47 @@
+{
+  "id": "wizard",
+  "name": "Wizard",
+  "renderer": "layered",
+  "mask": "masks/tab-panel.png",
+  "thumbnail": "thumbnail.png",
+  "eyeWindows": [
+    {
+      "side": "left",
+      "x": 0.197,
+      "y": 0.404,
+      "w": 0.29,
+      "h": 0.335
+    },
+    {
+      "side": "right",
+      "x": 0.551,
+      "y": 0.404,
+      "w": 0.29,
+      "h": 0.336
+    }
+  ],
+  "assets": {
+    "leftBase": "eyes/left-base.png",
+    "rightBase": "eyes/right-base.png"
+  },
+  "defaults": {
+    "irisColor": "#8f6bff",
+    "pupilColor": "#090316",
+    "eyeWhiteColor": "#f2e3c5",
+    "eyelidColor": "#7d5b46",
+    "eyelidShadowColor": "#2f1b16",
+    "irisGlow": 0.78,
+    "irisSize": 34,
+    "pupilSize": 30
+  },
+  "flavor": "Moonlit hat, silver brows, and a violet spellcaster gaze.",
+  "ambientReactions": [
+    "dreamy",
+    "starstruck",
+    "slow-blink",
+    "suspicious",
+    "spacing-out",
+    "wide-stare",
+    "wink-right"
+  ]
+}

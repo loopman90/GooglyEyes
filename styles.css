@@ -554,29 +554,6 @@
     radial-gradient(circle at 50% 52%, var(--pupil-color) 0 46%, color-mix(in srgb, var(--pupil-color) 74%, var(--iris-color) 26%) 100%);
 }
 
-.googly-eyes-pair[data-skin="mona-lisa"] .googly-eyes-iris {
-  background:
-    radial-gradient(circle at 38% 31%, rgb(255 244 199 / 0.38) 0 8%, transparent 9%),
-    radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--iris-color) 84%, #e0c176 16%) 0 25%, color-mix(in srgb, var(--iris-color) 70%, #33230f 30%) 58%, rgb(25 16 7 / 0.96) 100%);
-  box-shadow:
-    0 0 calc(13px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 55%, transparent),
-    inset 0 0 13px rgb(231 199 126 / 0.2),
-    inset 0 0 21px rgb(39 23 7 / 0.62);
-}
-
-.googly-eyes-pair[data-skin="mona-lisa"] .googly-eyes-iris::before {
-  background:
-    repeating-conic-gradient(from 5deg, color-mix(in srgb, var(--iris-color) 50%, #dac37c 50%) 0deg 2deg, color-mix(in srgb, #2b1c0a 55%, transparent) 2deg 9deg);
-  opacity: 0.34;
-}
-
-.googly-eyes-pair[data-skin="mona-lisa"] .googly-eyes-pupil {
-  width: var(--skin-pupil-size);
-  background:
-    radial-gradient(circle at 38% 30%, rgb(244 224 171 / 0.34) 0 7%, transparent 8%),
-    radial-gradient(circle at 50% 52%, var(--pupil-color) 0 45%, color-mix(in srgb, var(--pupil-color) 78%, var(--iris-color) 22%) 100%);
-}
-
 .googly-eyes-lid {
   position: absolute;
   left: -16%;
@@ -644,9 +621,16 @@
 }
 
 .googly-eyes-modal .googly-eyes-quick-grid,
+.googly-eyes-quick-emotions,
 .googly-eyes-reaction-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.googly-eyes-button-row {
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -667,6 +651,50 @@
   margin: 4px 0 12px;
 }
 
+.googly-eyes-quick-skins {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+  padding: 4px 0 10px;
+}
+
+.googly-eyes-quick-skin {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 6px;
+  text-align: left;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-secondary);
+}
+
+.googly-eyes-quick-skin.is-selected {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+.googly-eyes-quick-skin img {
+  width: 44px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.googly-eyes-quick-skin span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-ui-smaller);
+}
+
+.googly-eyes-quick-emotions {
+  margin-top: 12px;
+}
+
 .googly-eyes-modal-nav {
   display: flex;
   justify-content: flex-end;
@@ -685,6 +713,20 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin: 10px 0 18px;
+}
+
+.googly-eyes-setting-wide {
+  display: block;
+}
+
+.googly-eyes-setting-wide .setting-item-control {
+  justify-content: stretch;
+  width: 100%;
+}
+
+.googly-eyes-skin-grid-compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
 }
 
 .googly-eyes-skin-card {
@@ -791,7 +833,13 @@ body.theme-dark .googly-eyes-pair {
   }
 
   .googly-eyes-modal .googly-eyes-quick-grid,
+  .googly-eyes-quick-emotions,
   .googly-eyes-reaction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .googly-eyes-quick-skins,
+  .googly-eyes-skin-grid-compact {
     grid-template-columns: 1fr;
   }
 }

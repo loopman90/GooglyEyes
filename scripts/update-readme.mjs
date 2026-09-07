@@ -40,6 +40,7 @@ GooglyEyes is a playful, fully local Obsidian Community Plugin. It opens an embe
 - Living eyes embedded inside an Obsidian tab.
 - Mouse and text-cursor tracking.
 - Smooth blinking and eyelids.
+- Simple settings for everyday use, with Advanced controls for deeper tuning.
 - Personalities such as Calm, Curious, Dramatic, Goofy, Suspicious, Sleepy, Chaotic, Shy, Focused, and Mischievous.
 - Custom iris, pupil, eyelid, shadow, glow, size, opacity, focus mode, and reaction settings.
 - A compact Quick UI behind a Show controls button.
@@ -135,6 +136,7 @@ Use this when editing the plugin source code.
 
 \`\`\`bash
 npm install
+npm run generate-skin-data
 npm run validate-assets
 npm run build
 npm run package-test
@@ -161,11 +163,10 @@ The repository includes a GitHub Actions workflow that can attest \`main.js\`, \
 Open the Quick UI from:
 
 - Command: \`Open Quick UI\`
-- Default hotkey: \`Mod+Shift+E\`
 - Ribbon eye icon
 - Status bar item
 
-The Quick UI starts compact behind a Show controls button. When expanded it supports show/hide, skin switching, personality switching, reaction pause, focus mode, blink preview, GooglyEyes tab, and full settings.
+The Quick UI starts compact behind a Show controls button. When expanded it supports thumbnail skin switching, personality switching, reaction pause, reset, fullscreen, GooglyEyes tab, full settings, and direct emotion previews.
 
 ## GooglyEyes Tab
 
@@ -214,6 +215,7 @@ Eye scale rule:
 
 This README is generated from project files.
 
+- \`npm run generate-skin-data\` rebuilds \`generated-skins.ts\` from \`assets/skins.json\` and \`assets/skins/*/skin.json\`.
 - \`npm run update-readme\` updates it directly.
 - \`npm run build\` updates it automatically before building.
 - \`npm run package-test\` updates it automatically before creating the test package.

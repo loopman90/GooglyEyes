@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.14,
-      "y": 0.268,
-      "w": 0.32,
-      "h": 0.34
+      "x": 0.143,
+      "y": 0.345,
+      "w": 0.242,
+      "h": 0.274
     },
     {
       "side": "right",
-      "x": 0.541,
-      "y": 0.268,
-      "w": 0.32,
-      "h": 0.34
+      "x": 0.618,
+      "y": 0.34,
+      "w": 0.244,
+      "h": 0.268
     }
   ],
   "assets": {
@@ -32,5 +32,15 @@
     "irisGlow": 0.55,
     "irisSize": 35,
     "pupilSize": 30
-  }
+  },
+  "flavor": "Big anime eyes with soft lashes.",
+  "ambientReactions": [
+    "happy",
+    "shocked",
+    "crying",
+    "in-love",
+    "dreamy",
+    "laughing",
+    "wink-right"
+  ]
 }

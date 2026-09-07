@@ -5,8 +5,20 @@
   "mask": "masks/tab-panel.png",
   "thumbnail": "thumbnail.png",
   "eyeWindows": [
-    { "side": "left", "x": 0.08, "y": 0.263, "w": 0.365, "h": 0.473 },
-    { "side": "right", "x": 0.555, "y": 0.263, "w": 0.365, "h": 0.473 }
+    {
+      "side": "left",
+      "x": 0.129,
+      "y": 0.329,
+      "w": 0.267,
+      "h": 0.342
+    },
+    {
+      "side": "right",
+      "x": 0.604,
+      "y": 0.329,
+      "w": 0.267,
+      "h": 0.342
+    }
   ],
   "assets": {
     "leftBase": "eyes/left-base.png",
@@ -20,5 +32,15 @@
     "irisGlow": 0.35,
     "irisSize": 37,
     "pupilSize": 22
-  }
+  },
+  "flavor": "Soft fur, sharp focus, vertical pupils.",
+  "ambientReactions": [
+    "suspicious",
+    "look-left",
+    "look-right",
+    "sleepy-idle",
+    "happy",
+    "dreamy",
+    "wink-left"
+  ]
 }

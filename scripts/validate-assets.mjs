@@ -20,6 +20,7 @@ const MIN_PUPIL_SIZE = 16;
 const MAX_PUPIL_SIZE = 46;
 const MIN_EYE_WINDOW_SIZE = 0.12;
 const MAX_EYE_WINDOW_SIZE = 0.5;
+const VALID_REACTIONS = new Set(manifest.reactions ?? []);
 
 function isPng(path) {
   if (!existsSync(path)) return false;
@@ -174,6 +175,12 @@ for (const skin of manifest.skins) {
       try {
         const skinMeta = JSON.parse(readFileSync(path, "utf8"));
         const defaults = skinMeta.defaults ?? {};
+        if (typeof skinMeta.flavor !== "string" || !skinMeta.flavor.trim()) {
+          invalidJson.push(`${path}\n  - flavor must describe the skin for settings and the Quick UI`);
+        }
+        if (!Array.isArray(skinMeta.ambientReactions) || !skinMeta.ambientReactions.length || skinMeta.ambientReactions.some((reaction) => !VALID_REACTIONS.has(reaction))) {
+          invalidJson.push(`${path}\n  - ambientReactions must list valid reaction ids from assets/skins.json`);
+        }
         if (layeredSkins.has(skin)) {
           if (!Array.isArray(skinMeta.eyeWindows) || skinMeta.eyeWindows.length !== 2) {
             invalidJson.push(`${path}\n  - eyeWindows must define exactly one left and one right eye window`);

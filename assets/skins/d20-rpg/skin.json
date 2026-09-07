@@ -7,16 +7,16 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.153,
-      "y": 0.325,
-      "w": 0.303,
+      "x": 0.155,
+      "y": 0.326,
+      "w": 0.279,
       "h": 0.29
     },
     {
       "side": "right",
-      "x": 0.544,
-      "y": 0.325,
-      "w": 0.303,
+      "x": 0.569,
+      "y": 0.326,
+      "w": 0.278,
       "h": 0.29
     }
   ],
@@ -33,5 +33,15 @@
     "irisGlow": 0.32,
     "irisSize": 32,
     "pupilSize": 28
-  }
+  },
+  "flavor": "Tabletop dice, parchment maps, and dungeon master focus.",
+  "ambientReactions": [
+    "dramatic-shock",
+    "wide-stare",
+    "happy",
+    "confused",
+    "chaotic-stare",
+    "panic",
+    "starstruck"
+  ]
 }

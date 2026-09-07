@@ -13,7 +13,6 @@ Completed:
 - Hacker
 - Anonymous
 - Ice Hockey Horror
-- Mona Lisa
 - Clown
 
 Next candidates:

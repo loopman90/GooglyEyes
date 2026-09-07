@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.08,
-      "y": 0.263,
-      "w": 0.365,
-      "h": 0.473
+      "x": 0.129,
+      "y": 0.329,
+      "w": 0.268,
+      "h": 0.342
     },
     {
       "side": "right",
-      "x": 0.555,
-      "y": 0.263,
-      "w": 0.365,
-      "h": 0.473
+      "x": 0.604,
+      "y": 0.329,
+      "w": 0.268,
+      "h": 0.342
     }
   ],
   "assets": {
@@ -33,5 +33,15 @@
     "irisGlow": 0.5,
     "irisSize": 31,
     "pupilSize": 30
-  }
+  },
+  "flavor": "Dark hood, terminal glow, and sharp focus.",
+  "ambientReactions": [
+    "suspicious",
+    "rapid-typing-focus",
+    "look-left",
+    "look-right",
+    "nervous",
+    "restless",
+    "panic"
+  ]
 }
