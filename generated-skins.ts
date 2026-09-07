@@ -11,7 +11,7 @@ export const GENERATED_SKINS = [
     "outline": "#2a2d30",
     "accent": "#ffcc33",
     "irisSize": 38,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -65,7 +65,7 @@ export const GENERATED_SKINS = [
     "outline": "#3b3735",
     "accent": "#120e0c",
     "irisSize": 44,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -76,7 +76,7 @@ export const GENERATED_SKINS = [
     },
     "reactionTuning": {
       "all": {
-        "gazeMultiplier": 0.78,
+        "gazeMultiplier": 0.92,
         "pupilScaleMultiplier": 0.92,
         "durationMultiplier": 1.08
       },
@@ -90,7 +90,7 @@ export const GENERATED_SKINS = [
       },
       "sleepy-idle": {
         "lidMultiplier": 1.18,
-        "gazeMultiplier": 0.55
+        "gazeMultiplier": 0.68
       }
     },
     "supportsColorOverrides": true,
@@ -149,7 +149,7 @@ export const GENERATED_SKINS = [
     "reactionTuning": {
       "all": {
         "lidMultiplier": 1.08,
-        "gazeMultiplier": 0.84,
+        "gazeMultiplier": 0.98,
         "pupilScaleMultiplier": 1.06,
         "durationMultiplier": 1.1
       },
@@ -163,7 +163,7 @@ export const GENERATED_SKINS = [
       },
       "wink-right": {
         "lidMultiplier": 1.18,
-        "gazeMultiplier": 0.65
+        "gazeMultiplier": 0.78
       }
     },
     "supportsColorOverrides": true,
@@ -210,7 +210,7 @@ export const GENERATED_SKINS = [
     "outline": "#1d2a24",
     "accent": "#050403",
     "irisSize": 38,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -221,7 +221,7 @@ export const GENERATED_SKINS = [
     },
     "reactionTuning": {
       "all": {
-        "gazeMultiplier": 0.72,
+        "gazeMultiplier": 0.88,
         "pupilScaleMultiplier": 0.86,
         "durationMultiplier": 1.12
       },
@@ -283,7 +283,7 @@ export const GENERATED_SKINS = [
     "outline": "#292033",
     "accent": "#07040d",
     "irisSize": 42,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -337,7 +337,7 @@ export const GENERATED_SKINS = [
     "outline": "#c9962a",
     "accent": "#362000",
     "irisSize": 44,
-    "pupilSize": 24,
+    "pupilSize": 28,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -349,14 +349,14 @@ export const GENERATED_SKINS = [
     "reactionTuning": {
       "all": {
         "lidMultiplier": 0.62,
-        "gazeMultiplier": 0.58,
+        "gazeMultiplier": 0.72,
         "pupilScaleMultiplier": 0.78,
         "irisScaleMultiplier": 0.92,
         "vibeMultiplier": 0.18,
         "durationMultiplier": 0.9
       },
       "confused": {
-        "gazeMultiplier": 0.72,
+        "gazeMultiplier": 0.84,
         "durationMultiplier": 1.08
       },
       "panic": {
@@ -408,7 +408,7 @@ export const GENERATED_SKINS = [
     "outline": "#dce8f2",
     "accent": "#102438",
     "irisSize": 44,
-    "pupilSize": 24,
+    "pupilSize": 28,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -420,7 +420,7 @@ export const GENERATED_SKINS = [
     "reactionTuning": {
       "all": {
         "lidMultiplier": 0.55,
-        "gazeMultiplier": 0.52,
+        "gazeMultiplier": 0.68,
         "pupilScaleMultiplier": 0.74,
         "irisScaleMultiplier": 0.9,
         "vibeMultiplier": 0.12,
@@ -479,7 +479,7 @@ export const GENERATED_SKINS = [
     "outline": "#f0f5e9",
     "accent": "#1c2018",
     "irisSize": 42,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -533,7 +533,7 @@ export const GENERATED_SKINS = [
     "outline": "#8f5a2e",
     "accent": "#2b170f",
     "irisSize": 40,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -587,7 +587,7 @@ export const GENERATED_SKINS = [
     "outline": "#d4e6ef",
     "accent": "#0d2032",
     "irisSize": 42,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -598,46 +598,46 @@ export const GENERATED_SKINS = [
     },
     "reactionTuning": {
       "all": {
-        "gazeMultiplier": 0.8,
-        "eyeBaseScaleMultiplier": 1.14,
+        "gazeMultiplier": 0.96,
+        "eyeBaseScaleMultiplier": 1.22,
         "irisScaleMultiplier": 1.04,
         "pupilScaleMultiplier": 1.02,
         "durationMultiplier": 1.04
       },
       "wide-stare": {
-        "eyeBaseScaleMultiplier": 1.14,
+        "eyeBaseScaleMultiplier": 1.22,
         "irisScaleMultiplier": 1.08,
         "pupilScaleMultiplier": 0.92
       },
       "dramatic-shock": {
-        "eyeBaseScaleMultiplier": 1.14,
+        "eyeBaseScaleMultiplier": 1.22,
         "irisScaleMultiplier": 1.08,
         "pupilScaleMultiplier": 0.9
       },
       "starstruck": {
-        "eyeBaseScaleMultiplier": 1.14,
+        "eyeBaseScaleMultiplier": 1.22,
         "irisScaleMultiplier": 1.1,
         "pupilScaleMultiplier": 1.04
       },
       "look-up": {
-        "gazeMultiplier": 0.68,
-        "eyeBaseScaleMultiplier": 1.16
+        "gazeMultiplier": 0.9,
+        "eyeBaseScaleMultiplier": 1.24
       },
       "look-left": {
-        "gazeMultiplier": 0.68,
-        "eyeBaseScaleMultiplier": 1.16
+        "gazeMultiplier": 0.9,
+        "eyeBaseScaleMultiplier": 1.24
       },
       "look-right": {
-        "gazeMultiplier": 0.68,
-        "eyeBaseScaleMultiplier": 1.16
+        "gazeMultiplier": 0.9,
+        "eyeBaseScaleMultiplier": 1.24
       },
       "spacing-out": {
-        "gazeMultiplier": 0.64,
-        "eyeBaseScaleMultiplier": 1.16
+        "gazeMultiplier": 0.78,
+        "eyeBaseScaleMultiplier": 1.24
       },
       "dreamy": {
-        "gazeMultiplier": 0.66,
-        "eyeBaseScaleMultiplier": 1.16,
+        "gazeMultiplier": 0.82,
+        "eyeBaseScaleMultiplier": 1.24,
         "irisScaleMultiplier": 1.08
       }
     },
@@ -684,7 +684,7 @@ export const GENERATED_SKINS = [
     "outline": "#f2f2f2",
     "accent": "#d13b2f",
     "irisSize": 38,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -738,7 +738,7 @@ export const GENERATED_SKINS = [
     "outline": "#2d2118",
     "accent": "#0a0705",
     "irisSize": 40,
-    "pupilSize": 17,
+    "pupilSize": 21,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -791,7 +791,7 @@ export const GENERATED_SKINS = [
     "outline": "#58b55f",
     "accent": "#33185d",
     "irisSize": 44,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -802,12 +802,12 @@ export const GENERATED_SKINS = [
     },
     "reactionTuning": {
       "all": {
-        "gazeMultiplier": 0.6,
+        "gazeMultiplier": 0.82,
         "pupilScaleMultiplier": 0.9,
         "durationMultiplier": 1.12
       },
       "dizzy": {
-        "gazeMultiplier": 0.42,
+        "gazeMultiplier": 0.62,
         "vibeMultiplier": 0.5
       },
       "wide-stare": {
@@ -862,7 +862,7 @@ export const GENERATED_SKINS = [
     "outline": "#9b5535",
     "accent": "#3d2018",
     "irisSize": 44,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -915,7 +915,7 @@ export const GENERATED_SKINS = [
     "outline": "#627f77",
     "accent": "#142427",
     "irisSize": 40,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -969,7 +969,7 @@ export const GENERATED_SKINS = [
     "outline": "#2a2f2b",
     "accent": "#070a09",
     "irisSize": 42,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -980,7 +980,7 @@ export const GENERATED_SKINS = [
     },
     "reactionTuning": {
       "all": {
-        "gazeMultiplier": 0.7,
+        "gazeMultiplier": 0.9,
         "pupilScaleMultiplier": 0.82,
         "durationMultiplier": 0.94
       },
@@ -991,7 +991,7 @@ export const GENERATED_SKINS = [
       },
       "suspicious": {
         "lidMultiplier": 1.12,
-        "gazeMultiplier": 0.82
+        "gazeMultiplier": 1
       },
       "panic": {
         "vibeMultiplier": 0.55,
@@ -1042,7 +1042,7 @@ export const GENERATED_SKINS = [
     "outline": "#e1ddd1",
     "accent": "#1a1516",
     "irisSize": 34,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1095,7 +1095,7 @@ export const GENERATED_SKINS = [
     "outline": "#ccd7dd",
     "accent": "#101820",
     "irisSize": 38,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1148,7 +1148,7 @@ export const GENERATED_SKINS = [
     "outline": "#ff9aa6",
     "accent": "#590913",
     "irisSize": 38,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1202,7 +1202,7 @@ export const GENERATED_SKINS = [
     "outline": "#d8c7a9",
     "accent": "#4a3c2e",
     "irisSize": 38,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1256,7 +1256,7 @@ export const GENERATED_SKINS = [
     "outline": "#e8dcc2",
     "accent": "#5d5549",
     "irisSize": 38,
-    "pupilSize": 18,
+    "pupilSize": 22,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1309,7 +1309,7 @@ export const GENERATED_SKINS = [
     "outline": "#7d5b46",
     "accent": "#2f1b16",
     "irisSize": 42,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1363,7 +1363,7 @@ export const GENERATED_SKINS = [
     "outline": "#7a421d",
     "accent": "#2f1507",
     "irisSize": 42,
-    "pupilSize": 17,
+    "pupilSize": 21,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1416,7 +1416,7 @@ export const GENERATED_SKINS = [
     "outline": "#ff8a12",
     "accent": "#4d1104",
     "irisSize": 42,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1469,7 +1469,7 @@ export const GENERATED_SKINS = [
     "outline": "#527314",
     "accent": "#192606",
     "irisSize": 42,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",
@@ -1522,7 +1522,7 @@ export const GENERATED_SKINS = [
     "outline": "#4a5b60",
     "accent": "#151d20",
     "irisSize": 40,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeStyle": {
       "slotRadius": "0px",
       "lidLeft": "-34%",

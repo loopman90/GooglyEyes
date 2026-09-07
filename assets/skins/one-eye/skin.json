@@ -37,12 +37,12 @@
   ],
   "reactionTuning": {
     "all": {
-      "gazeMultiplier": 0.6,
+      "gazeMultiplier": 0.82,
       "pupilScaleMultiplier": 0.9,
       "durationMultiplier": 1.12
     },
     "dizzy": {
-      "gazeMultiplier": 0.42,
+      "gazeMultiplier": 0.62,
       "vibeMultiplier": 0.5
     },
     "wide-stare": {
@@ -61,7 +61,7 @@
     "eyelidShadowColor": "#33185d",
     "irisGlow": 0.65,
     "irisSize": 44,
-    "pupilSize": 16
+    "pupilSize": 20
   },
   "eyeStyle": {
     "slotRadius": "0px",

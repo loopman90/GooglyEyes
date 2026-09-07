@@ -35,46 +35,46 @@
   ],
   "reactionTuning": {
     "all": {
-      "gazeMultiplier": 0.8,
-      "eyeBaseScaleMultiplier": 1.14,
+      "gazeMultiplier": 0.96,
+      "eyeBaseScaleMultiplier": 1.22,
       "irisScaleMultiplier": 1.04,
       "pupilScaleMultiplier": 1.02,
       "durationMultiplier": 1.04
     },
     "wide-stare": {
-      "eyeBaseScaleMultiplier": 1.14,
+      "eyeBaseScaleMultiplier": 1.22,
       "irisScaleMultiplier": 1.08,
       "pupilScaleMultiplier": 0.92
     },
     "dramatic-shock": {
-      "eyeBaseScaleMultiplier": 1.14,
+      "eyeBaseScaleMultiplier": 1.22,
       "irisScaleMultiplier": 1.08,
       "pupilScaleMultiplier": 0.9
     },
     "starstruck": {
-      "eyeBaseScaleMultiplier": 1.14,
+      "eyeBaseScaleMultiplier": 1.22,
       "irisScaleMultiplier": 1.1,
       "pupilScaleMultiplier": 1.04
     },
     "look-up": {
-      "gazeMultiplier": 0.68,
-      "eyeBaseScaleMultiplier": 1.16
+      "gazeMultiplier": 0.9,
+      "eyeBaseScaleMultiplier": 1.24
     },
     "look-left": {
-      "gazeMultiplier": 0.68,
-      "eyeBaseScaleMultiplier": 1.16
+      "gazeMultiplier": 0.9,
+      "eyeBaseScaleMultiplier": 1.24
     },
     "look-right": {
-      "gazeMultiplier": 0.68,
-      "eyeBaseScaleMultiplier": 1.16
+      "gazeMultiplier": 0.9,
+      "eyeBaseScaleMultiplier": 1.24
     },
     "spacing-out": {
-      "gazeMultiplier": 0.64,
-      "eyeBaseScaleMultiplier": 1.16
+      "gazeMultiplier": 0.78,
+      "eyeBaseScaleMultiplier": 1.24
     },
     "dreamy": {
-      "gazeMultiplier": 0.66,
-      "eyeBaseScaleMultiplier": 1.16,
+      "gazeMultiplier": 0.82,
+      "eyeBaseScaleMultiplier": 1.24,
       "irisScaleMultiplier": 1.08
     }
   },
@@ -86,7 +86,7 @@
     "eyelidShadowColor": "#0d2032",
     "irisGlow": 0.78,
     "irisSize": 42,
-    "pupilSize": 18
+    "pupilSize": 22
   },
   "eyeStyle": {
     "slotRadius": "0px",

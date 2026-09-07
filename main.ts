@@ -498,7 +498,7 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   visible: true,
   visibilityMode: "active",
   followTarget: "smart",
-  followSensitivity: 0.8,
+  followSensitivity: 0.95,
   smoothing: 0.18,
   reactionsEnabled: true,
   reactionIntensity: "normal",
@@ -780,10 +780,10 @@ const REACTION_LABELS = labels<Reaction>({
 const QUICK_REACTIONS: readonly Reaction[] = ["gratitude", "doubt", "concentration", "playfulness", "impatience", "awe", "alertness", "suspense", "awkwardness", "smug", "concern", "anticipation", "deadpan"];
 
 const BEHAVIOR_PRESETS: Record<string, Partial<GooglyEyesSettings>> = {
-  subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85, ambientEmotionIntervalSec: 50, ambientEmotionJitter: 0.45 },
-  lively: { personality: "curious", reactionIntensity: "expressive", randomness: "medium", followSensitivity: 0.9, smoothing: 0.2, emotionStrength: 1.1, blinkSpeed: 1.05, ambientEmotionIntervalSec: 24, ambientEmotionJitter: 0.75 },
-  dramatic: { personality: "dramatic", reactionIntensity: "chaotic", randomness: "high", followSensitivity: 1.1, smoothing: 0.28, emotionStrength: 1.35, blinkSpeed: 1.2, ambientEmotionIntervalSec: 16, ambientEmotionJitter: 0.95 },
-  sleepy: { personality: "sleepy", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.45, smoothing: 0.1, emotionStrength: 0.8, blinkSpeed: 0.72, ambientEmotionIntervalSec: 42, ambientEmotionJitter: 0.55 }
+  subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.68, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85, ambientEmotionIntervalSec: 50, ambientEmotionJitter: 0.45 },
+  lively: { personality: "curious", reactionIntensity: "expressive", randomness: "medium", followSensitivity: 1.05, smoothing: 0.2, emotionStrength: 1.1, blinkSpeed: 1.05, ambientEmotionIntervalSec: 24, ambientEmotionJitter: 0.75 },
+  dramatic: { personality: "dramatic", reactionIntensity: "chaotic", randomness: "high", followSensitivity: 1.22, smoothing: 0.28, emotionStrength: 1.35, blinkSpeed: 1.2, ambientEmotionIntervalSec: 16, ambientEmotionJitter: 0.95 },
+  sleepy: { personality: "sleepy", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.58, smoothing: 0.1, emotionStrength: 0.8, blinkSpeed: 0.72, ambientEmotionIntervalSec: 42, ambientEmotionJitter: 0.55 }
 };
 
 class EyeController {
@@ -3091,21 +3091,20 @@ class GooglyEyesSettingTab extends PluginSettingTab {
       },
       {
         type: "group",
-        heading: "Tracking and tab",
-        visible: advanced,
+        heading: "Tracking",
         items: [
-          this.dropdownDef("Visibility mode", undefined, "visibilityMode", VISIBILITY_LABELS),
-          this.dropdownDef("Follow target", undefined, "followTarget", FOLLOW_LABELS),
-          this.sliderDef("Follow sensitivity", "followSensitivity", 0.1, 1.5, 0.05),
-          this.sliderDef("Smoothing", "smoothing", 0.04, 0.8, 0.02),
-          this.toggleDef("Peek mode", "peekMode"),
-          this.toggleDef("Embedded panel mask", "peekFaceMask", "Adds the full-width tab panel overlay."),
-          this.toggleDef("Debug eye windows", "debugOverlay", "Shows the eye-window boxes and centers while tuning a skin."),
-          this.sliderDef("Opacity", "opacity", 0.2, 1, 0.05),
-          this.numberDef("Layering / z-index", "zIndex", 1, 999999, 1),
-          this.sliderDef("Animation smoothness", "animationSmoothness", 8, 60, 1),
-          this.sliderDef("Number of eye pairs", "eyePairCount", 1, 6, 1),
-          this.toggleDef("Per-pair variation", "perPairVariation")
+          this.sliderDef("Mouse follow strength", "followSensitivity", 0.1, 1.5, 0.05),
+          this.dropdownDef("Visibility mode", undefined, "visibilityMode", VISIBILITY_LABELS, advanced),
+          this.dropdownDef("Follow target", undefined, "followTarget", FOLLOW_LABELS, advanced),
+          this.sliderDef("Smoothing", "smoothing", 0.04, 0.8, 0.02, advanced),
+          this.toggleDef("Peek mode", "peekMode", undefined, advanced),
+          this.toggleDef("Embedded panel mask", "peekFaceMask", "Adds the full-width tab panel overlay.", advanced),
+          this.toggleDef("Debug eye windows", "debugOverlay", "Shows the eye-window boxes and centers while tuning a skin.", advanced),
+          this.sliderDef("Opacity", "opacity", 0.2, 1, 0.05, advanced),
+          this.numberDef("Layering / z-index", "zIndex", 1, 999999, 1, advanced),
+          this.sliderDef("Animation smoothness", "animationSmoothness", 8, 60, 1, advanced),
+          this.sliderDef("Number of eye pairs", "eyePairCount", 1, 6, 1, advanced),
+          this.toggleDef("Per-pair variation", "perPairVariation", undefined, advanced)
         ]
       },
       {
@@ -3161,8 +3160,8 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     return { name, visible, control: { type: "color", key } };
   }
 
-  private numberDef(name: string, key: GooglyEyesSettingKey, min: number, max: number, step: number): SettingGroupItem<GooglyEyesSettingKey> {
-    return { name, control: { type: "number", key, min, max, step } };
+  private numberDef(name: string, key: GooglyEyesSettingKey, min: number, max: number, step: number, visible?: boolean | (() => boolean)): SettingGroupItem<GooglyEyesSettingKey> {
+    return { name, visible, control: { type: "number", key, min, max, step } };
   }
 
   private renderDef(name: string, desc: string | undefined, render: (setting: Setting) => void, visible?: boolean | (() => boolean)): SettingGroupItem<GooglyEyesSettingKey> {
@@ -3337,6 +3336,7 @@ export default class GooglyEyesPlugin extends Plugin {
       const loadedPupil = loaded.pupilColor ?? DEFAULT_SETTINGS.pupilColor;
       this.settings.useSkinDefaultColors = loadedIris === DEFAULT_SETTINGS.irisColor && loadedPupil === DEFAULT_SETTINGS.pupilColor;
     }
+    if (loaded?.followSensitivity === 0.8) this.settings.followSensitivity = DEFAULT_SETTINGS.followSensitivity;
     if (!AVAILABLE_SKIN_IDS.has(this.settings.skinId)) this.settings.skinId = DEFAULT_SETTINGS.skinId;
     if (loaded?.size === 96) this.settings.size = DEFAULT_SETTINGS.size;
     this.settings.irisSizeScale = clamp(this.settings.irisSizeScale, 0.6, 1.6);

@@ -37,14 +37,14 @@
   "reactionTuning": {
     "all": {
       "lidMultiplier": 0.62,
-      "gazeMultiplier": 0.58,
+      "gazeMultiplier": 0.72,
       "pupilScaleMultiplier": 0.78,
       "irisScaleMultiplier": 0.92,
       "vibeMultiplier": 0.18,
       "durationMultiplier": 0.9
     },
     "confused": {
-      "gazeMultiplier": 0.72,
+      "gazeMultiplier": 0.84,
       "durationMultiplier": 1.08
     },
     "panic": {
@@ -60,7 +60,7 @@
     "eyelidShadowColor": "#362000",
     "irisGlow": 0.9,
     "irisSize": 44,
-    "pupilSize": 24
+    "pupilSize": 28
   },
   "eyeStyle": {
     "slotRadius": "0px",

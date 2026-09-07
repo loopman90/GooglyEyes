@@ -32,7 +32,7 @@
     "eyelidShadowColor": "#070a09",
     "irisGlow": 0.5,
     "irisSize": 42,
-    "pupilSize": 16
+    "pupilSize": 20
   },
   "flavor": "Dark hood, terminal glow, and sharp focus.",
   "ambientReactions": [
@@ -46,7 +46,7 @@
   ],
   "reactionTuning": {
     "all": {
-      "gazeMultiplier": 0.7,
+      "gazeMultiplier": 0.9,
       "pupilScaleMultiplier": 0.82,
       "durationMultiplier": 0.94
     },
@@ -57,7 +57,7 @@
     },
     "suspicious": {
       "lidMultiplier": 1.12,
-      "gazeMultiplier": 0.82
+      "gazeMultiplier": 1
     },
     "panic": {
       "vibeMultiplier": 0.55,

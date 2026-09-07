@@ -31,7 +31,7 @@
     "eyelidShadowColor": "#120e0c",
     "irisGlow": 0.35,
     "irisSize": 44,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeWhiteColor": "#f4ffe8"
   },
   "flavor": "Soft fur, sharp focus, vertical pupils.",
@@ -46,7 +46,7 @@
   ],
   "reactionTuning": {
     "all": {
-      "gazeMultiplier": 0.78,
+      "gazeMultiplier": 0.92,
       "pupilScaleMultiplier": 0.92,
       "durationMultiplier": 1.08
     },
@@ -60,7 +60,7 @@
     },
     "sleepy-idle": {
       "lidMultiplier": 1.18,
-      "gazeMultiplier": 0.55
+      "gazeMultiplier": 0.68
     }
   },
   "eyeStyle": {

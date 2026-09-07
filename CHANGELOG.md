@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.23
+
+- Made mouse tracking more responsive by default and added a visible Mouse follow strength slider in settings.
+- Increased default pupil size across skins while keeping Manga Female's stylized pupil size unchanged.
+- Retuned low-gaze skins including Cat, Dragon, Hacker, One Eye, Atlas, C-4PO, and SpaceHelmet so they follow the cursor more clearly.
+
 ## 1.0.22
 
 - Replaced the SpaceHelmet mask with a teal rectangular helmet panel using true transparent alpha eye holes.

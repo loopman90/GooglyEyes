@@ -31,7 +31,7 @@
     "eyelidShadowColor": "#050403",
     "irisGlow": 0.85,
     "irisSize": 38,
-    "pupilSize": 16,
+    "pupilSize": 20,
     "eyeWhiteColor": "#f4efe0"
   },
   "flavor": "Ancient scales with a fiery slit gaze.",
@@ -45,7 +45,7 @@
   ],
   "reactionTuning": {
     "all": {
-      "gazeMultiplier": 0.72,
+      "gazeMultiplier": 0.88,
       "pupilScaleMultiplier": 0.86,
       "durationMultiplier": 1.12
     },

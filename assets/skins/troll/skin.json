@@ -41,7 +41,7 @@
     "eyelidShadowColor": "#151d20",
     "irisGlow": 0.28,
     "irisSize": 40,
-    "pupilSize": 16
+    "pupilSize": 20
   },
   "eyeStyle": {
     "slotRadius": "0px",
