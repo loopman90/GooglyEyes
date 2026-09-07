@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.11
+
+- Reduced remaining community review warnings around settings key typing, cross-window DOM checks, and UI helper usage.
+
 ## 1.0.10
 
 - Replaced the starstruck `clip-path` effect with gradient-based CSS for better Obsidian review compatibility.

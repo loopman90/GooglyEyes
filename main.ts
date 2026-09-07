@@ -99,7 +99,7 @@ interface GooglyEyesSettings {
   disabledActions: string[];
 }
 
-type GooglyEyesSettingKey = keyof GooglyEyesSettings & string;
+type GooglyEyesSettingKey = Extract<keyof GooglyEyesSettings, string>;
 
 interface SkinDefinition {
   id: string;
@@ -331,8 +331,18 @@ function labels<T extends string>(record: Record<T, string>): Record<T, string> 
   return record;
 }
 
+interface InstanceOfCapable {
+  instanceOf<T>(type: { new (): T }): this is T;
+}
+
 function isHtmlElement(value: unknown): value is HTMLElement {
-  return typeof value === "object" && value !== null && "instanceOf" in value && typeof value.instanceOf === "function" && value.instanceOf(HTMLElement);
+  if (typeof value !== "object" || value === null || !("instanceOf" in value)) return false;
+  const candidate = value as Partial<InstanceOfCapable>;
+  return typeof candidate.instanceOf === "function" && candidate.instanceOf(HTMLElement);
+}
+
+function isSettingKey(key: string): key is GooglyEyesSettingKey {
+  return key in DEFAULT_SETTINGS;
 }
 
 const VISIBILITY_LABELS = labels<VisibilityMode>({
@@ -1397,10 +1407,10 @@ class QuickUiModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("googly-eyes-modal");
-    contentEl.createEl("h2", { text: "GooglyEyes Quick UI" });
+    contentEl.createDiv({ text: "GooglyEyes Quick UI", cls: "googly-eyes-modal-title" });
 
     const header = contentEl.createDiv({ cls: "googly-eyes-quick-header" });
-    header.createEl("span", { text: this.plugin.settings.quickUiExpanded ? "Quick controls are visible" : "Quick controls are hidden" });
+    header.createSpan({ text: this.plugin.settings.quickUiExpanded ? "Quick controls are visible" : "Quick controls are hidden" });
     this.button(header, this.plugin.settings.quickUiExpanded ? "Hide controls" : "Show controls", () => {
       this.plugin.settings.quickUiExpanded = !this.plugin.settings.quickUiExpanded;
       void this.plugin.saveSettings().then(() => this.render());
@@ -1414,7 +1424,7 @@ class QuickUiModal extends Modal {
       const button = skinStrip.createEl("button", { cls: `googly-eyes-quick-skin ${skin.id === this.plugin.settings.skinId ? "is-selected" : ""}` });
       button.setAttr("aria-label", `Use ${skin.name} skin`);
       button.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin)}`), alt: "" } });
-      button.createEl("span", { text: skin.name });
+      button.createSpan({ text: skin.name });
       button.addEventListener("click", () => {
         this.plugin.settings.skinId = skin.id;
         void this.plugin.saveSettings().then(() => {
@@ -1426,7 +1436,9 @@ class QuickUiModal extends Modal {
 
     const selectors = contentEl.createDiv({ cls: "googly-eyes-quick-selectors" });
     new Setting(selectors).setName("Personality").addDropdown((dropdown) => {
-      Object.entries(PERSONALITY_OPTIONS).forEach(([id, option]) => dropdown.addOption(id, option.label));
+      Object.entries(PERSONALITY_OPTIONS).forEach(([id, option]) => {
+        dropdown.addOption(id, option.label);
+      });
       dropdown.setValue(this.plugin.settings.personality);
       dropdown.onChange((value) => {
         this.plugin.settings.personality = value as Personality;
@@ -1502,7 +1514,7 @@ class OnboardingModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("googly-eyes-modal");
-    contentEl.createEl("h2", { text: this.steps[this.step] });
+    contentEl.createDiv({ text: this.steps[this.step], cls: "googly-eyes-modal-title" });
     if (this.step === 1) {
       this.select(contentEl, SKINS.map((s) => [s.id, s.name]), this.plugin.settings.skinId, (value) => this.plugin.settings.skinId = value);
     } else if (this.step === 2) {
@@ -1543,7 +1555,9 @@ class OnboardingModal extends Modal {
 
   private select(parent: HTMLElement, options: string[][], value: string, onChange: (value: string) => void): void {
     new Setting(parent).addDropdown((dropdown) => {
-      options.forEach(([id, label]) => dropdown.addOption(id, label));
+      options.forEach(([id, label]) => {
+        dropdown.addOption(id, label);
+      });
       dropdown.setValue(value);
       dropdown.onChange((next) => {
         onChange(next);
@@ -1681,11 +1695,13 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     ];
   }
 
-  getControlValue(key: GooglyEyesSettingKey): unknown {
+  getControlValue(key: string): unknown {
+    if (!isSettingKey(key)) return undefined;
     return this.plugin.settings[key];
   }
 
-  async setControlValue(key: GooglyEyesSettingKey, value: unknown): Promise<void> {
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    if (!isSettingKey(key)) return;
     (this.plugin.settings[key] as unknown) = value;
     if (key === "irisColor" || key === "pupilColor") this.plugin.settings.useSkinDefaultColors = false;
     await this.plugin.saveSettings();
@@ -1753,8 +1769,8 @@ class GooglyEyesSettingTab extends PluginSettingTab {
       const selected = skin.id === this.plugin.settings.skinId;
       const card = skinGrid.createDiv({ cls: `googly-eyes-skin-card ${selected ? "is-selected" : ""}` });
       card.createEl("img", { attr: { src: this.app.vault.adapter.getResourcePath(`${this.plugin.manifest.dir}/${thumbnailAsset(skin)}`), alt: "" } });
-      card.createEl("strong", { text: skin.name });
-      card.createEl("span", { text: skin.flavor });
+      card.createSpan({ text: skin.name, cls: "googly-eyes-skin-card-name" });
+      card.createSpan({ text: skin.flavor });
       card.addEventListener("click", () => {
         this.save("skinId", skin.id);
       });
@@ -1777,7 +1793,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
         void this.plugin.saveSettings();
       }));
       row.addDropdown((dropdown) => {
-        Object.entries(REACTION_LABELS).forEach(([id, label]) => dropdown.addOption(id, label));
+        Object.entries(REACTION_LABELS).forEach(([id, label]) => {
+          dropdown.addOption(id, label);
+        });
         dropdown.setValue(mapping.reactionPool[0] ?? "blink");
         dropdown.onChange((value) => {
           const reaction = isReaction(value) ? value : "blink";
