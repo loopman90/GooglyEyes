@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GooglyEyes</title>
+    <meta name="description" content="GooglyEyes puts living, reactive eyes inside your workspace.">
+    <meta property="og:title" content="GooglyEyes">
+    <meta property="og:description" content="Living reactive eyes with skins, moods, mouse tracking, and a local-first privacy model.">
+    <meta property="og:image" content="assets/skins/atlas.png">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="GooglyEyes home">GooglyEyes</a>
+      <nav aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#skins">Skins</a>
+        <a href="#install">Install</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://github.com/loopman90/GooglyEyes">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-label="GooglyEyes introduction">
+        <div class="hero-bg" role="img" aria-label="Atlas skin preview"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-copy">
+          <p class="eyebrow">Community Plugin</p>
+          <h1>GooglyEyes</h1>
+          <p class="tagline">Living eyes embedded inside your workspace.</p>
+          <p class="promise">They follow, blink, react, daydream, panic, focus, and keep each skin's iris color stable while emotions tint the eye whites.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/loopman90/GooglyEyes/releases/latest">Download latest</a>
+            <a class="button" href="#install">Install guide</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-heading">
+          <h2>Feels Alive, Stays Local</h2>
+          <p>GooglyEyes opens a dedicated embedded tab with reactive eyes that follow your mouse, blink smoothly, and respond to local UI events.</p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h3>Embedded Tab</h3>
+            <p>The eyes live inside a tab panel so they feel part of the app instead of floating above it.</p>
+          </article>
+          <article>
+            <h3>Reactive Emotions</h3>
+            <p>Dozens of moods use different lids, pupil sizes, gaze offsets, motion, eye-white tints, glow, and timing.</p>
+          </article>
+          <article>
+            <h3>Custom Skins</h3>
+            <p>Switch between robots, monsters, masks, fantasy styles, horror looks, and playful characters.</p>
+          </article>
+          <article>
+            <h3>Quick UI</h3>
+            <p>Change skins, preview emotions, pause reactions, reset the view, or go fullscreen from compact controls.</p>
+          </article>
+          <article>
+            <h3>Personalities</h3>
+            <p>Choose calm, curious, dramatic, goofy, suspicious, sleepy, chaotic, shy, focused, or mischievous behavior.</p>
+          </article>
+          <article>
+            <h3>Color Control</h3>
+            <p>Use skin defaults or tune iris, pupil, eyelid, shadow, glow, size, smoothing, and intensity.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="skins" class="section skins-section">
+        <div class="section-heading">
+          <h2>Skin Gallery</h2>
+          <p>A small sample of the included tab-filling masks. Each skin keeps the iris and pupil separate, so the eyes can keep tracking naturally.</p>
+        </div>
+        <div class="skin-grid" aria-label="Featured GooglyEyes skins">
+          <article><img src="assets/skins/atlas.png" alt=""><span>Atlas</span></article>
+          <article><img src="assets/skins/c-4po.png" alt=""><span>C-4PO</span></article>
+          <article><img src="assets/skins/cat.png" alt=""><span>Cat</span></article>
+          <article><img src="assets/skins/cowboy.png" alt=""><span>Cowboy</span></article>
+          <article><img src="assets/skins/cyberpunk-female.png" alt=""><span>Cyberpunk Female</span></article>
+          <article><img src="assets/skins/detective-noir.png" alt=""><span>Detective Noir</span></article>
+          <article><img src="assets/skins/dragon.png" alt=""><span>Dragon</span></article>
+          <article><img src="assets/skins/hacker.png" alt=""><span>Hacker</span></article>
+          <article><img src="assets/skins/manga-female.png" alt=""><span>Manga Female</span></article>
+          <article><img src="assets/skins/one-eye.png" alt=""><span>One Eye</span></article>
+          <article><img src="assets/skins/panda.png" alt=""><span>Panda</span></article>
+          <article><img src="assets/skins/pumpkin-halloween.png" alt=""><span>Pumpkin Halloween</span></article>
+          <article><img src="assets/skins/tibetan-monk.png" alt=""><span>Tibetan Monk</span></article>
+          <article><img src="assets/skins/anonymous.png" alt=""><span>Anonymous</span></article>
+          <article><img src="assets/skins/space-helmet.png" alt=""><span>SpaceHelmet</span></article>
+          <article><img src="assets/skins/d20-rpg.png" alt=""><span>D20 RPG</span></article>
+          <article><img src="assets/skins/wizard.png" alt=""><span>Wizard</span></article>
+          <article><img src="assets/skins/skeleton.png" alt=""><span>Skeleton</span></article>
+          <article><img src="assets/skins/spy.png" alt=""><span>Spy</span></article>
+          <article><img src="assets/skins/troll.png" alt=""><span>Troll</span></article>
+        </div>
+      </section>
+
+      <section id="install" class="section split">
+        <div>
+          <h2>Install</h2>
+          <p>Use the latest GitHub release, then enable GooglyEyes from the Community plugins screen.</p>
+        </div>
+        <ol class="steps">
+          <li>Download <code>main.js</code>, <code>manifest.json</code>, and <code>styles.css</code> from the latest release.</li>
+          <li>Create <code>.obsidian/plugins/googly-eyes/</code> inside your vault.</li>
+          <li>Put the release files and the plugin <code>assets</code> folder in that directory.</li>
+          <li>Open Settings, go to Community plugins, reload plugins, and enable GooglyEyes.</li>
+          <li>Run the command <code>Open tab</code>.</li>
+        </ol>
+      </section>
+
+      <section id="privacy" class="section privacy">
+        <h2>Privacy</h2>
+        <p>GooglyEyes is local-only. It has no account, backend, analytics, telemetry, third-party tracking, runtime AI, or internet requirement. It does not read note text or clipboard contents; it only reacts to local UI events such as mouse movement, typing, and copy or paste events.</p>
+      </section>
+    </main>
+  </body>
+</html>

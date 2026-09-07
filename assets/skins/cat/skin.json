@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.14,
-      "y": 0.352,
-      "w": 0.306,
-      "h": 0.368
+      "x": 0.145,
+      "y": 0.31,
+      "w": 0.28,
+      "h": 0.34
     },
     {
       "side": "right",
-      "x": 0.555,
-      "y": 0.352,
-      "w": 0.306,
-      "h": 0.368
+      "x": 0.575,
+      "y": 0.31,
+      "w": 0.28,
+      "h": 0.34
     }
   ],
   "assets": {
@@ -30,9 +30,9 @@
     "eyelidColor": "#3b3735",
     "eyelidShadowColor": "#120e0c",
     "irisGlow": 0.35,
-    "irisSize": 31,
-    "pupilSize": 24,
-    "eyeWhiteColor": "#f3efe4"
+    "irisSize": 42,
+    "pupilSize": 16,
+    "eyeWhiteColor": "#f4ffe8"
   },
   "flavor": "Soft fur, sharp focus, vertical pupils.",
   "ambientReactions": [

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.16
+
+- Reworked emotion color behavior so skin iris colors stay stable by default and reactions mainly tint the eye whites.
+- Added distinct eye-white color families for warm happy states, red angry states, blue sad and fear states, green sick states, grey tired states, and surreal dreamy or dizzy states.
+- Reduced pupil travel during mouse tracking so pupils stay closer to the iris center and feel less shaky.
+- Refreshed problem mask and base-eye assets for Alien, Anonymous, Cat, Cowboy, Cyberpunk Female, Detective Noir, Dragon, Goblin, Hacker, Manga Female, One Eye, Panda, Pumpkin Halloween, Tibetan Monk, Troll, and Wizard.
+- Updated the copy-ready test package and GitHub Pages gallery assets.
+
 ## 1.0.15
 
 - Retuned eye-window placement for Wizard, Troll, Tibetan Monk, Pumpkin Halloween, Panda, One Eye, Manga Female, Hacker, Goblin, Dragon, Cyberpunk Female, Cowboy, Cat, Anonymous, and Alien.

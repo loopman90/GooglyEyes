@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.158,
-      "y": 0.331,
-      "w": 0.305,
-      "h": 0.248
+      "x": 0.16,
+      "y": 0.383,
+      "w": 0.322,
+      "h": 0.194
     },
     {
       "side": "right",
-      "x": 0.538,
-      "y": 0.331,
-      "w": 0.305,
-      "h": 0.248
+      "x": 0.519,
+      "y": 0.383,
+      "w": 0.322,
+      "h": 0.194
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#e1ddd1",
     "eyelidShadowColor": "#1a1516",
     "irisGlow": 0.22,
-    "irisSize": 26,
-    "pupilSize": 24
+    "irisSize": 36,
+    "pupilSize": 16
   },
   "flavor": "White mask, dark hood, and a quiet red stare.",
   "ambientReactions": [

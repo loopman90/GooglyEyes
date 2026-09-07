@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.12,
-      "y": 0.319,
-      "w": 0.286,
-      "h": 0.364
+      "x": 0.065,
+      "y": 0.368,
+      "w": 0.351,
+      "h": 0.216
     },
     {
       "side": "right",
-      "x": 0.594,
-      "y": 0.319,
-      "w": 0.286,
-      "h": 0.364
+      "x": 0.585,
+      "y": 0.368,
+      "w": 0.351,
+      "h": 0.216
     }
   ],
   "assets": {
@@ -30,9 +30,9 @@
     "eyelidColor": "#1d2a24",
     "eyelidShadowColor": "#050403",
     "irisGlow": 0.85,
-    "irisSize": 30,
-    "pupilSize": 25,
-    "eyeWhiteColor": "#f3efe4"
+    "irisSize": 44,
+    "pupilSize": 16,
+    "eyeWhiteColor": "#f4efe0"
   },
   "flavor": "Ancient scales with a fiery slit gaze.",
   "ambientReactions": [

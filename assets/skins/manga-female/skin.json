@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.139,
-      "y": 0.326,
-      "w": 0.307,
-      "h": 0.399
+      "x": 0.135,
+      "y": 0.335,
+      "w": 0.335,
+      "h": 0.355
     },
     {
       "side": "right",
-      "x": 0.555,
-      "y": 0.326,
-      "w": 0.307,
-      "h": 0.399
+      "x": 0.53,
+      "y": 0.335,
+      "w": 0.335,
+      "h": 0.355
     }
   ],
   "assets": {
@@ -30,8 +30,8 @@
     "eyelidColor": "#d99a96",
     "eyelidShadowColor": "#5b252b",
     "irisGlow": 0.55,
-    "irisSize": 30,
-    "pupilSize": 25,
+    "irisSize": 40,
+    "pupilSize": 16,
     "eyeWhiteColor": "#f3efe4"
   },
   "flavor": "Big anime eyes with soft lashes.",

@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.172,
-      "y": 0.343,
-      "w": 0.296,
-      "h": 0.204
+      "x": 0.211,
+      "y": 0.315,
+      "w": 0.258,
+      "h": 0.212
     },
     {
       "side": "right",
       "x": 0.532,
-      "y": 0.343,
-      "w": 0.296,
-      "h": 0.204
+      "y": 0.315,
+      "w": 0.258,
+      "h": 0.212
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#9b5535",
     "eyelidShadowColor": "#3d2018",
     "irisGlow": 0.18,
-    "irisSize": 28,
-    "pupilSize": 24
+    "irisSize": 38,
+    "pupilSize": 16
   },
   "flavor": "Warm robes with a calm meditative gaze.",
   "ambientReactions": [

@@ -176,6 +176,141 @@ const REACTIONS: Reaction[] = [
 
 const REACTION_IDS = new Set<string>(REACTIONS);
 
+function reactionEyeWhiteFilter(reaction: Reaction): string {
+  switch (reaction) {
+    case "happy":
+    case "copy":
+    case "paste":
+    case "redo":
+    case "laughing":
+    case "surprise-delight":
+    case "excitement":
+    case "inspiration":
+    case "hope":
+      return "sepia(0.22) saturate(1.32) hue-rotate(350deg) brightness(1.08)";
+    case "passion":
+    case "pride":
+    case "satisfaction":
+      return "sepia(0.28) saturate(1.26) hue-rotate(342deg) brightness(1.04)";
+    case "sad":
+    case "undo":
+    case "crying":
+    case "sympathy":
+    case "loneliness":
+      return "sepia(0.16) saturate(1.24) hue-rotate(172deg) brightness(1.02)";
+    case "angry":
+    case "delete":
+    case "cut":
+    case "frustration":
+      return "sepia(0.3) saturate(1.7) hue-rotate(308deg) brightness(0.98)";
+    case "furious":
+      return "sepia(0.45) saturate(2.2) hue-rotate(305deg) brightness(0.9) contrast(1.12)";
+    case "annoyance":
+    case "impatience":
+    case "guilt":
+    case "shame":
+    case "embarrassment":
+      return "sepia(0.2) saturate(1.34) hue-rotate(300deg) brightness(1.02)";
+    case "panic":
+    case "fear-freeze":
+    case "surprise-fear":
+    case "shocked":
+    case "wide-stare":
+    case "wake":
+    case "dramatic-shock":
+      return "sepia(0.08) saturate(1.22) hue-rotate(166deg) brightness(1.18) contrast(1.05)";
+    case "curiosity":
+      return "sepia(0.18) saturate(1.18) hue-rotate(72deg) brightness(1.04)";
+    case "suspicious":
+    case "hover-suspicious":
+    case "distrust":
+    case "skepticism":
+    case "doubt":
+      return "sepia(0.16) saturate(0.88) hue-rotate(82deg) brightness(0.92) contrast(1.08)";
+    case "jealousy":
+    case "mischief":
+      return "sepia(0.22) saturate(1.18) hue-rotate(252deg) brightness(0.96)";
+    case "bored":
+    case "apathy":
+    case "idle-long":
+      return "grayscale(0.55) saturate(0.55) brightness(0.9)";
+    case "sleepy":
+    case "sleepy-idle":
+    case "tired-but-awake":
+      return "grayscale(0.28) sepia(0.08) saturate(0.74) hue-rotate(162deg) brightness(0.88)";
+    case "calm":
+    case "acceptance":
+    case "relief":
+    case "trust":
+    case "gratitude":
+    case "contentment":
+      return "sepia(0.14) saturate(0.92) hue-rotate(52deg) brightness(1.04)";
+    case "disgust":
+      return "sepia(0.32) saturate(1.4) hue-rotate(58deg) brightness(0.88)";
+    case "dizzy":
+    case "confused":
+    case "confusion-spiral":
+    case "cross-eyed":
+    case "eye-roll":
+    case "overwhelmed":
+      return "sepia(0.18) saturate(1.22) hue-rotate(214deg) brightness(1.0)";
+    case "drunk":
+    case "stoned":
+    case "dreamy":
+    case "spacing-out":
+      return "sepia(0.2) saturate(1.18) hue-rotate(238deg) brightness(0.98)";
+    case "determination":
+    case "concentration":
+    case "rapid-typing-focus":
+    case "typing":
+    case "alertness":
+    case "suspense":
+      return "sepia(0.07) saturate(1.06) hue-rotate(170deg) brightness(1.04) contrast(1.08)";
+    case "restless":
+    case "nervous":
+    case "chaotic-stare":
+    case "fast-movement":
+      return "sepia(0.22) saturate(1.28) hue-rotate(28deg) brightness(1.02)";
+    case "in-love":
+    case "playfulness":
+      return "sepia(0.18) saturate(1.22) hue-rotate(292deg) brightness(1.06)";
+    case "awe":
+    case "starstruck":
+      return "sepia(0.12) saturate(1.28) hue-rotate(182deg) brightness(1.12)";
+    case "look-left":
+    case "look-right":
+    case "look-up":
+    case "look-down":
+    case "peek":
+    case "drag-tracking":
+      return "brightness(1.01)";
+    case "slow-blink":
+    case "blink":
+    case "wink-left":
+    case "wink-right":
+    case "idle-neutral":
+    default:
+      return "none";
+  }
+}
+
+function reactionIrisFilter(reaction: Reaction): string {
+  switch (reaction) {
+    case "starstruck":
+    case "awe":
+    case "excitement":
+      return "brightness(1.08) saturate(1.08)";
+    case "stoned":
+    case "drunk":
+      return "brightness(0.96) saturate(0.9) blur(0.25px)";
+    case "spacing-out":
+    case "apathy":
+      return "saturate(0.75) brightness(0.94)";
+    default:
+      return "none";
+  }
+}
+
 const SKINS: SkinDefinition[] = GENERATED_SKINS.map((skin) => ({
   ...skin,
   assets: { ...skin.assets },
@@ -857,8 +992,8 @@ class EyeController {
               "--iris-y": `${Math.sin(angle) * baseTravel * 0.07 * strength}px`
             });
             pupil?.setCssProps({
-              "--pupil-x": `${Math.cos(angle) * baseTravel * 0.13 * strength}px`,
-              "--pupil-y": `${Math.sin(angle) * baseTravel * 0.11 * strength}px`
+              "--pupil-x": `${Math.cos(angle) * baseTravel * 0.055 * strength}px`,
+              "--pupil-y": `${Math.sin(angle) * baseTravel * 0.048 * strength}px`
             });
           });
         }
@@ -952,6 +1087,7 @@ class EyeController {
     set("--pupil-scale", "1");
     set("--iris-opacity", "1");
     set("--iris-filter", "none");
+    set("--eye-white-filter", reactionEyeWhiteFilter(reaction));
     set("--eye-vibe", "0deg");
 
     if (reaction === "idle-neutral") {
@@ -2156,6 +2292,7 @@ class EyeController {
       set("--eye-base-y-left", pct(3));
       set("--eye-base-y-right", pct(3));
     }
+    set("--iris-filter", reactionIrisFilter(reaction));
   }
 
   private updateAssets(): void {

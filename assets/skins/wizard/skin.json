@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.25,
-      "y": 0.382,
-      "w": 0.249,
-      "h": 0.25
+      "x": 0.245,
+      "y": 0.325,
+      "w": 0.25,
+      "h": 0.32
     },
     {
       "side": "right",
-      "x": 0.502,
-      "y": 0.382,
-      "w": 0.249,
-      "h": 0.25
+      "x": 0.505,
+      "y": 0.325,
+      "w": 0.25,
+      "h": 0.32
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#7d5b46",
     "eyelidShadowColor": "#2f1b16",
     "irisGlow": 0.78,
-    "irisSize": 31,
-    "pupilSize": 27
+    "irisSize": 38,
+    "pupilSize": 17
   },
   "flavor": "Moonlit hat, silver brows, and a violet spellcaster gaze.",
   "ambientReactions": [
