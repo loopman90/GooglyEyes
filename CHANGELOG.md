@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.13
+
+- Rebuilt the Anonymous mask with clean, smooth eye cutouts and no fixed facial clutter around the openings.
+- Rebuilt the Classic Googly mask with clean circular cutouts and retuned eye-window placement.
+- Updated thumbnails and generated skin metadata for the corrected masks.
+
 ## 1.0.12
 
 - Added C-4PO, Atlas, and Panda layered skins.

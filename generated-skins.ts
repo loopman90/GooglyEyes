@@ -470,15 +470,15 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.118,
-        "y": 0.221,
+        "x": 0.127,
+        "y": 0.24,
         "w": 0.316,
         "h": 0.5
       },
       "right": {
         "side": "right",
-        "x": 0.571,
-        "y": 0.221,
+        "x": 0.557,
+        "y": 0.24,
         "w": 0.316,
         "h": 0.5
       }
@@ -738,16 +738,16 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.134,
-        "y": 0.324,
-        "w": 0.343,
+        "x": 0.135,
+        "y": 0.339,
+        "w": 0.33,
         "h": 0.283
       },
       "right": {
         "side": "right",
-        "x": 0.523,
-        "y": 0.324,
-        "w": 0.343,
+        "x": 0.535,
+        "y": 0.339,
+        "w": 0.33,
         "h": 0.283
       }
     },
