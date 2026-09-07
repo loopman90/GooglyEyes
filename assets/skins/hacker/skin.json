@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.11,
-      "y": 0.27,
-      "w": 0.38,
-      "h": 0.39
+      "x": 0.137,
+      "y": 0.303,
+      "w": 0.326,
+      "h": 0.326
     },
     {
       "side": "right",
-      "x": 0.51,
-      "y": 0.27,
-      "w": 0.38,
-      "h": 0.39
+      "x": 0.537,
+      "y": 0.303,
+      "w": 0.326,
+      "h": 0.326
     }
   ],
   "assets": {
@@ -32,7 +32,7 @@
     "eyelidShadowColor": "#070a09",
     "irisGlow": 0.5,
     "irisSize": 31,
-    "pupilSize": 30
+    "pupilSize": 26
   },
   "flavor": "Dark hood, terminal glow, and sharp focus.",
   "ambientReactions": [

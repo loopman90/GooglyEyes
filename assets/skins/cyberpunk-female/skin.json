@@ -7,17 +7,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.145,
-      "y": 0.3,
-      "w": 0.32,
-      "h": 0.36
+      "x": 0.148,
+      "y": 0.305,
+      "w": 0.316,
+      "h": 0.342
     },
     {
       "side": "right",
-      "x": 0.535,
-      "y": 0.3,
-      "w": 0.32,
-      "h": 0.36
+      "x": 0.537,
+      "y": 0.305,
+      "w": 0.316,
+      "h": 0.342
     }
   ],
   "assets": {
@@ -31,8 +31,8 @@
     "eyelidColor": "#292033",
     "eyelidShadowColor": "#07040d",
     "irisGlow": 0.7,
-    "irisSize": 34,
-    "pupilSize": 30
+    "irisSize": 30,
+    "pupilSize": 26
   },
   "flavor": "Neon makeup, chrome accents, and a sharp magenta gaze.",
   "ambientReactions": [

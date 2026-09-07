@@ -9,17 +9,17 @@
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.15,
-      "y": 0.17,
-      "w": 0.7,
-      "h": 0.66
+      "x": 0.174,
+      "y": 0.218,
+      "w": 0.652,
+      "h": 0.576
     },
     {
       "side": "right",
-      "x": 0.15,
-      "y": 0.17,
-      "w": 0.7,
-      "h": 0.66
+      "x": 0.174,
+      "y": 0.218,
+      "w": 0.652,
+      "h": 0.576
     }
   ],
   "assets": {
@@ -42,7 +42,7 @@
     "eyelidColor": "#58b55f",
     "eyelidShadowColor": "#33185d",
     "irisGlow": 0.65,
-    "irisSize": 29,
-    "pupilSize": 32
+    "irisSize": 34,
+    "pupilSize": 28
   }
 }

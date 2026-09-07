@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.15
+
+- Retuned eye-window placement for Wizard, Troll, Tibetan Monk, Pumpkin Halloween, Panda, One Eye, Manga Female, Hacker, Goblin, Dragon, Cyberpunk Female, Cowboy, Cat, Anonymous, and Alien.
+- Rebuilt base-eye PNGs for those skins with cleaner neutral eyeballs and stronger depth shading behind the mask.
+- Made the tab Quick UI button smaller, icon-only, and less visually intrusive while keeping it anchored in the lower-left corner.
+
 ## 1.0.14
 
 - Rebuilt and retuned problem skin masks and eye windows for Pumpkin Halloween, Wizard, One Eye, Manga Female, Hacker, Goblin, Cyberpunk Female, Cowboy, Cat, Anonymous, and Alien.

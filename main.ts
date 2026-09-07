@@ -1,4 +1,4 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf, ItemView, debounce, type SettingDefinitionItem, type SettingGroupItem } from "obsidian";
+import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf, ItemView, debounce, setIcon, type SettingDefinitionItem, type SettingGroupItem } from "obsidian";
 import { GENERATED_LAYERED_SKINS, GENERATED_SKIN_AMBIENT_REACTIONS, GENERATED_SKIN_EYE_WINDOWS, GENERATED_SKINS } from "./generated-skins";
 
 const VIEW_TYPE_PLAYGROUND = "googly-eyes-playground";
@@ -2469,8 +2469,10 @@ class PlaygroundView extends ItemView {
     el.addClass("googly-eyes-playground");
     const stage = el.createDiv({ cls: "googly-eyes-stage" });
     this.plugin.controller.mount(stage);
-    const quickButton = stage.createEl("button", { text: "Quick UI", cls: "googly-eyes-tab-quick-button mod-cta" });
+    const quickButton = stage.createEl("button", { cls: "googly-eyes-tab-quick-button clickable-icon" });
     quickButton.setAttr("aria-label", "Open Quick UI");
+    quickButton.setAttr("title", "Quick UI");
+    setIcon(quickButton, "sliders-horizontal");
     quickButton.addEventListener("click", () => {
       new QuickUiModal(this.app, this.plugin).open();
     });
