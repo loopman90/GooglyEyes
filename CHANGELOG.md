@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.19
+
+- Added Shyness, Awkwardness, Guilt panic, Interest, Disappointment, Contempt, Smug, Concern, Anticipation, Startled recovery, Meditative, and Deadpan reactions.
+- Added distinct pupil scaling, eye-white tinting, motion, and timing for the new reactions.
+- Rebuilt the SpaceHelmet mask as a full rectangular tab overlay with transparent eye holes and the #71d7d1 teal tint.
+- Retuned SpaceHelmet eye windows, iris color, and thumbnail to match the new transparent mask.
+
 ## 1.0.18
 
 - Rebuilt the Spy and Pumpkin Halloween masks as full rectangular tab-filling overlays with transparent eye holes.

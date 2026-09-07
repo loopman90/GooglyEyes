@@ -480,13 +480,13 @@ export const GENERATED_SKINS = [
     "id": "space-helmet",
     "name": "SpaceHelmet",
     "eyeLayout": "dual",
-    "flavor": "Astronaut visor with cool cyan focus.",
-    "iris": "#20d9ff",
+    "flavor": "Astronaut visor with bright teal focus.",
+    "iris": "#71d7d1",
     "pupil": "#020916",
     "eyeWhite": "#eaf7ff",
     "outline": "#d4e6ef",
     "accent": "#0d2032",
-    "irisSize": 38,
+    "irisSize": 42,
     "pupilSize": 18,
     "eyeStyle": {
       "slotRadius": "0px",
@@ -506,17 +506,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1533,
-        "y": 0.2627,
-        "w": 0.288,
-        "h": 0.4307
+        "x": 0.1099,
+        "y": 0.1811,
+        "w": 0.3427,
+        "h": 0.49
       },
       "right": {
         "side": "right",
-        "x": 0.5592,
-        "y": 0.2627,
-        "w": 0.288,
-        "h": 0.4307
+        "x": 0.5474,
+        "y": 0.1811,
+        "w": 0.3427,
+        "h": 0.49
       }
     },
     "ambientReactions": [

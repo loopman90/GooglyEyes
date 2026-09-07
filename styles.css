@@ -404,7 +404,9 @@
 
 .googly-eyes-pair[data-reaction="guilt"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="shame"] .googly-eyes-iris,
-.googly-eyes-pair[data-reaction="embarrassment"] .googly-eyes-iris {
+.googly-eyes-pair[data-reaction="embarrassment"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="shyness"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="awkwardness"] .googly-eyes-iris {
   animation: googly-eyes-avert 1800ms ease-in-out infinite;
 }
 
@@ -422,6 +424,9 @@
 .googly-eyes-pair[data-reaction="gratitude"] .googly-eyes-eye-slot::after,
 .googly-eyes-pair[data-reaction="trust"] .googly-eyes-eye-slot::after,
 .googly-eyes-pair[data-reaction="hope"] .googly-eyes-eye-slot::after,
+.googly-eyes-pair[data-reaction="interest"] .googly-eyes-eye-slot::after,
+.googly-eyes-pair[data-reaction="anticipation"] .googly-eyes-eye-slot::after,
+.googly-eyes-pair[data-reaction="concern"] .googly-eyes-eye-slot::after,
 .googly-eyes-pair[data-reaction="relief"] .googly-eyes-eye-slot::after,
 .googly-eyes-pair[data-reaction="satisfaction"] .googly-eyes-eye-slot::after,
 .googly-eyes-pair[data-reaction="contentment"] .googly-eyes-eye-slot::after {
@@ -443,15 +448,19 @@
 .googly-eyes-pair[data-reaction="distrust"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="skepticism"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="mischief"] .googly-eyes-iris,
-.googly-eyes-pair[data-reaction="doubt"] .googly-eyes-iris {
+.googly-eyes-pair[data-reaction="doubt"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="contempt"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="smug"] .googly-eyes-iris {
   animation: googly-eyes-side-eye 2200ms ease-in-out infinite;
 }
 
-.googly-eyes-pair[data-reaction="pride"] .googly-eyes-eye-slot {
+.googly-eyes-pair[data-reaction="pride"] .googly-eyes-eye-slot,
+.googly-eyes-pair[data-reaction="smug"] .googly-eyes-eye-slot {
   animation: googly-eyes-pride-lift 2400ms ease-in-out infinite;
 }
 
-.googly-eyes-pair[data-reaction="bored"] .googly-eyes-iris {
+.googly-eyes-pair[data-reaction="bored"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="disappointment"] .googly-eyes-iris {
   animation: googly-eyes-bored-sag 2100ms ease-in-out infinite;
 }
 
@@ -463,7 +472,9 @@
 .googly-eyes-pair[data-reaction="calm"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="relief"] .googly-eyes-iris,
 .googly-eyes-pair[data-reaction="trust"] .googly-eyes-iris,
-.googly-eyes-pair[data-reaction="contentment"] .googly-eyes-iris {
+.googly-eyes-pair[data-reaction="contentment"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="meditative"] .googly-eyes-iris,
+.googly-eyes-pair[data-reaction="interest"] .googly-eyes-iris {
   animation: googly-eyes-calm-breathe 2600ms ease-in-out infinite;
 }
 
@@ -509,7 +520,8 @@
 }
 
 .googly-eyes-pair[data-reaction="frustration"] .googly-eyes-eye,
-.googly-eyes-pair[data-reaction="impatience"] .googly-eyes-eye {
+.googly-eyes-pair[data-reaction="impatience"] .googly-eyes-eye,
+.googly-eyes-pair[data-reaction="awkwardness"] .googly-eyes-eye {
   animation: googly-eyes-tight-shiver 1350ms ease-in-out infinite;
 }
 
@@ -563,6 +575,22 @@
   animation: googly-eyes-suspense-hold 1200ms ease-in-out infinite;
 }
 
+.googly-eyes-pair[data-reaction="anticipation"] .googly-eyes-eye {
+  animation: googly-eyes-anticipation-lean 1600ms ease-in-out infinite;
+}
+
+.googly-eyes-pair[data-reaction="guilt-panic"] .googly-eyes-eye {
+  animation: googly-eyes-jitter 980ms ease-in-out infinite;
+}
+
+.googly-eyes-pair[data-reaction="startled-recovery"] .googly-eyes-eye-slot {
+  animation: googly-eyes-startled-recovery 1900ms ease-out infinite;
+}
+
+.googly-eyes-pair[data-reaction="deadpan"] .googly-eyes-eye-slot {
+  animation: googly-eyes-deadpan-hold 2800ms ease-in-out infinite;
+}
+
 .googly-eyes-pair[data-reaction="awe"] .googly-eyes-eye-slot::after {
   content: "";
   position: absolute;
@@ -588,6 +616,16 @@
   inset: 0;
   border-radius: inherit;
   background: linear-gradient(180deg, transparent, rgb(61 108 150 / 0.28));
+  pointer-events: none;
+  z-index: 4;
+}
+
+.googly-eyes-pair[data-reaction="shyness"] .googly-eyes-eye-slot::after {
+  content: "";
+  position: absolute;
+  inset: 8% 3%;
+  border-radius: inherit;
+  background: radial-gradient(circle at 48% 66%, rgb(255 132 168 / 0.22), transparent 58%);
   pointer-events: none;
   z-index: 4;
 }
@@ -992,6 +1030,45 @@
   }
   82% {
     translate: 2px -1px;
+  }
+}
+
+@keyframes googly-eyes-anticipation-lean {
+  0%,
+  100% {
+    translate: 0 0;
+    scale: 1;
+  }
+  45% {
+    translate: 1% -1%;
+    scale: 1.025;
+  }
+  72% {
+    translate: 0.3% -0.2%;
+    scale: 1.01;
+  }
+}
+
+@keyframes googly-eyes-startled-recovery {
+  0% {
+    transform: rotate(var(--eye-vibe)) scale(1.08);
+  }
+  38% {
+    transform: rotate(var(--eye-vibe)) scale(1.02);
+  }
+  100% {
+    transform: rotate(var(--eye-vibe)) scale(1);
+  }
+}
+
+@keyframes googly-eyes-deadpan-hold {
+  0%,
+  78%,
+  100% {
+    translate: 0 0;
+  }
+  86% {
+    translate: 0 1.5%;
   }
 }
 

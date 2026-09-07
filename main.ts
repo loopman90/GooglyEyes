@@ -26,7 +26,9 @@ type Reaction =
   | "determination" | "confusion-spiral" | "mischief" | "annoyance" | "fear-freeze"
   | "excitement" | "satisfaction" | "skepticism" | "overwhelmed" | "loneliness"
   | "gratitude" | "trust" | "doubt" | "concentration" | "playfulness" | "impatience"
-  | "surprise-fear" | "awe" | "tired-but-awake" | "contentment" | "alertness" | "suspense";
+  | "surprise-fear" | "awe" | "tired-but-awake" | "contentment" | "alertness" | "suspense"
+  | "shyness" | "awkwardness" | "guilt-panic" | "interest" | "disappointment" | "contempt"
+  | "smug" | "concern" | "anticipation" | "startled-recovery" | "meditative" | "deadpan";
 
 type ActionTuple = [string, TriggerType, Reaction[], number, number];
 
@@ -181,7 +183,9 @@ const REACTIONS: Reaction[] = [
   "determination", "confusion-spiral", "mischief", "annoyance", "fear-freeze",
   "excitement", "satisfaction", "skepticism", "overwhelmed", "loneliness",
   "gratitude", "trust", "doubt", "concentration", "playfulness", "impatience",
-  "surprise-fear", "awe", "tired-but-awake", "contentment", "alertness", "suspense"
+  "surprise-fear", "awe", "tired-but-awake", "contentment", "alertness", "suspense",
+  "shyness", "awkwardness", "guilt-panic", "interest", "disappointment", "contempt",
+  "smug", "concern", "anticipation", "startled-recovery", "meditative", "deadpan"
 ];
 
 const REACTION_IDS = new Set<string>(REACTIONS);
@@ -209,6 +213,7 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "crying":
     case "sympathy":
     case "loneliness":
+    case "disappointment":
       return "sepia(0.16) saturate(1.24) hue-rotate(172deg) brightness(1.02)";
     case "angry":
     case "delete":
@@ -222,12 +227,16 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "guilt":
     case "shame":
     case "embarrassment":
+    case "shyness":
+    case "awkwardness":
       return "sepia(0.2) saturate(1.34) hue-rotate(300deg) brightness(1.02)";
     case "panic":
       return "sepia(0.05) saturate(1.3) hue-rotate(170deg) brightness(1.24) contrast(1.14)";
     case "fear-freeze":
       return "sepia(0.08) saturate(0.95) hue-rotate(176deg) brightness(1.1) contrast(1.18)";
     case "surprise-fear":
+    case "guilt-panic":
+    case "startled-recovery":
       return "sepia(0.06) saturate(1.16) hue-rotate(168deg) brightness(1.2) contrast(1.12)";
     case "shocked":
     case "wide-stare":
@@ -235,12 +244,16 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "dramatic-shock":
       return "sepia(0.08) saturate(1.22) hue-rotate(166deg) brightness(1.18) contrast(1.05)";
     case "curiosity":
+    case "interest":
+    case "anticipation":
       return "sepia(0.18) saturate(1.18) hue-rotate(72deg) brightness(1.04)";
     case "suspicious":
     case "hover-suspicious":
     case "distrust":
     case "skepticism":
     case "doubt":
+    case "contempt":
+    case "smug":
       return "sepia(0.16) saturate(0.88) hue-rotate(82deg) brightness(0.92) contrast(1.08)";
     case "jealousy":
     case "mischief":
@@ -254,6 +267,7 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "tired-but-awake":
       return "grayscale(0.28) sepia(0.08) saturate(0.74) hue-rotate(162deg) brightness(0.88)";
     case "calm":
+    case "meditative":
       return "sepia(0.14) saturate(0.92) hue-rotate(52deg) brightness(1.04)";
     case "acceptance":
       return "grayscale(0.12) sepia(0.12) saturate(0.78) hue-rotate(58deg) brightness(0.98)";
@@ -265,6 +279,8 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
       return "sepia(0.18) saturate(1.0) hue-rotate(26deg) brightness(1.08)";
     case "contentment":
       return "sepia(0.12) saturate(0.72) hue-rotate(48deg) brightness(1.02)";
+    case "deadpan":
+      return "grayscale(0.18) saturate(0.72) brightness(0.96)";
     case "disgust":
       return "sepia(0.32) saturate(1.4) hue-rotate(58deg) brightness(0.88)";
     case "dizzy":
@@ -288,6 +304,7 @@ function reactionEyeWhiteFilter(reaction: Reaction): string {
     case "typing":
     case "alertness":
     case "suspense":
+    case "concern":
       return "sepia(0.07) saturate(1.06) hue-rotate(170deg) brightness(1.04) contrast(1.08)";
     case "restless":
     case "nervous":
@@ -328,6 +345,9 @@ function reactionIrisFilter(reaction: Reaction): string {
     case "bored":
     case "apathy":
     case "acceptance":
+    case "disappointment":
+    case "deadpan":
+    case "meditative":
       return "brightness(0.96) saturate(0.96)";
     case "angry":
     case "furious":
@@ -336,6 +356,8 @@ function reactionIrisFilter(reaction: Reaction): string {
     case "concentration":
     case "alertness":
     case "suspense":
+    case "concern":
+    case "anticipation":
       return "brightness(0.98) contrast(1.04)";
     case "happy":
     case "laughing":
@@ -347,6 +369,7 @@ function reactionIrisFilter(reaction: Reaction): string {
     case "relief":
     case "pride":
     case "satisfaction":
+    case "interest":
       return "brightness(1.03)";
     case "in-love":
     case "sympathy":
@@ -355,7 +378,13 @@ function reactionIrisFilter(reaction: Reaction): string {
     case "guilt":
     case "playfulness":
     case "mischief":
+    case "shyness":
+    case "awkwardness":
+    case "smug":
       return "brightness(1.02) saturate(1.02)";
+    case "guilt-panic":
+    case "startled-recovery":
+      return "brightness(1.04) contrast(1.04)";
     case "starstruck":
     case "awe":
       return "brightness(1.06) saturate(1.04)";
@@ -696,10 +725,22 @@ const REACTION_LABELS = labels<Reaction>({
   "tired-but-awake": "Tired but awake",
   contentment: "Contentment",
   alertness: "Alertness",
-  suspense: "Suspense"
+  suspense: "Suspense",
+  shyness: "Shyness",
+  awkwardness: "Awkwardness",
+  "guilt-panic": "Guilt panic",
+  interest: "Interest",
+  disappointment: "Disappointment",
+  contempt: "Contempt",
+  smug: "Smug",
+  concern: "Concern",
+  anticipation: "Anticipation",
+  "startled-recovery": "Startled recovery",
+  meditative: "Meditative",
+  deadpan: "Deadpan"
 });
 
-const QUICK_REACTIONS: readonly Reaction[] = ["gratitude", "doubt", "concentration", "playfulness", "impatience", "awe", "alertness", "suspense"];
+const QUICK_REACTIONS: readonly Reaction[] = ["gratitude", "doubt", "concentration", "playfulness", "impatience", "awe", "alertness", "suspense", "awkwardness", "smug", "concern", "anticipation", "deadpan"];
 
 const BEHAVIOR_PRESETS: Record<string, Partial<GooglyEyesSettings>> = {
   subtle: { personality: "focused", reactionIntensity: "subtle", randomness: "low", followSensitivity: 0.55, smoothing: 0.12, emotionStrength: 0.65, blinkSpeed: 0.85, ambientEmotionIntervalSec: 50, ambientEmotionJitter: 0.45 },
@@ -1113,7 +1154,7 @@ class EyeController {
     if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.dragging) return;
     if (this.root?.hasClass("is-hidden")) return;
     const skinId = this.plugin.settings.skinId;
-    const pool: readonly Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy", "curiosity", "bored", "calm", "hope", "pride", "relief", "mischief", "skepticism", "excitement", "loneliness", "gratitude", "trust", "doubt", "playfulness", "impatience", "awe", "tired-but-awake", "contentment", "alertness", "suspense"];
+    const pool: readonly Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy", "curiosity", "bored", "calm", "hope", "pride", "relief", "mischief", "skepticism", "excitement", "loneliness", "gratitude", "trust", "doubt", "playfulness", "impatience", "awe", "tired-but-awake", "contentment", "alertness", "suspense", "shyness", "awkwardness", "guilt-panic", "interest", "disappointment", "contempt", "smug", "concern", "anticipation", "startled-recovery", "meditative", "deadpan"];
     const reaction = this.resolveReaction(pick(pool, Math.max(0.45, this.randomness())));
     this.setReaction(reaction);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
@@ -1980,6 +2021,207 @@ class EyeController {
       set("--iris-scale", "1.08");
       set("--pupil-scale", "1.1");
       set("--iris-filter", "brightness(1.06) saturate(0.92)");
+    } else if (reaction === "shyness") {
+      set("--lid-upper-left", "-24%");
+      set("--lid-lower-left", "45%");
+      set("--lid-upper-right", "-32%");
+      set("--lid-lower-right", "50%");
+      set("--lid-tilt-left", "-8deg");
+      set("--lid-tilt-right", "7deg");
+      set("--reaction-iris-x-left", pct(-10));
+      set("--reaction-iris-x-right", pct(-10));
+      set("--reaction-pupil-x-left", pct(-15));
+      set("--reaction-pupil-x-right", pct(-15));
+      set("--reaction-iris-y-left", pct(13));
+      set("--reaction-iris-y-right", pct(10));
+      set("--reaction-pupil-y-left", pct(19));
+      set("--reaction-pupil-y-right", pct(15));
+      set("--eye-base-y-left", pct(4));
+      set("--eye-base-y-right", pct(3));
+      set("--iris-scale", "0.98");
+      set("--pupil-scale", "1.16");
+      set("--iris-opacity", "0.78");
+    } else if (reaction === "awkwardness") {
+      set("--lid-upper-left", "-18%");
+      set("--lid-lower-left", "43%");
+      set("--lid-upper-right", "-62%");
+      set("--lid-lower-right", "67%");
+      set("--lid-tilt-left", "9deg");
+      set("--lid-tilt-right", "-11deg");
+      set("--reaction-iris-x-left", pct(-13));
+      set("--reaction-iris-x-right", pct(11));
+      set("--reaction-pupil-x-left", pct(-19));
+      set("--reaction-pupil-x-right", pct(16));
+      set("--reaction-iris-y-left", pct(12));
+      set("--reaction-iris-y-right", pct(-5));
+      set("--reaction-pupil-y-left", pct(18));
+      set("--reaction-pupil-y-right", pct(-8));
+      set("--eye-base-rotate-left", "-4deg");
+      set("--eye-base-rotate-right", "4deg");
+      set("--iris-scale", "0.92");
+      set("--pupil-scale", "0.9");
+      set("--eye-vibe", "3deg");
+    } else if (reaction === "guilt-panic") {
+      set("--lid-upper-left", "-86%");
+      set("--lid-lower-left", "80%");
+      set("--lid-upper-right", "-58%");
+      set("--lid-lower-right", "67%");
+      set("--lid-tilt-left", "9deg");
+      set("--lid-tilt-right", "-12deg");
+      set("--reaction-iris-x-left", pct(19));
+      set("--reaction-iris-x-right", pct(19));
+      set("--reaction-pupil-x-left", pct(27));
+      set("--reaction-pupil-x-right", pct(27));
+      set("--reaction-iris-y-left", pct(-10));
+      set("--reaction-iris-y-right", pct(-5));
+      set("--reaction-pupil-y-left", pct(-15));
+      set("--reaction-pupil-y-right", pct(-8));
+      set("--eye-base-scale-left", "1.14");
+      set("--eye-base-scale-right", "1.06");
+      set("--iris-scale", "1.05");
+      set("--pupil-scale", "0.48");
+      set("--eye-vibe", "-5deg");
+    } else if (reaction === "interest") {
+      set("--lid-upper-left", "-70%");
+      set("--lid-lower-left", "70%");
+      set("--lid-upper-right", "-70%");
+      set("--lid-lower-right", "70%");
+      set("--reaction-iris-y-left", pct(-5));
+      set("--reaction-iris-y-right", pct(-5));
+      set("--reaction-pupil-y-left", pct(-7));
+      set("--reaction-pupil-y-right", pct(-7));
+      set("--eye-base-scale-left", "1.04");
+      set("--eye-base-scale-right", "1.04");
+      set("--iris-scale", "1.06");
+      set("--pupil-scale", "1.12");
+    } else if (reaction === "disappointment") {
+      set("--lid-upper-left", "-12%");
+      set("--lid-lower-left", "38%");
+      set("--lid-upper-right", "-12%");
+      set("--lid-lower-right", "38%");
+      set("--lid-tilt-left", "-9deg");
+      set("--lid-tilt-right", "9deg");
+      set("--reaction-iris-y-left", pct(17));
+      set("--reaction-iris-y-right", pct(17));
+      set("--reaction-pupil-y-left", pct(24));
+      set("--reaction-pupil-y-right", pct(24));
+      set("--eye-base-y-left", pct(6));
+      set("--eye-base-y-right", pct(6));
+      set("--iris-opacity", "0.58");
+      set("--iris-scale", "0.76");
+      set("--pupil-scale", "0.68");
+    } else if (reaction === "contempt") {
+      set("--lid-upper-left", "-9%");
+      set("--lid-lower-left", "43%");
+      set("--lid-upper-right", "-46%");
+      set("--lid-lower-right", "61%");
+      set("--lid-tilt-left", "-19deg");
+      set("--lid-tilt-right", "9deg");
+      set("--reaction-iris-x-left", pct(18));
+      set("--reaction-iris-x-right", pct(12));
+      set("--reaction-pupil-x-left", pct(25));
+      set("--reaction-pupil-x-right", pct(18));
+      set("--reaction-iris-y-left", pct(2));
+      set("--reaction-iris-y-right", pct(-3));
+      set("--reaction-pupil-y-left", pct(3));
+      set("--reaction-pupil-y-right", pct(-5));
+      set("--eye-base-rotate-left", "-5deg");
+      set("--eye-base-rotate-right", "2deg");
+      set("--iris-scale", "0.78");
+      set("--pupil-scale", "0.62");
+    } else if (reaction === "smug") {
+      set("--lid-upper-left", "-30%");
+      set("--lid-lower-left", "53%");
+      set("--lid-upper-right", "-18%");
+      set("--lid-lower-right", "43%");
+      set("--lid-tilt-left", "6deg");
+      set("--lid-tilt-right", "-13deg");
+      set("--reaction-iris-x-left", pct(10));
+      set("--reaction-iris-x-right", pct(10));
+      set("--reaction-pupil-x-left", pct(15));
+      set("--reaction-pupil-x-right", pct(15));
+      set("--reaction-iris-y-left", pct(-2));
+      set("--reaction-iris-y-right", pct(3));
+      set("--reaction-pupil-y-left", pct(-3));
+      set("--reaction-pupil-y-right", pct(4));
+      set("--eye-base-rotate-left", "2deg");
+      set("--eye-base-rotate-right", "-4deg");
+      set("--iris-scale", "0.9");
+      set("--pupil-scale", "0.88");
+    } else if (reaction === "concern") {
+      set("--lid-upper-left", "-52%");
+      set("--lid-lower-left", "63%");
+      set("--lid-upper-right", "-52%");
+      set("--lid-lower-right", "63%");
+      set("--lid-tilt-left", "-13deg");
+      set("--lid-tilt-right", "13deg");
+      set("--reaction-iris-y-left", pct(-2));
+      set("--reaction-iris-y-right", pct(-2));
+      set("--reaction-pupil-y-left", pct(-3));
+      set("--reaction-pupil-y-right", pct(-3));
+      set("--eye-base-scale-left", "1.08");
+      set("--eye-base-scale-right", "1.08");
+      set("--iris-scale", "1.04");
+      set("--pupil-scale", "0.72");
+    } else if (reaction === "anticipation") {
+      set("--lid-upper-left", "-58%");
+      set("--lid-lower-left", "66%");
+      set("--lid-upper-right", "-58%");
+      set("--lid-lower-right", "66%");
+      set("--reaction-iris-x-left", pct(8));
+      set("--reaction-iris-x-right", pct(8));
+      set("--reaction-pupil-x-left", pct(12));
+      set("--reaction-pupil-x-right", pct(12));
+      set("--reaction-iris-y-left", pct(-4));
+      set("--reaction-iris-y-right", pct(-4));
+      set("--reaction-pupil-y-left", pct(-6));
+      set("--reaction-pupil-y-right", pct(-6));
+      set("--eye-base-scale-left", "1.06");
+      set("--eye-base-scale-right", "1.06");
+      set("--iris-scale", "1.02");
+      set("--pupil-scale", "1.06");
+    } else if (reaction === "startled-recovery") {
+      set("--lid-upper-left", "-88%");
+      set("--lid-lower-left", "84%");
+      set("--lid-upper-right", "-88%");
+      set("--lid-lower-right", "84%");
+      set("--reaction-iris-y-left", pct(-6));
+      set("--reaction-iris-y-right", pct(-6));
+      set("--reaction-pupil-y-left", pct(-9));
+      set("--reaction-pupil-y-right", pct(-9));
+      set("--eye-base-scale-left", "1.16");
+      set("--eye-base-scale-right", "1.16");
+      set("--iris-scale", "1.16");
+      set("--pupil-scale", "0.52");
+      set("--eye-vibe", "-3deg");
+    } else if (reaction === "meditative") {
+      set("--lid-upper-left", "-2%");
+      set("--lid-lower-left", "24%");
+      set("--lid-upper-right", "-2%");
+      set("--lid-lower-right", "24%");
+      set("--reaction-iris-y-left", pct(12));
+      set("--reaction-iris-y-right", pct(12));
+      set("--reaction-pupil-y-left", pct(18));
+      set("--reaction-pupil-y-right", pct(18));
+      set("--eye-base-y-left", pct(5));
+      set("--eye-base-y-right", pct(5));
+      set("--iris-opacity", "0.42");
+      set("--iris-scale", "0.62");
+      set("--pupil-scale", "0.72");
+    } else if (reaction === "deadpan") {
+      set("--lid-upper-left", "-20%");
+      set("--lid-lower-left", "40%");
+      set("--lid-upper-right", "-20%");
+      set("--lid-lower-right", "40%");
+      set("--reaction-iris-y-left", pct(2));
+      set("--reaction-iris-y-right", pct(2));
+      set("--reaction-pupil-y-left", pct(2));
+      set("--reaction-pupil-y-right", pct(2));
+      set("--eye-base-scale-left", "0.96");
+      set("--eye-base-scale-right", "0.96");
+      set("--iris-opacity", "0.72");
+      set("--iris-scale", "0.82");
+      set("--pupil-scale", "0.74");
     } else if (reaction === "curiosity") {
       set("--lid-upper-left", "-76%");
       set("--lid-lower-left", "76%");
@@ -2321,6 +2563,7 @@ class EyeController {
       set("--reaction-pupil-x-right", pct(-15));
       set("--eye-base-x-left", pct(-3));
       set("--eye-base-x-right", pct(-3));
+      set("--pupil-scale", reaction === "peek" ? "1.04" : "0.98");
     } else if (reaction === "look-right" || reaction === "drag-tracking" || reaction === "fast-movement") {
       set("--reaction-iris-x-left", pct(10));
       set("--reaction-iris-x-right", pct(10));
@@ -2328,6 +2571,7 @@ class EyeController {
       set("--reaction-pupil-x-right", pct(15));
       set("--eye-base-x-left", pct(3));
       set("--eye-base-x-right", pct(3));
+      set("--pupil-scale", reaction === "fast-movement" ? "0.86" : reaction === "drag-tracking" ? "0.96" : "0.98");
     } else if (reaction === "chaotic-stare") {
       set("--lid-upper-left", "-90%");
       set("--lid-lower-left", "82%");
@@ -2364,6 +2608,7 @@ class EyeController {
       set("--reaction-pupil-y-right", pct(-15));
       set("--eye-base-y-left", pct(-3));
       set("--eye-base-y-right", pct(-3));
+      set("--pupil-scale", "0.98");
     } else if (reaction === "look-down") {
       set("--reaction-iris-y-left", pct(10));
       set("--reaction-iris-y-right", pct(10));
@@ -2371,6 +2616,7 @@ class EyeController {
       set("--reaction-pupil-y-right", pct(15));
       set("--eye-base-y-left", pct(3));
       set("--eye-base-y-right", pct(3));
+      set("--pupil-scale", "1.02");
     }
     set("--iris-filter", reactionIrisFilter(reaction));
   }
@@ -2484,8 +2730,8 @@ class EyeController {
   }
 
   private reactionDuration(reaction: Reaction, multiplier: number): number {
-    const longRead: Reaction[] = ["sad", "crying", "loneliness", "sleepy", "sleepy-idle", "dreamy", "stoned", "spacing-out", "in-love", "relief", "gratitude", "trust", "contentment", "calm", "acceptance", "awe", "bored", "apathy", "tired-but-awake"];
-    const punchyRead: Reaction[] = ["shocked", "wide-stare", "dramatic-shock", "panic", "surprise-fear", "surprise-delight", "excitement", "furious", "frustration", "impatience", "overwhelmed", "confusion-spiral", "dizzy", "laughing", "starstruck"];
+    const longRead: Reaction[] = ["sad", "crying", "loneliness", "sleepy", "sleepy-idle", "dreamy", "stoned", "spacing-out", "in-love", "relief", "gratitude", "trust", "contentment", "calm", "acceptance", "awe", "bored", "apathy", "tired-but-awake", "shyness", "interest", "disappointment", "meditative", "deadpan"];
+    const punchyRead: Reaction[] = ["shocked", "wide-stare", "dramatic-shock", "panic", "surprise-fear", "surprise-delight", "excitement", "furious", "frustration", "impatience", "overwhelmed", "confusion-spiral", "dizzy", "laughing", "starstruck", "awkwardness", "guilt-panic", "anticipation", "startled-recovery"];
     const base = reaction.includes("typing")
       ? 650
       : longRead.includes(reaction)
@@ -2498,8 +2744,8 @@ class EyeController {
 
   private ambientReactionDuration(reaction: Reaction): number {
     if (this.reduceMotion.matches) return 900;
-    const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love", "relief", "loneliness", "apathy", "acceptance", "calm", "hope", "satisfaction", "gratitude", "trust", "tired-but-awake", "contentment", "awe"];
-    const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck", "frustration", "surprise-delight", "confusion-spiral", "fear-freeze", "excitement", "overwhelmed", "impatience", "surprise-fear", "alertness", "suspense"];
+    const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love", "relief", "loneliness", "apathy", "acceptance", "calm", "hope", "satisfaction", "gratitude", "trust", "tired-but-awake", "contentment", "awe", "shyness", "interest", "disappointment", "meditative", "deadpan"];
+    const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck", "frustration", "surprise-delight", "confusion-spiral", "fear-freeze", "excitement", "overwhelmed", "impatience", "surprise-fear", "alertness", "suspense", "awkwardness", "guilt-panic", "anticipation", "startled-recovery"];
     const base = longRead.includes(reaction) ? 5200 : punchy.includes(reaction) ? 4200 : 3600;
     return base + Math.random() * 1200 + this.plugin.settings.reactionHoldMs;
   }
