@@ -40,6 +40,8 @@ GooglyEyes is a playful, fully local Obsidian Community Plugin. It opens an embe
 - Living eyes embedded inside an Obsidian tab.
 - Mouse and text-cursor tracking.
 - Smooth blinking and eyelids.
+- Per-skin reaction tuning from \`skin.json\` so animal, robot, single-eye, and character skins can express emotions differently.
+- Reduced motion support for users who prefer calmer animation.
 - Simple settings for everyday use, with Advanced controls for deeper tuning.
 - Personalities such as Calm, Curious, Dramatic, Goofy, Suspicious, Sleepy, Chaotic, Shy, Focused, and Mischievous.
 - Custom iris, pupil, eyelid, shadow, glow, size, opacity, focus mode, and reaction settings.
@@ -183,6 +185,7 @@ The tab includes live controls for:
 - Iris size
 - Pupil size
 - Emotion strength
+- Reduced motion
 - Visual reaction previews
 
 ## Skin Asset Rules
@@ -214,6 +217,28 @@ Eye scale rule:
 - Runtime iris and pupil layers must stay visually behind the mask.
 
 \`npm run validate-assets\` enforces these rules.
+
+## Per-Skin Reaction Tuning
+
+Skins can define optional emotion overrides in their own \`skin.json\`:
+
+\`\`\`json
+{
+  "reactionTuning": {
+    "all": {
+      "gazeMultiplier": 0.8,
+      "pupilScaleMultiplier": 0.9,
+      "durationMultiplier": 1.1
+    },
+    "happy": {
+      "lidMultiplier": 1.08,
+      "pupilScaleMultiplier": 1.18
+    }
+  }
+}
+\`\`\`
+
+Supported tuning keys are \`lidMultiplier\`, \`gazeMultiplier\`, \`pupilScaleMultiplier\`, \`irisScaleMultiplier\`, \`eyeBaseScaleMultiplier\`, \`vibeMultiplier\`, and \`durationMultiplier\`.
 
 ## README Updates
 

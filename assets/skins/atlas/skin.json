@@ -35,6 +35,24 @@
     "spacing-out",
     "slow-blink"
   ],
+  "reactionTuning": {
+    "all": {
+      "lidMultiplier": 0.55,
+      "gazeMultiplier": 0.52,
+      "pupilScaleMultiplier": 0.74,
+      "irisScaleMultiplier": 0.9,
+      "vibeMultiplier": 0.12,
+      "durationMultiplier": 0.86
+    },
+    "wide-stare": {
+      "irisScaleMultiplier": 1.04,
+      "pupilScaleMultiplier": 0.9
+    },
+    "starstruck": {
+      "irisScaleMultiplier": 1.08,
+      "pupilScaleMultiplier": 1.02
+    }
+  },
   "defaults": {
     "irisColor": "#1ecbff",
     "pupilColor": "#baf7ff",

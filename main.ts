@@ -55,6 +55,16 @@ interface EyeWindow {
   h: number;
 }
 
+interface ReactionTuning {
+  lidMultiplier?: number;
+  gazeMultiplier?: number;
+  pupilScaleMultiplier?: number;
+  irisScaleMultiplier?: number;
+  eyeBaseScaleMultiplier?: number;
+  vibeMultiplier?: number;
+  durationMultiplier?: number;
+}
+
 interface GooglyEyesSettings {
   enabled: boolean;
   visible: boolean;
@@ -93,6 +103,7 @@ interface GooglyEyesSettings {
   ambientEmotionsEnabled: boolean;
   ambientEmotionIntervalSec: number;
   ambientEmotionJitter: number;
+  reduceMotion: boolean;
   debugOverlay: boolean;
   size: number;
   opacity: number;
@@ -134,6 +145,7 @@ interface SkinDefinition {
     lidLowerRadius: string;
   };
   eyeWindows: Record<"left" | "right", EyeWindow>;
+  reactionTuning: Partial<Record<Reaction | "all", ReactionTuning>>;
   assets: {
     leftBase: string;
     rightBase: string;
@@ -519,6 +531,7 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   ambientEmotionsEnabled: true,
   ambientEmotionIntervalSec: 28,
   ambientEmotionJitter: 0.65,
+  reduceMotion: false,
   debugOverlay: false,
   size: 180,
   opacity: 0.95,
@@ -566,6 +579,30 @@ function effectivePupilSize(settings: GooglyEyesSettings, skin: SkinDefinition):
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+function mergeReactionTuning(skin: SkinDefinition, reaction: Reaction): ReactionTuning {
+  return {
+    ...(skin.reactionTuning.all ?? {}),
+    ...(skin.reactionTuning[reaction] ?? {})
+  };
+}
+
+function readCssNumeric(element: HTMLElement, name: string, fallback: number): number {
+  const raw = element.style.getPropertyValue(name).trim();
+  const parsed = Number.parseFloat(raw);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function multiplyCssNumber(element: HTMLElement, name: string, multiplier: number, unit = ""): void {
+  if (multiplier === 1) return;
+  const value = readCssNumeric(element, name, unit === "deg" ? 0 : 1);
+  element.setCssProps({ [name]: `${value * multiplier}${unit}` });
+}
+
+function multiplyCssVars(element: HTMLElement, names: readonly string[], multiplier: number, unit: string): void {
+  if (multiplier === 1) return;
+  names.forEach((name) => multiplyCssNumber(element, name, multiplier, unit));
 }
 
 function pick<T>(items: readonly T[], randomness: number): T {
@@ -827,7 +864,7 @@ class EyeController {
     this.root.toggleClass("is-hidden", !s.enabled || !s.visible || !this.visibilityAllowsDisplay());
     this.root.toggleClass("is-peeking", s.peekMode);
     this.root.toggleClass("is-focus-mode", this.isFocusMode());
-    this.root.toggleClass("is-reduced-motion", this.reduceMotion.matches);
+    this.root.toggleClass("is-reduced-motion", this.motionReduced());
     this.root.toggleClass("show-debug", s.debugOverlay);
     this.root.setCssProps({
       "--googly-eyes-size": `${s.size}px`,
@@ -1084,7 +1121,7 @@ class EyeController {
       const smoothing = clamp(s.smoothing / PERSONALITY_OPTIONS[s.personality].lag, 0.04, 0.8);
       this.eased.x += (this.target.x - this.eased.x) * smoothing;
       this.eased.y += (this.target.y - this.eased.y) * smoothing;
-      const lifePupilScale = this.reduceMotion.matches ? 1 : this.pupilLifeScale(now);
+      const lifePupilScale = this.motionReduced() ? 1 : this.pupilLifeScale(now);
       for (const pair of this.pairs) {
         pair.setCssProps({ "--life-pupil-scale": lifePupilScale.toFixed(3) });
         const rect = pair.getBoundingClientRect();
@@ -1119,7 +1156,7 @@ class EyeController {
   };
 
   private scheduleIdle(): void {
-    const base = this.isFocusMode() ? 9000 : 4500;
+    const base = this.motionReduced() ? 14000 : this.isFocusMode() ? 9000 : 4500;
     const jitter = 6000 * this.randomness();
     this.idleTimer = window.setTimeout(() => {
       this.react("idle");
@@ -1129,7 +1166,8 @@ class EyeController {
 
   private scheduleBlink(): void {
     const personality = PERSONALITY_OPTIONS[this.plugin.settings.personality];
-    const interval = (2600 + Math.random() * 4200 * this.randomness()) * personality.blink;
+    const motionScale = this.motionReduced() ? 1.65 : 1;
+    const interval = (2600 + Math.random() * 4200 * this.randomness()) * personality.blink * motionScale;
     this.blinkTimer = window.setTimeout(() => {
       this.setReaction(this.isFocusMode() ? "blink" : pick(["blink", "slow-blink"], this.randomness()));
       window.setTimeout(() => this.setReaction("idle-neutral"), 180 / Math.max(0.2, this.plugin.settings.blinkSpeed));
@@ -1139,6 +1177,7 @@ class EyeController {
 
   private scheduleAmbientEmotion(): void {
     if (this.ambientTimer) window.clearTimeout(this.ambientTimer);
+    if (this.motionReduced()) return;
     const s = this.plugin.settings;
     const base = clamp(s.ambientEmotionIntervalSec, 5, 240) * 1000;
     const jitter = base * clamp(s.ambientEmotionJitter, 0, 1.5);
@@ -1151,7 +1190,7 @@ class EyeController {
 
   private playAmbientEmotion(): void {
     const s = this.plugin.settings;
-    if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.dragging) return;
+    if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.motionReduced() || this.dragging) return;
     if (this.root?.hasClass("is-hidden")) return;
     const skinId = this.plugin.settings.skinId;
     const pool: readonly Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy", "curiosity", "bored", "calm", "hope", "pride", "relief", "mischief", "skepticism", "excitement", "loneliness", "gratitude", "trust", "doubt", "playfulness", "impatience", "awe", "tired-but-awake", "contentment", "alertness", "suspense", "shyness", "awkwardness", "guilt-panic", "interest", "disappointment", "contempt", "smug", "concern", "anticipation", "startled-recovery", "meditative", "deadpan"];
@@ -1169,7 +1208,7 @@ class EyeController {
     this.updateAssets();
   }
 
-  private applyReactionState(pair: HTMLElement): void {
+  private applyReactionState(pair: HTMLElement, skinDef?: SkinDefinition): void {
     const reaction = this.currentReaction;
     const strength = this.plugin.settings.emotionStrength;
     const pose = PERSONALITY_POSES[this.plugin.settings.personality];
@@ -2619,6 +2658,7 @@ class EyeController {
       set("--pupil-scale", "1.02");
     }
     set("--iris-filter", reactionIrisFilter(reaction));
+    if (skinDef) this.applySkinReactionTuning(pair, skinDef, reaction);
   }
 
   private updateAssets(): void {
@@ -2632,7 +2672,7 @@ class EyeController {
       const hasPeekMask = hasLayeredAssets && s.peekFaceMask;
       pair.dataset.skin = skinDef.id;
       pair.dataset.reaction = this.currentReaction;
-      this.applyReactionState(pair);
+      this.applyReactionState(pair, skinDef);
       pair.toggleClass("has-layered-assets", hasLayeredAssets);
       pair.toggleClass("has-peek-mask", hasPeekMask);
       pair.toggleClass("has-single-eye", skinDef.eyeLayout === "single");
@@ -2708,6 +2748,7 @@ class EyeController {
   }
 
   private intensity(): number {
+    if (this.motionReduced()) return 0.32;
     if (this.plugin.settings.subtleMode) return 0.45;
     if (this.isFocusMode()) return 0.35;
     return { subtle: 0.45, normal: 1, expressive: 1.35, chaotic: 1.8, custom: this.plugin.settings.customIntensity }[this.plugin.settings.reactionIntensity];
@@ -2739,19 +2780,47 @@ class EyeController {
         : punchyRead.includes(reaction) || reaction.includes("shock")
           ? 1450
           : 1150;
-    return this.reduceMotion.matches ? 240 : base * multiplier * this.intensity() + 350 + this.plugin.settings.reactionHoldMs;
+    const skin = SKINS.find((item) => item.id === this.plugin.settings.skinId) ?? SKINS[0];
+    const tunedMultiplier = multiplier * (mergeReactionTuning(skin, reaction).durationMultiplier ?? 1);
+    return this.motionReduced() ? 650 : base * tunedMultiplier * this.intensity() + 350 + this.plugin.settings.reactionHoldMs;
   }
 
   private ambientReactionDuration(reaction: Reaction): number {
-    if (this.reduceMotion.matches) return 900;
+    if (this.motionReduced()) return 900;
     const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love", "relief", "loneliness", "apathy", "acceptance", "calm", "hope", "satisfaction", "gratitude", "trust", "tired-but-awake", "contentment", "awe", "shyness", "interest", "disappointment", "meditative", "deadpan"];
     const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck", "frustration", "surprise-delight", "confusion-spiral", "fear-freeze", "excitement", "overwhelmed", "impatience", "surprise-fear", "alertness", "suspense", "awkwardness", "guilt-panic", "anticipation", "startled-recovery"];
     const base = longRead.includes(reaction) ? 5200 : punchy.includes(reaction) ? 4200 : 3600;
-    return base + Math.random() * 1200 + this.plugin.settings.reactionHoldMs;
+    const skin = SKINS.find((item) => item.id === this.plugin.settings.skinId) ?? SKINS[0];
+    return (base + Math.random() * 1200) * (mergeReactionTuning(skin, reaction).durationMultiplier ?? 1) + this.plugin.settings.reactionHoldMs;
   }
 
   private isFocusMode(): boolean {
     return this.plugin.settings.focusModeActive || this.plugin.settings.focusMode === "fullscreen" && !!document.fullscreenElement;
+  }
+
+  private motionReduced(): boolean {
+    return this.plugin.settings.reduceMotion || this.reduceMotion.matches;
+  }
+
+  private applySkinReactionTuning(pair: HTMLElement, skin: SkinDefinition, reaction: Reaction): void {
+    const tuning = mergeReactionTuning(skin, reaction);
+    if (tuning.lidMultiplier !== undefined) {
+      multiplyCssVars(pair, [
+        "--lid-upper-left", "--lid-lower-left", "--lid-upper-right", "--lid-lower-right"
+      ], tuning.lidMultiplier, "%");
+    }
+    if (tuning.gazeMultiplier !== undefined) {
+      multiplyCssVars(pair, [
+        "--reaction-iris-x-left", "--reaction-iris-y-left", "--reaction-iris-x-right", "--reaction-iris-y-right",
+        "--reaction-pupil-x-left", "--reaction-pupil-y-left", "--reaction-pupil-x-right", "--reaction-pupil-y-right",
+        "--eye-base-x-left", "--eye-base-y-left", "--eye-base-x-right", "--eye-base-y-right"
+      ], tuning.gazeMultiplier, "%");
+    }
+    multiplyCssNumber(pair, "--pupil-scale", tuning.pupilScaleMultiplier ?? 1);
+    multiplyCssNumber(pair, "--iris-scale", tuning.irisScaleMultiplier ?? 1);
+    multiplyCssNumber(pair, "--eye-base-scale-left", tuning.eyeBaseScaleMultiplier ?? 1);
+    multiplyCssNumber(pair, "--eye-base-scale-right", tuning.eyeBaseScaleMultiplier ?? 1);
+    if (tuning.vibeMultiplier !== undefined) multiplyCssNumber(pair, "--eye-vibe", tuning.vibeMultiplier, "deg");
   }
 }
 
@@ -3010,6 +3079,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
           this.toggleDef("Enable reactions", "reactionsEnabled"),
           this.dropdownDef("Reaction intensity", undefined, "reactionIntensity", INTENSITY_LABELS),
           this.sliderDef("Emotion strength", "emotionStrength", 0.25, 1.8, 0.05),
+          this.toggleDef("Reduce motion", "reduceMotion", "Softens movement, disables ambient emotions, and respects sensitive-motion users."),
           this.toggleDef("Ambient emotions", "ambientEmotionsEnabled", "Occasionally shows a natural random expression, then returns to mouse tracking."),
           this.sliderDef("Ambient interval", "ambientEmotionIntervalSec", 5, 120, 1, advanced),
           this.sliderDef("Ambient variation", "ambientEmotionJitter", 0, 1.5, 0.05, advanced),
@@ -3071,7 +3141,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     if (key === "irisColor" || key === "pupilColor") this.plugin.settings.useSkinDefaultColors = false;
     await this.plugin.saveSettings();
     this.plugin.controller.refresh();
-    if (key.startsWith("ambientEmotion")) this.plugin.controller.refreshAmbientEmotions();
+    if (key.startsWith("ambientEmotion") || key === "reduceMotion") this.plugin.controller.refreshAmbientEmotions();
     this.update();
   }
 
@@ -3205,7 +3275,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
     this.plugin.settings[key] = value;
     void this.plugin.saveSettings().then(() => {
       this.plugin.controller.refresh();
-      if (String(key).startsWith("ambientEmotion")) this.plugin.controller.refreshAmbientEmotions();
+      if (String(key).startsWith("ambientEmotion") || key === "reduceMotion") this.plugin.controller.refreshAmbientEmotions();
       this.update();
     });
   }
@@ -3333,6 +3403,7 @@ export default class GooglyEyesPlugin extends Plugin {
     this.settings.focusModeActive = false;
     this.settings.pausedReactions = false;
     this.settings.dndMode = false;
+    this.settings.reduceMotion = DEFAULT_SETTINGS.reduceMotion;
     this.settings.peekMode = DEFAULT_SETTINGS.peekMode;
     this.settings.quickUiExpanded = true;
     await this.saveSettings();

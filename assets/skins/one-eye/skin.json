@@ -35,6 +35,24 @@
     "spacing-out",
     "wink-left"
   ],
+  "reactionTuning": {
+    "all": {
+      "gazeMultiplier": 0.6,
+      "pupilScaleMultiplier": 0.9,
+      "durationMultiplier": 1.12
+    },
+    "dizzy": {
+      "gazeMultiplier": 0.42,
+      "vibeMultiplier": 0.5
+    },
+    "wide-stare": {
+      "irisScaleMultiplier": 1.08,
+      "pupilScaleMultiplier": 0.82
+    },
+    "wink-left": {
+      "lidMultiplier": 1.2
+    }
+  },
   "defaults": {
     "irisColor": "#b7ff35",
     "pupilColor": "#050806",

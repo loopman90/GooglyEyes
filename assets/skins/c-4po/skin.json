@@ -34,6 +34,24 @@
     "panic",
     "slow-blink"
   ],
+  "reactionTuning": {
+    "all": {
+      "lidMultiplier": 0.62,
+      "gazeMultiplier": 0.58,
+      "pupilScaleMultiplier": 0.78,
+      "irisScaleMultiplier": 0.92,
+      "vibeMultiplier": 0.18,
+      "durationMultiplier": 0.9
+    },
+    "confused": {
+      "gazeMultiplier": 0.72,
+      "durationMultiplier": 1.08
+    },
+    "panic": {
+      "pupilScaleMultiplier": 0.7,
+      "vibeMultiplier": 0.22
+    }
+  },
   "defaults": {
     "irisColor": "#ffb21a",
     "pupilColor": "#fff3a6",

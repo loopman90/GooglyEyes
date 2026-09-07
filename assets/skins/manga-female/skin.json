@@ -44,6 +44,26 @@
     "laughing",
     "wink-right"
   ],
+  "reactionTuning": {
+    "all": {
+      "lidMultiplier": 1.08,
+      "gazeMultiplier": 0.84,
+      "pupilScaleMultiplier": 1.06,
+      "durationMultiplier": 1.1
+    },
+    "crying": {
+      "irisScaleMultiplier": 1.08,
+      "pupilScaleMultiplier": 1.18
+    },
+    "in-love": {
+      "irisScaleMultiplier": 1.12,
+      "pupilScaleMultiplier": 1.2
+    },
+    "wink-right": {
+      "lidMultiplier": 1.18,
+      "gazeMultiplier": 0.65
+    }
+  },
   "eyeStyle": {
     "slotRadius": "0px",
     "lidLeft": "-34%",

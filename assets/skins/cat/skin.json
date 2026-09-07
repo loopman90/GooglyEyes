@@ -44,6 +44,25 @@
     "dreamy",
     "wink-left"
   ],
+  "reactionTuning": {
+    "all": {
+      "gazeMultiplier": 0.78,
+      "pupilScaleMultiplier": 0.92,
+      "durationMultiplier": 1.08
+    },
+    "suspicious": {
+      "lidMultiplier": 1.12,
+      "pupilScaleMultiplier": 0.78
+    },
+    "happy": {
+      "lidMultiplier": 1.08,
+      "pupilScaleMultiplier": 1.18
+    },
+    "sleepy-idle": {
+      "lidMultiplier": 1.18,
+      "gazeMultiplier": 0.55
+    }
+  },
   "eyeStyle": {
     "slotRadius": "0px",
     "lidLeft": "-34%",

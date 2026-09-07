@@ -43,6 +43,27 @@
     "chaotic-stare",
     "look-down"
   ],
+  "reactionTuning": {
+    "all": {
+      "gazeMultiplier": 0.72,
+      "pupilScaleMultiplier": 0.86,
+      "durationMultiplier": 1.12
+    },
+    "angry": {
+      "lidMultiplier": 1.18,
+      "pupilScaleMultiplier": 0.68,
+      "vibeMultiplier": 0.8
+    },
+    "furious": {
+      "lidMultiplier": 1.22,
+      "pupilScaleMultiplier": 0.58,
+      "vibeMultiplier": 0.75
+    },
+    "dramatic-shock": {
+      "irisScaleMultiplier": 1.08,
+      "pupilScaleMultiplier": 0.72
+    }
+  },
   "eyeStyle": {
     "slotRadius": "0px",
     "lidLeft": "-34%",

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.21
+
+- Added per-skin reaction tuning from skin metadata so animal, robot, single-eye, and character skins can express emotions differently.
+- Added initial tuning profiles for Cat, Dragon, Atlas, C-4PO, Manga Female, One Eye, and Hacker.
+- Added a Reduce motion setting that softens movement, disables ambient emotions, and stops organic pupil micro-motion.
+- Updated README, GitHub Pages copy, generated skin metadata, and the copy-ready test package.
+
 ## 1.0.20
 
 - Rebuilt the D20 tabletop skin as D20 DND with a new full rectangular transparent-eye-hole mask.

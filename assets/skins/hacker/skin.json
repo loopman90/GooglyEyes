@@ -44,6 +44,26 @@
     "restless",
     "panic"
   ],
+  "reactionTuning": {
+    "all": {
+      "gazeMultiplier": 0.7,
+      "pupilScaleMultiplier": 0.82,
+      "durationMultiplier": 0.94
+    },
+    "rapid-typing-focus": {
+      "irisScaleMultiplier": 0.9,
+      "pupilScaleMultiplier": 0.68,
+      "durationMultiplier": 1.08
+    },
+    "suspicious": {
+      "lidMultiplier": 1.12,
+      "gazeMultiplier": 0.82
+    },
+    "panic": {
+      "vibeMultiplier": 0.55,
+      "pupilScaleMultiplier": 0.62
+    }
+  },
   "eyeStyle": {
     "slotRadius": "0px",
     "lidLeft": "-34%",

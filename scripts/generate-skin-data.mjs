@@ -19,6 +19,10 @@ function eyeWindowsBySide(windows) {
   return { left, right };
 }
 
+function reactionTuning(value) {
+  return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+}
+
 const manifest = readJson(join(root, "assets", "skins.json"));
 const skins = manifest.skins.map((id) => {
   const file = join(root, "assets", "skins", id, "skin.json");
@@ -45,6 +49,7 @@ const skins = manifest.skins.map((id) => {
       lidUpperRadius: assertString(skin.eyeStyle?.lidUpperRadius, "0 0 55% 55%"),
       lidLowerRadius: assertString(skin.eyeStyle?.lidLowerRadius, "55% 55% 0 0")
     },
+    reactionTuning: reactionTuning(skin.reactionTuning),
     supportsColorOverrides: true,
     assets: {
       leftBase: `assets/skins/${id}/${assertString(skin.assets?.leftBase, "eyes/left-base.png")}`,

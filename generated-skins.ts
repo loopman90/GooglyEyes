@@ -20,6 +20,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/robot/eyes/left-base.png",
@@ -72,6 +73,25 @@ export const GENERATED_SKINS = [
       "lidHeight": "122%",
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
+    },
+    "reactionTuning": {
+      "all": {
+        "gazeMultiplier": 0.78,
+        "pupilScaleMultiplier": 0.92,
+        "durationMultiplier": 1.08
+      },
+      "suspicious": {
+        "lidMultiplier": 1.12,
+        "pupilScaleMultiplier": 0.78
+      },
+      "happy": {
+        "lidMultiplier": 1.08,
+        "pupilScaleMultiplier": 1.18
+      },
+      "sleepy-idle": {
+        "lidMultiplier": 1.18,
+        "gazeMultiplier": 0.55
+      }
     },
     "supportsColorOverrides": true,
     "assets": {
@@ -126,6 +146,26 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {
+      "all": {
+        "lidMultiplier": 1.08,
+        "gazeMultiplier": 0.84,
+        "pupilScaleMultiplier": 1.06,
+        "durationMultiplier": 1.1
+      },
+      "crying": {
+        "irisScaleMultiplier": 1.08,
+        "pupilScaleMultiplier": 1.18
+      },
+      "in-love": {
+        "irisScaleMultiplier": 1.12,
+        "pupilScaleMultiplier": 1.2
+      },
+      "wink-right": {
+        "lidMultiplier": 1.18,
+        "gazeMultiplier": 0.65
+      }
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/manga-female/eyes/left-base.png",
@@ -179,6 +219,27 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {
+      "all": {
+        "gazeMultiplier": 0.72,
+        "pupilScaleMultiplier": 0.86,
+        "durationMultiplier": 1.12
+      },
+      "angry": {
+        "lidMultiplier": 1.18,
+        "pupilScaleMultiplier": 0.68,
+        "vibeMultiplier": 0.8
+      },
+      "furious": {
+        "lidMultiplier": 1.22,
+        "pupilScaleMultiplier": 0.58,
+        "vibeMultiplier": 0.75
+      },
+      "dramatic-shock": {
+        "irisScaleMultiplier": 1.08,
+        "pupilScaleMultiplier": 0.72
+      }
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/dragon/eyes/left-base.png",
@@ -231,6 +292,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/cyberpunk-female/eyes/left-base.png",
@@ -283,6 +345,24 @@ export const GENERATED_SKINS = [
       "lidHeight": "122%",
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
+    },
+    "reactionTuning": {
+      "all": {
+        "lidMultiplier": 0.62,
+        "gazeMultiplier": 0.58,
+        "pupilScaleMultiplier": 0.78,
+        "irisScaleMultiplier": 0.92,
+        "vibeMultiplier": 0.18,
+        "durationMultiplier": 0.9
+      },
+      "confused": {
+        "gazeMultiplier": 0.72,
+        "durationMultiplier": 1.08
+      },
+      "panic": {
+        "pupilScaleMultiplier": 0.7,
+        "vibeMultiplier": 0.22
+      }
     },
     "supportsColorOverrides": true,
     "assets": {
@@ -337,6 +417,24 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {
+      "all": {
+        "lidMultiplier": 0.55,
+        "gazeMultiplier": 0.52,
+        "pupilScaleMultiplier": 0.74,
+        "irisScaleMultiplier": 0.9,
+        "vibeMultiplier": 0.12,
+        "durationMultiplier": 0.86
+      },
+      "wide-stare": {
+        "irisScaleMultiplier": 1.04,
+        "pupilScaleMultiplier": 0.9
+      },
+      "starstruck": {
+        "irisScaleMultiplier": 1.08,
+        "pupilScaleMultiplier": 1.02
+      }
+    },
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/atlas/eyes/left-base.png",
@@ -390,6 +488,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/panda/eyes/left-base.png",
@@ -443,6 +542,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/d20-rpg/eyes/left-base.png",
@@ -496,6 +596,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/space-helmet/eyes/left-base.png",
@@ -548,6 +649,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/classic-googly/eyes/left-base.png",
@@ -601,6 +703,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/detective-noir/eyes/left-base.png",
@@ -652,6 +755,24 @@ export const GENERATED_SKINS = [
       "lidHeight": "122%",
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
+    },
+    "reactionTuning": {
+      "all": {
+        "gazeMultiplier": 0.6,
+        "pupilScaleMultiplier": 0.9,
+        "durationMultiplier": 1.12
+      },
+      "dizzy": {
+        "gazeMultiplier": 0.42,
+        "vibeMultiplier": 0.5
+      },
+      "wide-stare": {
+        "irisScaleMultiplier": 1.08,
+        "pupilScaleMultiplier": 0.82
+      },
+      "wink-left": {
+        "lidMultiplier": 1.2
+      }
     },
     "supportsColorOverrides": true,
     "assets": {
@@ -706,6 +827,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/tibetan-monk/eyes/left-base.png",
@@ -758,6 +880,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/alien/eyes/left-base.png",
@@ -810,6 +933,26 @@ export const GENERATED_SKINS = [
       "lidHeight": "122%",
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
+    },
+    "reactionTuning": {
+      "all": {
+        "gazeMultiplier": 0.7,
+        "pupilScaleMultiplier": 0.82,
+        "durationMultiplier": 0.94
+      },
+      "rapid-typing-focus": {
+        "irisScaleMultiplier": 0.9,
+        "pupilScaleMultiplier": 0.68,
+        "durationMultiplier": 1.08
+      },
+      "suspicious": {
+        "lidMultiplier": 1.12,
+        "gazeMultiplier": 0.82
+      },
+      "panic": {
+        "vibeMultiplier": 0.55,
+        "pupilScaleMultiplier": 0.62
+      }
     },
     "supportsColorOverrides": true,
     "assets": {
@@ -864,6 +1007,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/anonymous/eyes/left-base.png",
@@ -916,6 +1060,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/ice-hockey/eyes/left-base.png",
@@ -968,6 +1113,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/clown/eyes/left-base.png",
@@ -1021,6 +1167,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/spy/eyes/left-base.png",
@@ -1074,6 +1221,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/skeleton/eyes/left-base.png",
@@ -1126,6 +1274,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/wizard/eyes/left-base.png",
@@ -1179,6 +1328,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/cowboy/eyes/left-base.png",
@@ -1231,6 +1381,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/pumpkin-halloween/eyes/left-base.png",
@@ -1283,6 +1434,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/goblin/eyes/left-base.png",
@@ -1335,6 +1487,7 @@ export const GENERATED_SKINS = [
       "lidUpperRadius": "0 0 46% 46%",
       "lidLowerRadius": "46% 46% 0 0"
     },
+    "reactionTuning": {},
     "supportsColorOverrides": true,
     "assets": {
       "leftBase": "assets/skins/troll/eyes/left-base.png",
