@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.20
+
+- Rebuilt the D20 tabletop skin as D20 DND with a new full rectangular transparent-eye-hole mask.
+- Retuned D20 DND eye placement, thumbnail, iris color, and fantasy table styling for cleaner depth behind the mask.
+
 ## 1.0.19
 
 - Added Shyness, Awkwardness, Guilt panic, Interest, Disappointment, Contempt, Smug, Concern, Anticipation, Startled recovery, Meditative, and Deadpan reactions.

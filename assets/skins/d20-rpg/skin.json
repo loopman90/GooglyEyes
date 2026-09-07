@@ -1,23 +1,23 @@
 {
   "id": "d20-rpg",
-  "name": "D20 RPG",
+  "name": "D20 DND",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",
   "thumbnail": "thumbnail.png",
   "eyeWindows": [
     {
       "side": "left",
-      "x": 0.1381,
-      "y": 0.2909,
-      "w": 0.3129,
-      "h": 0.3596
+      "x": 0.1995,
+      "y": 0.2627,
+      "w": 0.2531,
+      "h": 0.4532
     },
     {
       "side": "right",
-      "x": 0.5519,
-      "y": 0.2909,
-      "w": 0.3123,
-      "h": 0.3596
+      "x": 0.5474,
+      "y": 0.2638,
+      "w": 0.2531,
+      "h": 0.451
     }
   ],
   "assets": {
@@ -25,13 +25,13 @@
     "rightBase": "eyes/right-base.png"
   },
   "defaults": {
-    "irisColor": "#3fcf7f",
+    "irisColor": "#24c66f",
     "pupilColor": "#100806",
-    "eyeWhiteColor": "#f2dec0",
-    "eyelidColor": "#7b4f2b",
+    "eyeWhiteColor": "#f3e1be",
+    "eyelidColor": "#8f5a2e",
     "eyelidShadowColor": "#2b170f",
-    "irisGlow": 0.32,
-    "irisSize": 38,
+    "irisGlow": 0.42,
+    "irisSize": 40,
     "pupilSize": 18
   },
   "flavor": "Tabletop dice, parchment maps, and dungeon master focus.",

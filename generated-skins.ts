@@ -425,15 +425,15 @@ export const GENERATED_SKINS = [
   },
   {
     "id": "d20-rpg",
-    "name": "D20 RPG",
+    "name": "D20 DND",
     "eyeLayout": "dual",
     "flavor": "Tabletop dice, parchment maps, and dungeon master focus.",
-    "iris": "#3fcf7f",
+    "iris": "#24c66f",
     "pupil": "#100806",
-    "eyeWhite": "#f2dec0",
-    "outline": "#7b4f2b",
+    "eyeWhite": "#f3e1be",
+    "outline": "#8f5a2e",
     "accent": "#2b170f",
-    "irisSize": 38,
+    "irisSize": 40,
     "pupilSize": 18,
     "eyeStyle": {
       "slotRadius": "0px",
@@ -453,17 +453,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1381,
-        "y": 0.2909,
-        "w": 0.3129,
-        "h": 0.3596
+        "x": 0.1995,
+        "y": 0.2627,
+        "w": 0.2531,
+        "h": 0.4532
       },
       "right": {
         "side": "right",
-        "x": 0.5519,
-        "y": 0.2909,
-        "w": 0.3123,
-        "h": 0.3596
+        "x": 0.5474,
+        "y": 0.2638,
+        "w": 0.2531,
+        "h": 0.451
       }
     },
     "ambientReactions": [

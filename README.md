@@ -46,7 +46,7 @@ The current build exposes only completed skins in the UI:
 - C-4PO
 - Atlas
 - Panda
-- D20 RPG
+- D20 DND
 - SpaceHelmet
 - Classic Googly
 - Detective Noir
@@ -122,7 +122,7 @@ release/googly-eyes-test
 8. Enable GooglyEyes.
 9. Run `Open tab`.
 
-The test package includes Robot, Cat, Manga Female, Dragon, Cyberpunk Female, C-4PO, Atlas, Panda, D20 RPG, SpaceHelmet, Classic Googly, Detective Noir, One Eye, Air Monk, Alien, Hacker, Anonymous, Jason, Clown, Spy, Skeleton, Wizard, Cowboy, Pumpkin Halloween, Goblin, and Troll.
+The test package includes Robot, Cat, Manga Female, Dragon, Cyberpunk Female, C-4PO, Atlas, Panda, D20 DND, SpaceHelmet, Classic Googly, Detective Noir, One Eye, Air Monk, Alien, Hacker, Anonymous, Jason, Clown, Spy, Skeleton, Wizard, Cowboy, Pumpkin Halloween, Goblin, and Troll.
 
 ## Developer Setup
 
@@ -242,4 +242,4 @@ The eyes look too large or too small:
 
 ## Version
 
-Current package version: `1.0.19`.
+Current package version: `1.0.20`.
