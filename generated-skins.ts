@@ -67,17 +67,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.1565,
-        "y": 0.3665,
-        "w": 0.218,
-        "h": 0.243
+        "x": 0.135,
+        "y": 0.33,
+        "w": 0.315,
+        "h": 0.41
       },
       "right": {
         "side": "right",
-        "x": 0.6265,
-        "y": 0.3665,
-        "w": 0.218,
-        "h": 0.243
+        "x": 0.55,
+        "y": 0.33,
+        "w": 0.315,
+        "h": 0.41
       }
     },
     "ambientReactions": [
@@ -112,17 +112,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.143,
-        "y": 0.345,
-        "w": 0.242,
-        "h": 0.274
+        "x": 0.135,
+        "y": 0.3,
+        "w": 0.32,
+        "h": 0.43
       },
       "right": {
         "side": "right",
-        "x": 0.618,
-        "y": 0.34,
-        "w": 0.244,
-        "h": 0.268
+        "x": 0.545,
+        "y": 0.3,
+        "w": 0.32,
+        "h": 0.43
       }
     },
     "ambientReactions": [
@@ -201,17 +201,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.19,
-        "y": 0.358,
-        "w": 0.254,
-        "h": 0.209
+        "x": 0.145,
+        "y": 0.3,
+        "w": 0.32,
+        "h": 0.36
       },
       "right": {
         "side": "right",
-        "x": 0.56,
-        "y": 0.358,
-        "w": 0.254,
-        "h": 0.209
+        "x": 0.535,
+        "y": 0.3,
+        "w": 0.32,
+        "h": 0.36
       }
     },
     "ambientReactions": [
@@ -559,17 +559,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.18,
-        "y": 0.225,
-        "w": 0.64,
-        "h": 0.56
+        "x": 0.15,
+        "y": 0.17,
+        "w": 0.7,
+        "h": 0.66
       },
       "right": {
         "side": "right",
-        "x": 0.18,
-        "y": 0.225,
-        "w": 0.64,
-        "h": 0.56
+        "x": 0.15,
+        "y": 0.17,
+        "w": 0.7,
+        "h": 0.66
       }
     },
     "ambientReactions": [
@@ -648,17 +648,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.129,
-        "y": 0.329,
-        "w": 0.267,
-        "h": 0.342
+        "x": 0.1,
+        "y": 0.285,
+        "w": 0.325,
+        "h": 0.425
       },
       "right": {
         "side": "right",
-        "x": 0.604,
-        "y": 0.329,
-        "w": 0.267,
-        "h": 0.342
+        "x": 0.575,
+        "y": 0.285,
+        "w": 0.325,
+        "h": 0.425
       }
     },
     "ambientReactions": [
@@ -693,17 +693,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.129,
-        "y": 0.329,
-        "w": 0.268,
-        "h": 0.342
+        "x": 0.11,
+        "y": 0.27,
+        "w": 0.38,
+        "h": 0.39
       },
       "right": {
         "side": "right",
-        "x": 0.604,
-        "y": 0.329,
-        "w": 0.268,
-        "h": 0.342
+        "x": 0.51,
+        "y": 0.27,
+        "w": 0.38,
+        "h": 0.39
       }
     },
     "ambientReactions": [
@@ -738,17 +738,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.135,
-        "y": 0.339,
-        "w": 0.33,
-        "h": 0.283
+        "x": 0.155,
+        "y": 0.315,
+        "w": 0.31,
+        "h": 0.28
       },
       "right": {
         "side": "right",
         "x": 0.535,
-        "y": 0.339,
-        "w": 0.33,
-        "h": 0.283
+        "y": 0.315,
+        "w": 0.31,
+        "h": 0.28
       }
     },
     "ambientReactions": [
@@ -960,17 +960,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.215,
-        "y": 0.43,
-        "w": 0.24,
-        "h": 0.235
+        "x": 0.24,
+        "y": 0.36,
+        "w": 0.27,
+        "h": 0.29
       },
       "right": {
         "side": "right",
-        "x": 0.575,
-        "y": 0.43,
-        "w": 0.24,
-        "h": 0.235
+        "x": 0.49,
+        "y": 0.36,
+        "w": 0.27,
+        "h": 0.29
       }
     },
     "ambientReactions": [
@@ -1005,17 +1005,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.255,
-        "y": 0.365,
-        "w": 0.205,
-        "h": 0.405
+        "x": 0.17,
+        "y": 0.28,
+        "w": 0.34,
+        "h": 0.44
       },
       "right": {
         "side": "right",
-        "x": 0.557,
-        "y": 0.365,
-        "w": 0.205,
-        "h": 0.405
+        "x": 0.49,
+        "y": 0.28,
+        "w": 0.34,
+        "h": 0.44
       }
     },
     "ambientReactions": [
@@ -1049,16 +1049,16 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.205,
-        "y": 0.255,
-        "w": 0.275,
+        "x": 0.145,
+        "y": 0.24,
+        "w": 0.31,
         "h": 0.495
       },
       "right": {
         "side": "right",
         "x": 0.545,
-        "y": 0.255,
-        "w": 0.275,
+        "y": 0.24,
+        "w": 0.31,
         "h": 0.495
       }
     },
@@ -1093,17 +1093,17 @@ export const GENERATED_SKINS = [
     "eyeWindows": {
       "left": {
         "side": "left",
-        "x": 0.22,
-        "y": 0.365,
-        "w": 0.285,
-        "h": 0.3
+        "x": 0.19,
+        "y": 0.325,
+        "w": 0.345,
+        "h": 0.38
       },
       "right": {
         "side": "right",
-        "x": 0.565,
-        "y": 0.365,
-        "w": 0.285,
-        "h": 0.3
+        "x": 0.535,
+        "y": 0.325,
+        "w": 0.345,
+        "h": 0.38
       }
     },
     "ambientReactions": [

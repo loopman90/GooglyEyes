@@ -244,7 +244,7 @@ const DEFAULT_ACTION_TUPLES: ActionTuple[] = [
   ["hover command palette", "hover", ["wide-stare", "suspicious"], 0.8, 900],
   ["hover link", "hover", ["peek", "happy", "look-down"], 0.7, 600],
   ["scroll fast", "event", ["dizzy", "confused", "drunk"], 1, 850],
-  ["quick mouse movement", "event", ["dizzy", "chaotic-stare", "fast-movement", "panic"], 1.2, 800]
+  ["quick mouse movement", "event", ["fast-movement", "look-left", "look-right", "wide-stare"], 0.85, 1200]
 ];
 
 const DEFAULT_ACTIONS: ActionMapping[] = DEFAULT_ACTION_TUPLES.map(([name, triggerType, reactionPool, intensity, cooldownMs]) => ({
@@ -2777,6 +2777,12 @@ export default class GooglyEyesPlugin extends Plugin {
     if (!AVAILABLE_SKIN_IDS.has(this.settings.skinId)) this.settings.skinId = DEFAULT_SETTINGS.skinId;
     if (loaded?.size === 96) this.settings.size = DEFAULT_SETTINGS.size;
     this.settings.pairConfigs = this.settings.pairConfigs.filter((config) => AVAILABLE_SKIN_IDS.has(config.skinId));
+    const quickMouse = this.settings.actionMappings.find((mapping) => mapping.name === "quick mouse movement");
+    if (quickMouse && quickMouse.reactionPool.some((reaction) => reaction === "panic" || reaction === "chaotic-stare" || reaction === "dizzy")) {
+      quickMouse.reactionPool = ["fast-movement", "look-left", "look-right", "wide-stare"];
+      quickMouse.intensity = Math.min(quickMouse.intensity, 0.85);
+      quickMouse.cooldownMs = Math.max(quickMouse.cooldownMs, 1200);
+    }
   }
 
   async saveSettings(): Promise<void> {

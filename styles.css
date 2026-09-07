@@ -481,7 +481,7 @@
 .googly-eyes-pair[data-reaction="frustration"] .googly-eyes-eye,
 .googly-eyes-pair[data-reaction="annoyance"] .googly-eyes-eye,
 .googly-eyes-pair[data-reaction="impatience"] .googly-eyes-eye {
-  animation: googly-eyes-tight-shiver 210ms steps(2, end) infinite;
+  animation: googly-eyes-tight-shiver 920ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="fear-freeze"] .googly-eyes-eye,
@@ -557,20 +557,20 @@
 
 .googly-eyes-pair[data-reaction="nervous"] .googly-eyes-eye,
 .googly-eyes-pair[data-reaction="restless"] .googly-eyes-eye {
-  animation: googly-eyes-micro-scan 240ms steps(3, end) infinite;
+  animation: googly-eyes-micro-scan 1200ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="restless"] .googly-eyes-eye {
-  animation: googly-eyes-jitter 180ms steps(2, end) infinite;
+  animation-duration: 860ms;
 }
 
 .googly-eyes-pair[data-reaction="panic"] .googly-eyes-eye {
-  animation: googly-eyes-jitter 110ms steps(2, end) infinite;
+  animation: googly-eyes-jitter 560ms ease-in-out infinite;
 }
 
 .googly-eyes-pair[data-reaction="chaotic-stare"] .googly-eyes-eye,
 .googly-eyes-pair[data-reaction="fast-movement"] .googly-eyes-eye {
-  animation: googly-eyes-chaos-snap 150ms steps(2, end) infinite;
+  animation: googly-eyes-chaos-snap 720ms cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 }
 
 .googly-eyes-pair[data-reaction="drunk"] .googly-eyes-eye {
@@ -633,28 +633,31 @@
 
 @keyframes googly-eyes-jitter {
   0% {
-    translate: -1px 0;
+    translate: -0.35% -0.15%;
+    rotate: -0.4deg;
   }
   50% {
-    translate: 1px 1px;
+    translate: 0.35% 0.25%;
+    rotate: 0.45deg;
   }
   100% {
-    translate: 0 -1px;
+    translate: 0 -0.2%;
+    rotate: -0.2deg;
   }
 }
 
 @keyframes googly-eyes-chaos-snap {
   0% {
-    translate: -3px 1px;
-    rotate: -3deg;
+    translate: -0.9% 0.35%;
+    rotate: -1.2deg;
   }
   50% {
-    translate: 3px -2px;
-    rotate: 4deg;
+    translate: 0.9% -0.45%;
+    rotate: 1.4deg;
   }
   100% {
-    translate: 0 2px;
-    rotate: -1deg;
+    translate: 0 0.35%;
+    rotate: -0.5deg;
   }
 }
 
@@ -820,28 +823,35 @@
 
 @keyframes googly-eyes-micro-scan {
   0% {
-    translate: -2px -1px;
+    translate: -0.45% -0.25%;
+    rotate: -0.35deg;
   }
   33% {
-    translate: 2px 1px;
+    translate: 0.42% 0.2%;
+    rotate: 0.3deg;
   }
   66% {
-    translate: -1px 2px;
+    translate: -0.25% 0.38%;
+    rotate: -0.15deg;
   }
   100% {
-    translate: 1px -1px;
+    translate: 0.2% -0.18%;
+    rotate: 0.2deg;
   }
 }
 
 @keyframes googly-eyes-tight-shiver {
   0% {
-    translate: -1px 0;
+    translate: -0.35% 0;
+    rotate: -0.25deg;
   }
   50% {
-    translate: 1px 0;
+    translate: 0.35% 0;
+    rotate: 0.25deg;
   }
   100% {
-    translate: 0 1px;
+    translate: 0 0.18%;
+    rotate: 0deg;
   }
 }
 

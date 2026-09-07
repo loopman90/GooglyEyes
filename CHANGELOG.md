@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.14
+
+- Rebuilt and retuned problem skin masks and eye windows for Pumpkin Halloween, Wizard, One Eye, Manga Female, Hacker, Goblin, Cyberpunk Female, Cowboy, Cat, Anonymous, and Alien.
+- Added cleaner generated mask artwork for several skins and refreshed neutral base-eye PNGs so eyes sit behind the mask more naturally.
+- Reduced unnatural eye jitter by smoothing rapid reactions and migrating old quick-mouse settings to calmer gaze reactions.
+
 ## 1.0.13
 
 - Rebuilt the Anonymous mask with clean, smooth eye cutouts and no fixed facial clutter around the openings.
