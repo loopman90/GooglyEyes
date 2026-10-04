@@ -13,6 +13,8 @@ GooglyEyes is a playful, fully local Obsidian Community Plugin. It opens an embe
 - Reduced motion support for users who prefer calmer animation.
 - Simple settings for everyday use, with Advanced controls for deeper tuning.
 - Personalities such as Calm, Curious, Dramatic, Goofy, Suspicious, Sleepy, Chaotic, Shy, Focused, and Mischievous.
+- Automatic per-skin mood profiles that influence spontaneous emotions, blinking, and movement, with manual overrides.
+- Gentle eye contact moments with adjustable timing and a smooth return to cursor tracking.
 - Custom iris, pupil, eyelid, shadow, glow, size, opacity, focus mode, and reaction settings.
 - A compact Quick UI behind a Show controls button.
 - A full settings page for detailed behavior tuning.
@@ -182,6 +184,12 @@ The tab includes live controls for:
 - Reduced motion
 - Visual reaction previews
 
+## Behavior Settings
+
+Choose **Mood profile** in Settings > GooglyEyes. **Skin default** reads the profile from each skin's `skin.json`; you can also choose Warm, Playful, Vigilant, Serene, Mysterious, Mechanical, or Off. Your selected personality remains active. Profiles favor matching spontaneous emotions without changing iris or pupil colors.
+
+Under **Tracking**, enable or disable **Eye contact moments**. In Advanced mode, set the interval (10–180 seconds) and duration (1–6 seconds). Timing varies slightly so the gaze feels natural. The eyes ease toward you, hold briefly, and return to the current cursor position. These moments pause during emotions, focus mode, DND, paused reactions, reduced motion, and when the window is inactive.
+
 ## Skin Asset Rules
 
 Every active skin uses the layered renderer. A complete active skin needs:
@@ -267,4 +275,4 @@ The eyes look too large or too small:
 
 ## Version
 
-Current package version: `1.0.23`.
+Current package version: `1.0.24`.

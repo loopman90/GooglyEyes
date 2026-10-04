@@ -1,5 +1,6 @@
 {
   "id": "robot",
+  "moodProfile": "mechanical",
   "name": "Robot",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

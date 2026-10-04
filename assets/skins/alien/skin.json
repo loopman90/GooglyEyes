@@ -1,5 +1,6 @@
 {
   "id": "alien",
+  "moodProfile": "mysterious",
   "name": "Alien",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

@@ -1,5 +1,6 @@
 {
   "id": "hacker",
+  "moodProfile": "vigilant",
   "name": "Hacker",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

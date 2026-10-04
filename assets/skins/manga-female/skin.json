@@ -1,5 +1,6 @@
 {
   "id": "manga-female",
+  "moodProfile": "warm",
   "name": "Manga Female",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

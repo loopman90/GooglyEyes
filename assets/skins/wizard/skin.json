@@ -1,5 +1,6 @@
 {
   "id": "wizard",
+  "moodProfile": "serene",
   "name": "Wizard",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

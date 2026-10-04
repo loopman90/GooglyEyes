@@ -1,5 +1,6 @@
 import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, WorkspaceLeaf, ItemView, debounce, setIcon, type SettingDefinitionItem, type SettingGroupItem } from "obsidian";
 import { GENERATED_LAYERED_SKINS, GENERATED_SKIN_AMBIENT_REACTIONS, GENERATED_SKIN_EYE_WINDOWS, GENERATED_SKINS } from "./generated-skins";
+import { MOOD_PROFILES, blinkTiming, closedLidOffsets, eyeContactWeight, isMoodProfile, type MoodSelection } from "./behavior";
 
 const VIEW_TYPE_PLAYGROUND = "googly-eyes-playground";
 
@@ -80,6 +81,10 @@ interface GooglyEyesSettings {
   customRandomness: number;
   personality: Personality;
   skinId: string;
+  moodProfile: MoodSelection;
+  eyeContactEnabled: boolean;
+  eyeContactIntervalSec: number;
+  eyeContactDurationSec: number;
   eyePairCount: number;
   perPairVariation: boolean;
   pairConfigs: EyePairConfig[];
@@ -126,6 +131,7 @@ type GooglyEyesSettingKey = Extract<keyof GooglyEyesSettings, string>;
 interface SkinDefinition {
   id: string;
   name: string;
+  moodProfile: string;
   eyeLayout: "dual" | "single";
   flavor: string;
   supportsColorOverrides: boolean;
@@ -508,6 +514,10 @@ const DEFAULT_SETTINGS: GooglyEyesSettings = {
   customRandomness: 0.55,
   personality: "curious",
   skinId: "robot",
+  moodProfile: "skin",
+  eyeContactEnabled: true,
+  eyeContactIntervalSec: 40,
+  eyeContactDurationSec: 3,
   eyePairCount: 1,
   perPairVariation: false,
   pairConfigs: [],
@@ -797,6 +807,11 @@ class EyeController {
   private blinkTimer = 0;
   private ambientTimer = 0;
   private ambientReturnTimer = 0;
+  private reactionTimer = 0;
+  private eyeContactStart = 0;
+  private eyeContactDuration = 0;
+  private nextEyeContact = 0;
+  private lastAmbientReaction: Reaction | null = null;
   private dragging = false;
   private dragOffset = { x: 0, y: 0 };
   private cleanups: Array<() => void> = [];
@@ -834,12 +849,16 @@ class EyeController {
     if (this.blinkTimer) window.clearTimeout(this.blinkTimer);
     if (this.ambientTimer) window.clearTimeout(this.ambientTimer);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
+    if (this.reactionTimer) window.clearTimeout(this.reactionTimer);
     this.resizeObserver?.disconnect();
     this.frame = 0;
     this.idleTimer = 0;
     this.blinkTimer = 0;
     this.ambientTimer = 0;
     this.ambientReturnTimer = 0;
+    this.reactionTimer = 0;
+    this.eyeContactStart = 0;
+    this.nextEyeContact = 0;
     this.resizeObserver = null;
     this.observedParent = null;
     this.root?.remove();
@@ -849,6 +868,9 @@ class EyeController {
 
   refresh(): void {
     if (!this.root) return;
+    this.resetEyeContact();
+    if (this.reactionTimer) window.clearTimeout(this.reactionTimer);
+    if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
     this.buildPairs();
     this.applySettings();
     this.setReaction("idle-neutral");
@@ -856,6 +878,33 @@ class EyeController {
 
   refreshAmbientEmotions(): void {
     this.scheduleAmbientEmotion();
+  }
+
+  private mood(skinId = this.plugin.settings.skinId) {
+    const selected = this.plugin.settings.moodProfile;
+    const id = selected === "skin" ? SKINS.find((skin) => skin.id === skinId)?.moodProfile : selected;
+    return isMoodProfile(id) ? MOOD_PROFILES[id] : null;
+  }
+
+  private resetEyeContact(now = Date.now()): void {
+    this.eyeContactStart = 0;
+    this.eyeContactDuration = 0;
+    this.nextEyeContact = now + clamp(this.plugin.settings.eyeContactIntervalSec, 10, 180) * 1000 * (0.7 + Math.random() * 0.6);
+  }
+
+  private contactWeight(now: number): number {
+    const s = this.plugin.settings;
+    if (!s.eyeContactEnabled || !s.enabled || !s.visible || !s.reactionsEnabled || s.pausedReactions || s.dndMode || this.motionReduced() || this.isFocusMode() || this.dragging || !document.hasFocus() || document.hidden || this.root?.hasClass("is-hidden")) {
+      this.resetEyeContact(now);
+      return 0;
+    }
+    if (!this.nextEyeContact) this.resetEyeContact(now);
+    if (this.eyeContactStart && now >= this.eyeContactStart + this.eyeContactDuration) this.resetEyeContact(now);
+    if (!this.eyeContactStart && now >= this.nextEyeContact && this.currentReaction === "idle-neutral") {
+      this.eyeContactStart = now;
+      this.eyeContactDuration = clamp(s.eyeContactDurationSec, 1, 6) * 1000 * (0.85 + Math.random() * 0.3);
+    }
+    return this.eyeContactStart ? eyeContactWeight(now - this.eyeContactStart, this.eyeContactDuration) : 0;
   }
 
   applySettings(): void {
@@ -936,7 +985,7 @@ class EyeController {
     const reaction = this.resolveReaction(pick(pool, this.randomness()));
     this.setReaction(reaction);
     const duration = this.reactionDuration(reaction, mapping?.intensity ?? 1);
-    window.setTimeout(() => this.setReaction("idle-neutral"), duration);
+    this.reactionTimer = window.setTimeout(() => this.setReaction("idle-neutral"), duration);
   }
 
   setVisible(visible: boolean): void {
@@ -1118,14 +1167,16 @@ class EyeController {
     const s = this.plugin.settings;
     if (this.root && !this.root.hasClass("is-hidden")) {
       const now = Date.now();
+      const contact = this.contactWeight(now);
       const smoothing = clamp(s.smoothing / PERSONALITY_OPTIONS[s.personality].lag, 0.04, 0.8);
       this.eased.x += (this.target.x - this.eased.x) * smoothing;
       this.eased.y += (this.target.y - this.eased.y) * smoothing;
       const lifePupilScale = this.motionReduced() ? 1 : this.pupilLifeScale(now);
-      for (const pair of this.pairs) {
-        pair.setCssProps({ "--life-pupil-scale": lifePupilScale.toFixed(3) });
+      for (const [index, pair] of this.pairs.entries()) {
+        pair.setCssProps({ "--life-pupil-scale": lifePupilScale.toFixed(3), "--gaze-pose-weight": (1 - contact).toFixed(3) });
         const rect = pair.getBoundingClientRect();
-        const energy = this.isFocusMode() ? 0.35 : PERSONALITY_OPTIONS[s.personality].energy * this.intensity();
+        const skinId = s.perPairVariation ? s.pairConfigs[index]?.skinId ?? s.skinId : s.skinId;
+        const energy = this.isFocusMode() ? 0.35 : PERSONALITY_OPTIONS[s.personality].energy * this.intensity() * (this.mood(skinId)?.energy ?? 1);
         const irises = pair.querySelectorAll<HTMLElement>(".googly-eyes-iris");
         if (irises.length) {
           irises.forEach((iris) => {
@@ -1134,8 +1185,8 @@ class EyeController {
             const eyeRect = slot?.getBoundingClientRect() ?? rect;
             const cx = eyeRect.left + eyeRect.width / 2 || rect.left + rect.width / 2;
             const cy = eyeRect.top + eyeRect.height / 2 || rect.top + rect.height / 2;
-            const vx = this.eased.x - cx;
-            const vy = this.eased.y - cy;
+            const vx = (this.eased.x - cx) * (1 - contact);
+            const vy = (this.eased.y - cy) * (1 - contact);
             const distance = Math.hypot(vx, vy);
             const baseTravel = Math.min(eyeRect.width, eyeRect.height) * s.followSensitivity * energy;
             const strength = clamp(distance / 280, 0, 1);
@@ -1167,10 +1218,13 @@ class EyeController {
   private scheduleBlink(): void {
     const personality = PERSONALITY_OPTIONS[this.plugin.settings.personality];
     const motionScale = this.motionReduced() ? 1.65 : 1;
-    const interval = (2600 + Math.random() * 4200 * this.randomness()) * personality.blink * motionScale;
+    const interval = (2600 + Math.random() * 4200 * this.randomness()) * personality.blink * (this.mood()?.blink ?? 1) * motionScale;
     this.blinkTimer = window.setTimeout(() => {
-      this.setReaction(this.isFocusMode() ? "blink" : pick(["blink", "slow-blink"], this.randomness()));
-      window.setTimeout(() => this.setReaction("idle-neutral"), 180 / Math.max(0.2, this.plugin.settings.blinkSpeed));
+      if (this.currentReaction === "idle-neutral" && !this.eyeContactStart && !this.plugin.settings.pausedReactions && !this.plugin.settings.dndMode) {
+        const reaction = this.isFocusMode() ? "blink" : pick(["blink", "slow-blink"] as const, this.randomness());
+        this.setReaction(reaction);
+        this.reactionTimer = window.setTimeout(() => this.setReaction("idle-neutral"), blinkTiming(reaction === "slow-blink", this.plugin.settings.blinkSpeed).holdMs);
+      }
       this.scheduleBlink();
     }, interval);
   }
@@ -1192,9 +1246,13 @@ class EyeController {
     const s = this.plugin.settings;
     if (!s.enabled || !s.visible || !s.reactionsEnabled || !s.ambientEmotionsEnabled || s.pausedReactions || s.dndMode || this.motionReduced() || this.dragging) return;
     if (this.root?.hasClass("is-hidden")) return;
+    if (this.currentReaction !== "idle-neutral" || this.eyeContactStart || this.isFocusMode()) return;
     const skinId = this.plugin.settings.skinId;
     const pool: readonly Reaction[] = SKIN_AMBIENT_REACTIONS[skinId] ?? ["chaotic-stare", "sleepy-idle", "dizzy", "idle-long", "eye-roll", "suspicious", "confused", "dreamy", "restless", "laughing", "spacing-out", "happy", "curiosity", "bored", "calm", "hope", "pride", "relief", "mischief", "skepticism", "excitement", "loneliness", "gratitude", "trust", "doubt", "playfulness", "impatience", "awe", "tired-but-awake", "contentment", "alertness", "suspense", "shyness", "awkwardness", "guilt-panic", "interest", "disappointment", "contempt", "smug", "concern", "anticipation", "startled-recovery", "meditative", "deadpan"];
-    const reaction = this.resolveReaction(pick(pool, Math.max(0.45, this.randomness())));
+    const preferred = this.mood()?.reactions ?? [];
+    const candidates = [...pool, ...preferred, ...preferred].filter((reaction) => reaction !== this.lastAmbientReaction);
+    const reaction = this.resolveReaction(pick(candidates.length ? candidates : pool, Math.max(0.45, this.randomness())));
+    this.lastAmbientReaction = reaction;
     this.setReaction(reaction);
     if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
     const duration = this.ambientReactionDuration(reaction);
@@ -1204,12 +1262,26 @@ class EyeController {
   }
 
   private setReaction(reaction: Reaction): void {
+    if (this.reactionTimer) window.clearTimeout(this.reactionTimer);
+    if (this.ambientReturnTimer) window.clearTimeout(this.ambientReturnTimer);
+    this.reactionTimer = 0;
+    this.ambientReturnTimer = 0;
+    if (this.eyeContactStart) this.resetEyeContact();
     this.currentReaction = this.resolveReaction(reaction);
     this.updateAssets();
   }
 
   private applyReactionState(pair: HTMLElement, skinDef?: SkinDefinition): void {
     const reaction = this.currentReaction;
+    const blinking = reaction === "blink" || reaction === "slow-blink";
+    pair.toggleClass("is-left-eye-closed", blinking || reaction === "wink-left");
+    pair.toggleClass("is-right-eye-closed", blinking || reaction === "wink-right");
+    const close = closedLidOffsets(skinDef?.eyeStyle.lidHeight ?? "122%");
+    pair.setCssProps({
+      "--lid-closed-upper-y": close.upper,
+      "--lid-closed-lower-y": close.lower,
+      "--lid-transition-ms": `${reaction === "slow-blink" ? 260 : reaction === "idle-neutral" ? 205 : 145}ms`
+    });
     const strength = this.plugin.settings.emotionStrength;
     const pose = PERSONALITY_POSES[this.plugin.settings.personality];
     const set = (name: string, value: string) => pair.setCssProps({ [name]: value });
@@ -2771,6 +2843,7 @@ class EyeController {
   }
 
   private reactionDuration(reaction: Reaction, multiplier: number): number {
+    if (reaction === "blink" || reaction === "slow-blink") return blinkTiming(reaction === "slow-blink", this.plugin.settings.blinkSpeed).holdMs;
     const longRead: Reaction[] = ["sad", "crying", "loneliness", "sleepy", "sleepy-idle", "dreamy", "stoned", "spacing-out", "in-love", "relief", "gratitude", "trust", "contentment", "calm", "acceptance", "awe", "bored", "apathy", "tired-but-awake", "shyness", "interest", "disappointment", "meditative", "deadpan"];
     const punchyRead: Reaction[] = ["shocked", "wide-stare", "dramatic-shock", "panic", "surprise-fear", "surprise-delight", "excitement", "furious", "frustration", "impatience", "overwhelmed", "confusion-spiral", "dizzy", "laughing", "starstruck", "awkwardness", "guilt-panic", "anticipation", "startled-recovery"];
     const base = reaction.includes("typing")
@@ -2786,6 +2859,7 @@ class EyeController {
   }
 
   private ambientReactionDuration(reaction: Reaction): number {
+    if (reaction === "blink" || reaction === "slow-blink") return blinkTiming(reaction === "slow-blink", this.plugin.settings.blinkSpeed).holdMs;
     if (this.motionReduced()) return 900;
     const longRead: Reaction[] = ["sleepy-idle", "idle-long", "dreamy", "stoned", "spacing-out", "crying", "in-love", "relief", "loneliness", "apathy", "acceptance", "calm", "hope", "satisfaction", "gratitude", "trust", "tired-but-awake", "contentment", "awe", "shyness", "interest", "disappointment", "meditative", "deadpan"];
     const punchy: Reaction[] = ["dizzy", "chaotic-stare", "restless", "panic", "drunk", "furious", "laughing", "starstruck", "frustration", "surprise-delight", "confusion-spiral", "fear-freeze", "excitement", "overwhelmed", "impatience", "surprise-fear", "alertness", "suspense", "awkwardness", "guilt-panic", "anticipation", "startled-recovery"];
@@ -3053,6 +3127,7 @@ class GooglyEyesSettingTab extends PluginSettingTab {
           this.toggleDef("Enable plugin", "enabled"),
           this.renderDef("Skin", "Choose the face used in the embedded tab.", (setting) => this.renderSkinGrid(setting)),
           this.dropdownDef("Personality", undefined, "personality", Object.fromEntries(Object.entries(PERSONALITY_OPTIONS).map(([id, p]) => [id, p.label]))),
+          this.dropdownDef("Mood profile", "Skin default adds matching spontaneous emotions, blink timing, and movement. Off uses your personality alone.", "moodProfile", { skin: "Skin default", off: "Off", ...Object.fromEntries(Object.entries(MOOD_PROFILES).map(([id, profile]) => [id, profile.label])) }),
           this.renderDef("Quick behavior", "Start here, then fine-tune in Advanced.", (setting) => this.renderPresetButtons(setting)),
           this.renderDef("Quick actions", undefined, (setting) => this.renderPreviewButtons(setting))
         ]
@@ -3094,6 +3169,9 @@ class GooglyEyesSettingTab extends PluginSettingTab {
         heading: "Tracking",
         items: [
           this.sliderDef("Mouse follow strength", "followSensitivity", 0.1, 1.5, 0.05),
+          this.toggleDef("Eye contact moments", "eyeContactEnabled", "Occasionally looks straight at you, then smoothly returns to following your cursor."),
+          this.sliderDef("Eye contact interval (seconds)", "eyeContactIntervalSec", 10, 180, 5, advanced),
+          this.sliderDef("Eye contact duration (seconds)", "eyeContactDurationSec", 1, 6, 0.5, advanced),
           this.dropdownDef("Visibility mode", undefined, "visibilityMode", VISIBILITY_LABELS, advanced),
           this.dropdownDef("Follow target", undefined, "followTarget", FOLLOW_LABELS, advanced),
           this.sliderDef("Smoothing", "smoothing", 0.04, 0.8, 0.02, advanced),

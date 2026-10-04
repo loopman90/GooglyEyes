@@ -1,9 +1,10 @@
 {
   "name": "googly-eyes",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "Put living reactive eyes in your workspace.",
   "main": "main.js",
   "scripts": {
+    "test:behavior": "node --test scripts/behavior-test.mjs",
     "generate-skin-data": "node scripts/generate-skin-data.mjs",
     "rebuild-mask-eyes": "node scripts/rebuild-mask-driven-eyes.mjs",
     "update-readme": "npm run generate-skin-data && node scripts/update-readme.mjs",

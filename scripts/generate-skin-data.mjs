@@ -32,6 +32,7 @@ const skins = manifest.skins.map((id) => {
   return {
     id,
     name: assertString(skin.name, id),
+    moodProfile: assertString(skin.moodProfile, "warm"),
     eyeLayout: skin.eyeLayout === "single" ? "single" : "dual",
     flavor: assertString(skin.flavor ?? skin.description, id),
     iris: assertString(defaults.irisColor, "#42d9ff"),

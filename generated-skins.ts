@@ -3,6 +3,7 @@ export const GENERATED_SKINS = [
   {
     "id": "robot",
     "name": "Robot",
+    "moodProfile": "mechanical",
     "eyeLayout": "dual",
     "flavor": "Mechanical lenses with tiny LED attitude.",
     "iris": "#42d9ff",
@@ -57,6 +58,7 @@ export const GENERATED_SKINS = [
   {
     "id": "cat",
     "name": "Cat",
+    "moodProfile": "playful",
     "eyeLayout": "dual",
     "flavor": "Soft fur, sharp focus, vertical pupils.",
     "iris": "#58d34f",
@@ -129,6 +131,7 @@ export const GENERATED_SKINS = [
   {
     "id": "manga-female",
     "name": "Manga Female",
+    "moodProfile": "warm",
     "eyeLayout": "dual",
     "flavor": "Bright manga eye openings with clean stylized pupils.",
     "iris": "#9b68ee",
@@ -202,6 +205,7 @@ export const GENERATED_SKINS = [
   {
     "id": "dragon",
     "name": "Dragon",
+    "moodProfile": "vigilant",
     "eyeLayout": "dual",
     "flavor": "Ancient scales with a fiery slit gaze.",
     "iris": "#ff9f21",
@@ -275,6 +279,7 @@ export const GENERATED_SKINS = [
   {
     "id": "cyberpunk-female",
     "name": "Cyberpunk Female",
+    "moodProfile": "vigilant",
     "eyeLayout": "dual",
     "flavor": "Neon makeup, chrome accents, and a sharp magenta gaze.",
     "iris": "#ff4fd8",
@@ -329,6 +334,7 @@ export const GENERATED_SKINS = [
   {
     "id": "c-4po",
     "name": "C-4PO",
+    "moodProfile": "mechanical",
     "eyeLayout": "dual",
     "flavor": "Golden robot faceplate with warm lamp eyes.",
     "iris": "#ffb21a",
@@ -400,6 +406,7 @@ export const GENERATED_SKINS = [
   {
     "id": "atlas",
     "name": "Atlas",
+    "moodProfile": "mechanical",
     "eyeLayout": "single",
     "flavor": "White robot faceplate with one cool blue lamp eye.",
     "iris": "#1ecbff",
@@ -471,6 +478,7 @@ export const GENERATED_SKINS = [
   {
     "id": "panda",
     "name": "Panda",
+    "moodProfile": "warm",
     "eyeLayout": "dual",
     "flavor": "Soft panda mask with calm bamboo-green eyes.",
     "iris": "#67b84f",
@@ -525,6 +533,7 @@ export const GENERATED_SKINS = [
   {
     "id": "d20-rpg",
     "name": "D20 DND",
+    "moodProfile": "playful",
     "eyeLayout": "dual",
     "flavor": "Tabletop dice, parchment maps, and dungeon master focus.",
     "iris": "#24c66f",
@@ -579,6 +588,7 @@ export const GENERATED_SKINS = [
   {
     "id": "space-helmet",
     "name": "SpaceHelmet",
+    "moodProfile": "vigilant",
     "eyeLayout": "dual",
     "flavor": "Matte teal astronaut visor with deep transparent eye ports.",
     "iris": "#71d7d1",
@@ -676,6 +686,7 @@ export const GENERATED_SKINS = [
   {
     "id": "classic-googly",
     "name": "Classic Googly",
+    "moodProfile": "playful",
     "eyeLayout": "dual",
     "flavor": "Clean toy rings with bright playful eyes.",
     "iris": "#1e88ff",
@@ -730,6 +741,7 @@ export const GENERATED_SKINS = [
   {
     "id": "detective-noir",
     "name": "Detective Noir",
+    "moodProfile": "mysterious",
     "eyeLayout": "dual",
     "flavor": "Fedora shadows with a warm suspicious stare.",
     "iris": "#c28a3a",
@@ -783,6 +795,7 @@ export const GENERATED_SKINS = [
   {
     "id": "one-eye",
     "name": "One Eye",
+    "moodProfile": "playful",
     "eyeLayout": "single",
     "flavor": "Single cyclops opening with a curious lime stare.",
     "iris": "#b7ff35",
@@ -854,6 +867,7 @@ export const GENERATED_SKINS = [
   {
     "id": "tibetan-monk",
     "name": "Air Monk",
+    "moodProfile": "serene",
     "eyeLayout": "dual",
     "flavor": "Air temple markings with a calm meditative gaze.",
     "iris": "#7f5634",
@@ -907,6 +921,7 @@ export const GENERATED_SKINS = [
   {
     "id": "alien",
     "name": "Alien",
+    "moodProfile": "mysterious",
     "eyeLayout": "dual",
     "flavor": "Bioluminescent skin with an uncanny teal stare.",
     "iris": "#48eed8",
@@ -961,6 +976,7 @@ export const GENERATED_SKINS = [
   {
     "id": "hacker",
     "name": "Hacker",
+    "moodProfile": "vigilant",
     "eyeLayout": "dual",
     "flavor": "Dark hood, terminal glow, and sharp focus.",
     "iris": "#58ff37",
@@ -1034,6 +1050,7 @@ export const GENERATED_SKINS = [
   {
     "id": "anonymous",
     "name": "Anonymous",
+    "moodProfile": "mysterious",
     "eyeLayout": "dual",
     "flavor": "White mask, dark hood, and a quiet red stare.",
     "iris": "#ac1220",
@@ -1087,6 +1104,7 @@ export const GENERATED_SKINS = [
   {
     "id": "ice-hockey",
     "name": "Jason",
+    "moodProfile": "vigilant",
     "eyeLayout": "dual",
     "flavor": "Frozen hockey mask with a blood-spattered stare.",
     "iris": "#b82022",
@@ -1140,6 +1158,7 @@ export const GENERATED_SKINS = [
   {
     "id": "clown",
     "name": "Clown",
+    "moodProfile": "playful",
     "eyeLayout": "dual",
     "flavor": "Cartoon circus face with a bright playful stare.",
     "iris": "#ffcc2e",
@@ -1194,6 +1213,7 @@ export const GENERATED_SKINS = [
   {
     "id": "spy",
     "name": "Spy",
+    "moodProfile": "mysterious",
     "eyeLayout": "dual",
     "flavor": "Cartoon eyes peeking through newspaper cutouts.",
     "iris": "#4d6f8f",
@@ -1248,6 +1268,7 @@ export const GENERATED_SKINS = [
   {
     "id": "skeleton",
     "name": "Skeleton",
+    "moodProfile": "mysterious",
     "eyeLayout": "dual",
     "flavor": "Playful bone mask with deep skull sockets.",
     "iris": "#f0d36b",
@@ -1301,6 +1322,7 @@ export const GENERATED_SKINS = [
   {
     "id": "wizard",
     "name": "Wizard",
+    "moodProfile": "serene",
     "eyeLayout": "dual",
     "flavor": "Moonlit hat, silver brows, and a violet spellcaster gaze.",
     "iris": "#8f6bff",
@@ -1355,6 +1377,7 @@ export const GENERATED_SKINS = [
   {
     "id": "cowboy",
     "name": "Cowboy",
+    "moodProfile": "vigilant",
     "eyeLayout": "dual",
     "flavor": "Dusty western hat with a curious frontier stare.",
     "iris": "#39b7a3",
@@ -1408,6 +1431,7 @@ export const GENERATED_SKINS = [
   {
     "id": "pumpkin-halloween",
     "name": "Pumpkin Halloween",
+    "moodProfile": "playful",
     "eyeLayout": "dual",
     "flavor": "Glowing jack-o-lantern mischief for spooky notes.",
     "iris": "#95ff24",
@@ -1461,6 +1485,7 @@ export const GENERATED_SKINS = [
   {
     "id": "goblin",
     "name": "Goblin",
+    "moodProfile": "playful",
     "eyeLayout": "dual",
     "flavor": "Green fantasy trouble with a sneaky bright gaze.",
     "iris": "#d6b23a",
@@ -1514,6 +1539,7 @@ export const GENERATED_SKINS = [
   {
     "id": "troll",
     "name": "Troll",
+    "moodProfile": "mysterious",
     "eyeLayout": "dual",
     "flavor": "Stone cave face with a heavy grumpy gaze.",
     "iris": "#b7a34f",

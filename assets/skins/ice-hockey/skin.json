@@ -1,5 +1,6 @@
 {
   "id": "ice-hockey",
+  "moodProfile": "vigilant",
   "name": "Jason",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

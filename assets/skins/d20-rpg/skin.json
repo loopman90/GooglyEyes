@@ -1,5 +1,6 @@
 {
   "id": "d20-rpg",
+  "moodProfile": "playful",
   "name": "D20 DND",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

@@ -1,5 +1,6 @@
 {
   "id": "c-4po",
+  "moodProfile": "mechanical",
   "name": "C-4PO",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

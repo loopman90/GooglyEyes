@@ -124,7 +124,7 @@
   display: block;
 }
 
-.googly-eyes-pair:not([data-reaction="idle-neutral"]) .googly-eyes-layered-eyes {
+.googly-eyes-pair:not([data-reaction="idle-neutral"]):not([data-reaction="blink"]):not([data-reaction="slow-blink"]):not([data-reaction="wink-left"]):not([data-reaction="wink-right"]) .googly-eyes-layered-eyes {
   animation: googly-eyes-expression-build 620ms cubic-bezier(0.18, 0.9, 0.24, 1) both;
   transform-origin: 50% 50%;
 }
@@ -232,7 +232,7 @@
     inset 0 0 22px rgb(0 17 28 / 0.65);
   opacity: var(--iris-opacity);
   filter: var(--iris-filter);
-  transform: translate(calc(-50% + var(--iris-x) + var(--reaction-iris-x)), calc(-50% + var(--iris-y) + var(--reaction-iris-y))) scale(var(--iris-scale));
+  transform: translate(calc(-50% + var(--iris-x) + var(--reaction-iris-x) * var(--gaze-pose-weight, 1)), calc(-50% + var(--iris-y) + var(--reaction-iris-y) * var(--gaze-pose-weight, 1))) scale(var(--iris-scale));
   transition: transform 190ms cubic-bezier(0.2, 0.8, 0.2, 1), width 220ms ease, opacity 220ms ease, filter 260ms ease;
   z-index: 2;
   pointer-events: none;
@@ -262,7 +262,7 @@
   box-shadow:
     0 0 calc(10px * var(--iris-glow)) color-mix(in srgb, var(--iris-color) 58%, transparent),
     inset 0 0 9px rgb(0 0 0 / 0.86);
-  transform: translate(calc(-50% + var(--pupil-x) + var(--reaction-pupil-x)), calc(-50% + var(--pupil-y) + var(--reaction-pupil-y))) scale(var(--pupil-scale)) scale(var(--life-pupil-scale));
+  transform: translate(calc(-50% + var(--pupil-x) + var(--reaction-pupil-x) * var(--gaze-pose-weight, 1)), calc(-50% + var(--pupil-y) + var(--reaction-pupil-y) * var(--gaze-pose-weight, 1))) scale(var(--pupil-scale)) scale(var(--life-pupil-scale));
   transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), width 220ms ease;
   z-index: 3;
 }
@@ -1367,7 +1367,7 @@
     0 3px 7px rgb(0 0 0 / 0.35);
   z-index: 4;
   pointer-events: none;
-  transition: transform calc(145ms * var(--lid-transition-scale)) cubic-bezier(0.2, 0.8, 0.2, 1), opacity 120ms ease;
+  transition: transform calc(var(--lid-transition-ms, 145ms) * var(--lid-transition-scale)) cubic-bezier(0.2, 0.8, 0.2, 1), border-radius calc(var(--lid-transition-ms, 145ms) * var(--lid-transition-scale)) ease, opacity 120ms ease;
 }
 
 .googly-eyes-lid-upper {
@@ -1392,6 +1392,18 @@
 
 .googly-eyes-eye-slot-right .googly-eyes-lid-lower {
   transform: translateY(calc(var(--lid-lower-right) + 34%)) rotate(var(--lid-lower-tilt));
+}
+
+.googly-eyes-pair.is-left-eye-closed .googly-eyes-eye-slot-left .googly-eyes-lid-upper,
+.googly-eyes-pair.is-right-eye-closed .googly-eyes-eye-slot-right .googly-eyes-lid-upper {
+  border-radius: 0;
+  transform: translateY(var(--lid-closed-upper-y)) rotate(0deg);
+}
+
+.googly-eyes-pair.is-left-eye-closed .googly-eyes-eye-slot-left .googly-eyes-lid-lower,
+.googly-eyes-pair.is-right-eye-closed .googly-eyes-eye-slot-right .googly-eyes-lid-lower {
+  border-radius: 0;
+  transform: translateY(var(--lid-closed-lower-y)) rotate(0deg);
 }
 
 .googly-eyes-peek-mask {

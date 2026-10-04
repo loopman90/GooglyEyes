@@ -1,5 +1,6 @@
 {
   "id": "cyberpunk-female",
+  "moodProfile": "vigilant",
   "name": "Cyberpunk Female",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

@@ -1,5 +1,6 @@
 {
   "id": "tibetan-monk",
+  "moodProfile": "serene",
   "name": "Air Monk",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

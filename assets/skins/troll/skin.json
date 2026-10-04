@@ -1,5 +1,6 @@
 {
   "id": "troll",
+  "moodProfile": "mysterious",
   "name": "Troll",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

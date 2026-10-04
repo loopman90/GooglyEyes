@@ -1,5 +1,6 @@
 {
   "id": "clown",
+  "moodProfile": "playful",
   "name": "Clown",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

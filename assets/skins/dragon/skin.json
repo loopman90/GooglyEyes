@@ -1,5 +1,6 @@
 {
   "id": "dragon",
+  "moodProfile": "vigilant",
   "name": "Dragon",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

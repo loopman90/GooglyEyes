@@ -1,5 +1,6 @@
 {
   "id": "panda",
+  "moodProfile": "warm",
   "name": "Panda",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

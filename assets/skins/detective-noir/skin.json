@@ -1,5 +1,6 @@
 {
   "id": "detective-noir",
+  "moodProfile": "mysterious",
   "name": "Detective Noir",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

@@ -1,5 +1,6 @@
 {
   "id": "atlas",
+  "moodProfile": "mechanical",
   "name": "Atlas",
   "renderer": "layered",
   "eyeLayout": "single",

@@ -1,5 +1,6 @@
 {
   "id": "classic-googly",
+  "moodProfile": "playful",
   "name": "Classic Googly",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

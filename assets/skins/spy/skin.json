@@ -1,5 +1,6 @@
 {
   "id": "spy",
+  "moodProfile": "mysterious",
   "name": "Spy",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

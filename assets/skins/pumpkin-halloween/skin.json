@@ -1,5 +1,6 @@
 {
   "id": "pumpkin-halloween",
+  "moodProfile": "playful",
   "name": "Pumpkin Halloween",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

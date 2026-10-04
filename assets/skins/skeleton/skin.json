@@ -1,5 +1,6 @@
 {
   "id": "skeleton",
+  "moodProfile": "mysterious",
   "name": "Skeleton",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

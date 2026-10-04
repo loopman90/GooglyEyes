@@ -1,5 +1,6 @@
 {
   "id": "goblin",
+  "moodProfile": "playful",
   "name": "Goblin",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

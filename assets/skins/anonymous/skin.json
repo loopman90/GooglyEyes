@@ -1,5 +1,6 @@
 {
   "id": "anonymous",
+  "moodProfile": "mysterious",
   "name": "Anonymous",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

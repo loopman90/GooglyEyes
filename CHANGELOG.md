@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.24
+
+- Added gentle eye contact moments with adjustable interval and duration, followed by a smooth return to cursor tracking.
+- Added default mood profiles for all 26 skins, with manual profile selection and an Off option.
+- Mood profiles influence spontaneous emotions, blink timing, and movement without changing eye colors.
+- Prevented automatic blinking and ambient emotions from interrupting active expressions, and cancelled stale reaction timers.
+- Improved full eyelid closure and winks with overlapping, level edges that remain closed regardless of skin tuning or emotion strength.
+- Gave slow blinks their own timing and removed whole-eye scaling during blinks and winks.
+- Updated documentation, GitHub Pages feature descriptions, and the copy-ready test build.
+
 ## 1.0.23
 
 - Made mouse tracking more responsive by default and added a visible Mouse follow strength slider in settings.

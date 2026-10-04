@@ -1,5 +1,6 @@
 {
   "id": "cat",
+  "moodProfile": "playful",
   "name": "Cat",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

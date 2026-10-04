@@ -1,5 +1,6 @@
 {
   "id": "cowboy",
+  "moodProfile": "vigilant",
   "name": "Cowboy",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",

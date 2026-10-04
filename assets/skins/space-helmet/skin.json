@@ -1,5 +1,6 @@
 {
   "id": "space-helmet",
+  "moodProfile": "vigilant",
   "name": "SpaceHelmet",
   "renderer": "layered",
   "mask": "masks/tab-panel.png",
